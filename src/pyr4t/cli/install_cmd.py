@@ -5,7 +5,7 @@ This module provides the 'install' command for the Pyr4t CLI, allowing users to 
 
 import argparse
 
-from pyr4t.core.installer import pyr4t_install
+from pyr4t.core import pyr4t_install
 
 
 def cmd_install(args: argparse.Namespace):
