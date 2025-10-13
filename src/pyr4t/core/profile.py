@@ -1,4 +1,5 @@
-"""Profile management for pyr4t.
+"""
+Profile management for pyr4t.
 Handles creation, listing, updating, selection, and removal of user profiles.
 """
 
