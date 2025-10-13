@@ -280,8 +280,14 @@ choco install make
 ### CLI
 
 * **Run the main project script**
+
+- Integrated CLI
 ```bash
 run-{self.project_name}
+```
+- Python CLI
+```bash
+python -m {self.package_name}
 ```
 
 ### Make commands
