@@ -493,7 +493,7 @@ where = ["src"]
         """Create a CLI runner script for the project."""
 
         print("[info] Creating CLI runner script...")
-        CONTENT = f"""from {self.package_name}.main import main as main_app
+        CONTENT = f"""from {self.package_name}.__main__ import main as main_app
 
 def main():
     print("[info] Running {self.project_name}...")
