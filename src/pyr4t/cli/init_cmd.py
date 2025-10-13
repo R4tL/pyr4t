@@ -25,7 +25,7 @@ def cmd_init(args: argparse.Namespace):
     print(f"[info] Project '{args.project_name}' initialized at {(Path(str(args.base_path)) / str(args.project_name)).resolve()}")
 
 
-def add_init_parser(subparsers: argparse._SubParsersAction) -> None:
+def add_init_parser(subparsers: argparse._SubParsersAction):
     """
     Adds the 'init' subcommand parser to the CLI.
     Args:
