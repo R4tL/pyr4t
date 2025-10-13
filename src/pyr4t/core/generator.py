@@ -1,4 +1,5 @@
-"""Project generator for Python projects.
+"""
+Project generator for Python projects.
 This module provides the GenerateProject class, which automates the creation of a standardized Python project structure,
 including directories, configuration files, scripts, and metadata. It supports customization of project name, version,
 authors, and base path, and generates files such as README, LICENSE, .gitignore, pyproject.toml, and Makefiles.
