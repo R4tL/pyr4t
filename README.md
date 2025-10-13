@@ -107,7 +107,7 @@ choco install make
 
 ### CLI
 
-* **Generate a python project achitecture**
+* **Create a pyr4t profilep**
 ```bash
 pyr4t profile
 ```
@@ -125,6 +125,7 @@ pyr4t profile
 |            | -e, --email (optional)            | New profile email                          |
 | whoami     |                                   | Show the currently selected profile        |
 
+NB: It's necessary to create profile in a first after installation.
 
 * **Generate a python project achitecture**
 ```bash
