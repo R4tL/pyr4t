@@ -25,7 +25,7 @@ help:
 # -------------------------------------------
 run:
 	@echo "[info] Running main project..."
-	$(PYTHON) -m scripts.manage -r $(ARGS)
+	$(PYTHON) -m pyr4t $(ARGS)
 	@echo "[info] Run complete."
 
 # -------------------------------------------
@@ -73,5 +73,5 @@ endif
 # -------------------------------------------
 build:
 	@echo "[info] Build in development mode..."
-	$(PYTHON) -m pip install -e .[dev]
+	$(PYTHON) -m pip install -e ..[dev]
 	@echo "[info] Build complete."

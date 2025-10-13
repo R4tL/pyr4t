@@ -1,7 +1,6 @@
 """CLI command for initializing a new Python project."""
 
 import argparse
-
 from pathlib import Path
 
 from pyr4t.core import GenerateProject
@@ -22,7 +21,9 @@ def cmd_init(args: argparse.Namespace):
         authors=args.authors,
     )
     generator.generate_project()
-    print(f"[info] Project '{args.project_name}' initialized at {(Path(str(args.base_path)) / str(args.project_name)).resolve()}")
+    print(
+        f"[info] Project '{args.project_name}' initialized at {(Path(str(args.base_path)) / str(args.project_name)).resolve()}"
+    )
 
 
 def add_init_parser(subparsers: argparse._SubParsersAction):

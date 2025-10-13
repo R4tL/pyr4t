@@ -27,8 +27,7 @@ class GenerateProject:
     ):
         self.project_name = project_name.replace(" ", "-").lower()
         self.package_name = self.project_name.replace("-", "_")
-        self.base_path = Path(base_path)
-        self.project_path = self.base_path / self.project_name
+        self.project_path = Path(base_path) / self.project_name
         self.authors = self._get_authors(authors)
         self.project_version = project_version
 
@@ -44,8 +43,9 @@ class GenerateProject:
         self.create_readme()
         self.create_license()
         self.create_py_doc_link()
-        self.create_run_app()
+        self.create_luncher()
         self.create_pyproject()
+        self.create_cli_base()
         self.create_basic_scritps()
         self.create_dev_scritps()
         print("[info] Project generation complete.")
@@ -94,9 +94,16 @@ class GenerateProject:
 
             for dir in self.project_path.rglob("*"):
                 if dir.is_dir():
-                    if dir.name not in ["docs", "src", "tests", self.package_name]:
-                        (dir / "__init__.py").touch()
-                        print(f"[info] Created __init__.py in: {dir}")
+                    if dir.name not in [
+                        "docs",
+                        "src",
+                        "tests",
+                        self.package_name,
+                        "cli",
+                        "dev",
+                        "tmp"
+                    ]:
+                        self._create_file(dir / "__init__.py")
                     if dir.name == self.package_name:
                         self._create_file(
                             dir / "__init__.py",
@@ -106,8 +113,8 @@ class GenerateProject:
                             dir / "__main__.py",
                             "def main():\n    print('Hello, World!')\n\nif __name__ == '__main__':\n    main()\n",
                         )
-                        (dir / "utils.py").touch()
-                        print(f"[info] Created utils.py in: {dir}")
+                        dir / "__init__.py"
+                        self._create_file(dir / "utils.py")
 
         except FileExistsError:
             print(f"[error] The directory '{self.project_path}' already exists.")
@@ -484,7 +491,7 @@ dependencies = []
 dev = {dev_deps}
 
 [project.scripts]
-run-{self.project_name} = "{self.package_name}.cli.run_app:main"
+{self.project_name} = "{self.package_name}.luncher:main"
 
 [build-system]
 requires = ["setuptools>=61.0"]
@@ -495,18 +502,25 @@ where = ["src"]
 """
         self._create_file(self.project_path / "pyproject.toml", CONTENT)
 
-    def create_run_app(self):
+    def create_luncher(self):
         """Create a CLI runner script for the project."""
 
         print("[info] Creating CLI runner script...")
-        CONTENT = f"""from {self.package_name}.__main__ import main as main_app
+        CONTENT = f'''"""
+Launcher module for the CLI.
+Provides the entry point for running the application from the command line.
+""" 
+
+from {self.package_name}.__main__ import main as core_main
+
 
 def main():
-    print("[info] Running {self.project_name}...")
-    main_app()
-"""
+    """Runs the {self.package_name} application from the command line."""
+
+    core_main()
+'''
         self._create_file(
-            self.project_path / "src" / self.package_name / "cli" / f"run_app.py",
+            self.project_path / "src" / self.package_name / "luncher.py",
             CONTENT,
         )
 
@@ -514,10 +528,18 @@ def main():
         """Create basic utility scripts for testing and project management."""
 
         print("[info] Creating basic scripts...")
-        RUN_TEST = """import subprocess
+
+        RUN_TEST = """\"\"\"
+Run tests module.
+Contains a main function to run all project tests using pytest.
+\"\"\"
+
+import subprocess
+
 
 def main():
     \"\"\"Run all project tests using pytest.\"\"\"
+
     print("[info] Running tests...")
     try:
         subprocess.run(["pytest", "tests"], check=True)
@@ -526,19 +548,25 @@ def main():
         print("[warning] Some tests failed.")
 """
 
-        MANAGE = f"""import argparse
+        MANAGE = f"""\"\"\"
+Management CLI module.
+Provides a command-line interface to run tests and other project management tasks.
+\"\"\"
+
+import argparse
 from . import run_tests
 
+
 def main():
+    \"\"\"Main entry point for the management CLI.\"\"\"
+
     parser = argparse.ArgumentParser(
         description="Project utility CLI for common development tasks."
     )
 
-    # Define optional flags
     parser.add_argument("-t", "--tests", action="store_true", help="Run tests using pytest")
     args = parser.parse_args()
 
-    # Execute based on flags
     if args.tests:
         run_tests.main()
     else:
@@ -592,48 +620,60 @@ test:
 
         print("[info] Creating dev scripts...")
 
-        CLEAN = """import shutil
+        CLEAN = """\"\"\"
+Clean module.
+Provides a function to clean cache, logs, and temporary files.
+\"\"\"
+
+import shutil
 from pathlib import Path
+
 
 def main(mode="all"):
     \"\"\"Clean cache, logs, or all temporary files.\"\"\"
+
     print(f"[info] Cleaning mode: {mode}")
 
     if mode in ("cache", "all"):
-        # Remove __pycache__ folders
         cache_count = 0
-        for path in Path(".").rglob("__pycache__"):
+        for path in Path(__file__).parents[2].rglob("__pycache__"):
             shutil.rmtree(path, ignore_errors=True)
             cache_count += 1
         print(f"[info] Removed {cache_count} __pycache__ folders.")
 
-        # Remove .pyc and .pyo files
         file_count = 0
         for ext in ("*.pyc", "*.pyo"):
-            for file in Path(".").rglob(ext):
+            for file in Path(__file__).parents[2].rglob(ext):
                 file.unlink(missing_ok=True)
                 file_count += 1
         print(f"[info] Deleted {file_count} compiled Python files (*.pyc, *.pyo).")
 
     if mode in ("log", "all"):
         log_count = 0
-        for file in Path(".").rglob("*.log"):
+        for file in Path(__file__).parents[2].rglob("*.log"):
             file.unlink(missing_ok=True)
             log_count += 1
         print(f"[info] Deleted {log_count} log files.")
     
     if mode in ("tmp", "all"):
+        tmp_count = 0
         for path in Path("./dev/tmp").rglob("*"):
             shutil.rmtree(path, ignore_errors=True)
+        print(f"[info] Deleted {tmp_count} tmp files.")
 
     print("[info] Cleaning complete!")
 """
 
-        FORMAT = f"""
+        FORMAT = f"""\"\"\"
+Format code module.
+Provides functions to format code and manage docstrings.
+\"\"\"
+
 import subprocess
 import sys
 from pathlib import Path
 import ast
+
 
 BECON = "# TOD" + "O:"  # Dont interpret as T0-D0
 SINGLE_LINE_DOC = f"{{BECON}} add description"
@@ -645,12 +685,14 @@ DO_UPDATE = f"{{{{BECON}}}} update docstring"
 
 def main():
     \"\"\"Format code and check docstrings.\"\"\"
-    pack_path = Path(".").resolve() / "src" / "{self.package_name}"
+
+    pack_path = Path(__file__).parents[2].resolve() / "src" / "{self.package_name}"
     format_code(pack_path)
     process_folder(pack_path)
     
 def format_code(path: Path):
     \"\"\"Format code using Black and isort.\"\"\"
+
     print("[info] Formatting code...")
     try:
         subprocess.run([sys.executable, "-m", "black", str(path)], check=True)
@@ -660,13 +702,15 @@ def format_code(path: Path):
         print("[warning] Formatting failed.")
 
 def process_folder(folder: Path):
-    \"\"\"Manage doscstrings in a folder.\"\"\"
+    \"\"\"Manage docstrings in a folder.\"\"\"
+
     for py_file in folder.rglob("*.py"):
         print(f"[info] Processing {{py_file}}")
         process_file(py_file)
 
 def generate_google_docstring(node: ast.FunctionDef, indent: str, update=False) -> str:
     \"\"\"Generate a Google-style docstring with proper indentation.\"\"\"
+
     prefix = f"{{DO_UPDATE}}" if update else f"{{SINGLE_LINE_DOC}}"
     filtered_args = [arg.arg for arg in node.args.args if arg.arg not in ("self", "cls")]
     if node.returns is None and not has_non_none_return(node) and not filtered_args:
@@ -690,6 +734,7 @@ def generate_google_docstring(node: ast.FunctionDef, indent: str, update=False) 
 
 def check_docstring_needs_update(node: ast.FunctionDef, docstring: str) -> bool:
     \"\"\"Check if the docstring is missing any arguments or the return value.\"\"\"
+
     if docstring is None:
         return True
     filtered_args = [arg.arg for arg in node.args.args if arg.arg not in ("self", "cls")]
@@ -710,6 +755,7 @@ def check_docstring_needs_update(node: ast.FunctionDef, docstring: str) -> bool:
 
 def get_indent(line: str) -> str:
     \"\"\"Return the whitespace at the start of a line for indentation.\"\"\"
+
     base = ""
     if ":" in line:
         base = "    "
@@ -717,6 +763,7 @@ def get_indent(line: str) -> str:
 
 def process_file(path: Path):
     \"\"\"Manage docstrings in a file.\"\"\"
+
     with open(path, "r", encoding="utf-8") as f:
         lines = f.read().splitlines()
     if not lines:
@@ -737,7 +784,7 @@ def process_file(path: Path):
                 edits.append((
                     line_idx + 1, 
                     generate_google_docstring(node, indent, update= bool(docstring))
-                    ))
+                ))
         elif isinstance(node, ast.ClassDef):
             docstring = ast.get_docstring(node)
             line_idx = find_signature_end(lines, node.lineno - 1)
@@ -752,6 +799,7 @@ def process_file(path: Path):
 
 def find_signature_end(lines: list[str], start_line: int) -> int:
     \"\"\"Return the index where the function signature ends.\"\"\"
+
     open_parens = 0
     for i, line in enumerate(lines[start_line:], start=start_line):
         open_parens += line.count("(")
@@ -762,38 +810,41 @@ def find_signature_end(lines: list[str], start_line: int) -> int:
 
 def has_non_none_return(node: ast.FunctionDef) -> bool:
     \"\"\"Return True if the function has at least one 'return' with a value.\"\"\"
+
     for n in ast.walk(node):
         if isinstance(n, ast.Return) and n.value is not None:
             return True
     return False
 """
 
-        MANAGE = f"""import argparse
+        MANAGE = f"""\"\"\"
+Development management CLI module.
+Provides a CLI to format code and clean the project.
+\"\"\"
+
+import argparse
 from . import format_code, clean
-from {self.package_name}.main import main as run_main
+
 
 def main():
+    \"\"\"Main entry point for the development management CLI.\"\"\"
+
     parser = argparse.ArgumentParser(
         description="Project utility CLI for common development tasks."
     )
 
-    # Define optional flags
-    parser.add_argument("-r", "--run", action="store_true", help="Run the main project script with args")
     parser.add_argument("-f", "--format", action="store_true", help="Format code with black and isort")
     parser.add_argument(
-    "-c", "--clean",
-    nargs="?",
-    const="cache",  # Default if no value provided
-    choices=["all", "cache", "log", "tmp"],
-    help="Clean files: 'all' (default), 'cache', 'log' (log files), or 'tmp' (files in /dev/tmp/)"
+        "-c", "--clean",
+        nargs="?",
+        const="cache",  
+        choices=["all", "cache", "log", "tmp"],
+        help="Clean files: 'all' (default), 'cache', 'log' (log files), or 'tmp' (files in /dev/tmp/)"
     )
 
     args = parser.parse_args()
 
-    # Execute based on flags
-    if args.run:
-        run_main(args.run)
-    elif args.format:
+    if args.format:
         format_code.main()
     elif args.clean:
         clean.main(args.clean)
@@ -831,24 +882,20 @@ help:
 # -------------------------------------------
 run:
 \t@echo "[info] Running main project..."
-\t$(PYTHON) -m scripts.manage -r $(ARGS)
+\t$(PYTHON) -m {self.package_name} $(ARGS)
 \t@echo "[info] Run complete."
 
 # -------------------------------------------
 # Format code
 # -------------------------------------------
 fmt:
-\t@echo "[info] Formatting code..."
 \t$(PYTHON) -m scripts.manage -f
-\t@echo "[info] Format complete."
 
 # -------------------------------------------
 # Clean project
 # -------------------------------------------
 clean:
-\t@echo "[info] Cleaning $(TYPE)..."
 \t$(PYTHON) -m scripts.manage -c $(TYPE)
-\t@echo "[info] Clean complete."
 
 # -------------------------------------------
 # Create venv
@@ -862,7 +909,7 @@ ifeq ($(OS),Windows_NT)
 \t) else ( \\
 \t\techo [info] Virtual environment already exists, skipping creation. \\
 \t)
-\t@echo [info] To activate the venv: ..\\.venv\\Scripts\\activate.bat
+\t@echo [info] To activate the venv: .\\.venv\\Scripts\\activate
 else
 \t@if [ ! -d "../.venv" ]; then \\
 \t\techo "[info] Creating virtual environment..."; \\
@@ -871,7 +918,7 @@ else
 \telse \\
 \t\techo "[info] Virtual environment already exists, skipping creation."; \\
 \tfi
-\t@echo "[info] To activate the venv: source ../.venv/bin/activate"
+\t@echo "[info] To activate the venv: source ./.venv/bin/activate"
 endif
 
 # -------------------------------------------
@@ -879,7 +926,7 @@ endif
 # -------------------------------------------
 build:
 \t@echo "[info] Build in development mode..."
-\t$(PYTHON) -m pip install -e .[dev]
+\t$(PYTHON) -m pip install -e ..[dev]
 \t@echo "[info] Build complete."
 """
 
@@ -892,6 +939,104 @@ build:
         MAKEFILE
         print("[info] Dev scripts created.")
 
+    def create_cli_base(self):
+        """Create the logic of the command manager with command `--version`."""
+
+        VERSION = f'''"""
+Version command for the CLI.
+Provides a parser for the --version option.
+""" 
+
+import argparse
+
+from pyr4t import __version__
+
+
+def cmd_version(args: argparse.Namespace):
+    """Print the current version of the package."""
+
+    print(__version__)
+
+def add_version_parser(subparsers: argparse._SubParsersAction):
+    """Add the --version command to the CLI parser."""
+
+    parser: argparse.ArgumentParser = subparsers.add_parser(
+        "--version", help="Print the version of package {self.package_name}"
+    )
+    parser.set_defaults(func=cmd_version)
+'''
+
+        PARSER = f"""\"\"\"
+Parser module for the CLI.
+Creates the main argument parser and registers subcommands.
+\"\"\"
+
+from .cmd_version import add_version_parser
+
+
+def build_parser():
+    \"\"\"Creates and configures the main argument parser for the CLI.
+    Returns:
+        argparse.ArgumentParser: The configured argument parser for the CLI.
+    \"\"\"
+    
+    parser = argparse.ArgumentParser(
+        prog="{self.project_name}", description="CLI of {self.project_name}."
+    )
+    subparsers = parser.add_subparsers(dest="command", required=True)
+
+    add_version_parser(subparsers)
+
+    return parser
+"""
+        INIT = """\"\"\"CLI package: provides the parser builder and sub-commands.\"\"\"
+
+from .parser import build_parser
+
+
+__all__ = ["build_parser"]
+"""
+
+        self._create_file(
+            self.project_path / "src" / self.package_name / "cli" / "cmd_version.py",
+            VERSION,
+        )
+        self._create_file(
+            self.project_path / "src" / self.package_name / "cli" / "parser.py", PARSER
+        )
+        self._create_file(
+            self.project_path / "src" / self.package_name / "cli" / "__init__.py", INIT
+        )
+
+        MAIN = f"""\"\"\"
+Main module for the project.
+Provides the entry point for command-line interface operation.
+\"\"\"
+
+from pyr4t.cli import build_parser
+
+def main():
+    \"\"\"Main entry point for the {self.project_name} CLI program.\"\"\"
+    parser = build_parser()
+    args = parser.parse_args()
+
+    if hasattr(args, "func"):
+        args.func(args)
+    else:
+        print("Hello World")  # default comportement
+
+if __name__ == "__main__":
+    main()
+"""
+
+        # If, in the future we want run this separatly
+        path_main = self.project_path / "src" / self.package_name / "__main__.py"
+        if path_main.exists():
+            with open(path_main, "w") as file:
+                file.write(MAIN)
+        else:
+            self._create_file(path_main, MAIN)
+
     def _create_file(self, file_path: Path, content: str = ""):
         try:
             file_path.parent.mkdir(parents=True, exist_ok=True)
@@ -902,10 +1047,6 @@ build:
             print(f"[error] An error occurred while creating {file_path}: {e}")
 
     def _get_dev_dependencies(self):
-        """
-        Returns dev dependencies (pytest, black, isort) pinned to a version
-        compatible with the current Python version.
-        """
         major, minor = sys.version_info[:2]
 
         # Define recommended versions per Python release
@@ -929,7 +1070,7 @@ build:
         # Return TOML-style list
         return f'["{pytest}", "{black}", "{isort}"]'
 
-    def _get_authors(self, authors: list[str]) -> list[dict]:
+    def _get_authors(self, authors: list[str]) -> list[dict]:        
         authors_list = []
         for author in authors:
             with open(PATH_JSON_PROFILES, "r") as file:

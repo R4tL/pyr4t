@@ -14,7 +14,7 @@ DO_UPDATE = f"{{BECON}} update docstring"
 
 def main():
     """Format code and check docstrings."""
-    pack_path = Path(".").resolve() / "src" / "pyr4t"
+    pack_path = Path(__file__).parents[2] / "src" / "pyr4t"
     format_code(pack_path)
     process_folder(pack_path)
     

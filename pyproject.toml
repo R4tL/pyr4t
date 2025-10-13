@@ -12,7 +12,7 @@ dependencies = []
 dev = ["pytest>=8.3.2", "black>=24.3.0", "isort>=5.13.2"]
 
 [project.scripts]
-pyr4t = "pyr4t.cli.run_app:main"
+pyr4t = "pyr4t.luncher:main"
 
 [build-system]
 requires = ["setuptools>=61.0"]
