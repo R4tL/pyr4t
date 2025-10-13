@@ -114,7 +114,12 @@ class GenerateProject:
                             "def main():\n    print('Hello, World!')\n\nif __name__ == '__main__':\n    main()\n",
                         )
                         dir / "__init__.py"
-                        self._create_file(dir / "utils.py")
+                        ut_content = '''"""
+Utils module.
+A collection of reusable utility functions for general purposes.
+"""
+'''
+                        self._create_file(dir / "utils.py", ut_content)
 
         except FileExistsError:
             print(f"[error] The directory '{self.project_path}' already exists.")
