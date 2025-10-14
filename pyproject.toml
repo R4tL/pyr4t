@@ -2,7 +2,7 @@
 name = "pyr4t"
 version = "0.1.0"
 description = ""
-authors = [{ name = "r4tL", email = "simon33910.lambert@gmail.com" }]
+authors = [{ name = "R4tL", email = "simon33910.lambert@gmail.com" }]
 requires-python = ">=3.13"
 readme = "README.md"
 license = { file = "LISENSE" }
