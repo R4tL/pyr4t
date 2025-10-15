@@ -91,7 +91,7 @@ Pour ça faudrait prendre la taille de la cmd et revenir a la ligne pour les arg
     │   └── test                                                                                        # Run integration test files
     ├── proj                                                                                        # Python project manager
     │   ├── add <proj-name> <path>                                                                      # Add a local project to the pyr4t project DB
-    │   ├── init <proj-name> (--cli | --import)
+    │   ├── init <proj-name> (--app | --cli | --import)
     │   │       [--authors] <authors> [--path] <path> [--version] <version>                             # Generate a new python project architecture (`cli` or `import`)
     │   ├── list                                                                                        # List projects from the pyr4t project DB
     │   ├── modify <proj-name> [--name] [--path]                                                        # Modify project informations in the pyr4t project DB
