@@ -71,36 +71,38 @@ LES DIFFERENTS MODULES de "pyr4t"
 
 ```
 └── pyr4t
-    ├── dev [--proj-name]
-    │   ├── build
-    │   ├── cls
-    │   ├── fmt
-    │   ├── init
-    │   ├── test [--test-script]
-    │   └── venv
-    ├── package
-    │   ├── install <package-name>
-    │   ├── uninstall <package-name>
-    │   └── update <package-name>
-    ├── prod [--proj-name]
-    │   ├── build
-    │   ├── run
-    │   └── test
-    ├── proj
-    │   ├── add <proj-name> <path>
-    │   ├── init <proj-name> [--authors] [--path] [--version]
-    │   ├── list
-    │   ├── modify <proj-name> [--name] [--path]
-    │   ├── rm <proj-name>
-    │   ├── whoami
-    │   └── switch <proj-name>
-    └── user
-        ├── add <alias> [--email] [--name]
-        ├── list
-        ├── modify <alias> [--email] [--name]
-        ├── rm <alias>
-        ├── switch <alias>
-        └── whoami
+    ├── dev [--proj-name] <proj-name>                                                               # Dev commands
+    │   ├── build                                                                                       # Build project in editable mode with `pip install -e .[dev]`
+    │   │ cls [--cache] [--log] [--tmp]                                                                 # Clean cache, logs and tmp files (select an option to chose files to clean just)                                                                     
+    │   ├── docstr                                                                                      # Check doctring and create/update template if necessary
+    │   ├── fmt                                                                                         # Format scripts in ./src using black and isort
+    │   ├── init                                                                                        # Generate a dev environment in ./dev
+    │   ├── test [--test-script] <test-script>                                                          # Lunch all or specific test scripts
+    │   └── venv                                                                                        # Generate a python venv in ./.venv
+    ├── package                                                                                     # Pyr4t package manager
+    │   ├── install <package-name>                                                                      # Install a pyr4t package from `R4tL` github repo
+    │   ├── uninstall <package-name>                                                                    # Unstall a pyr4t package from local device
+    │   └── update <package-name>                                                                       # Update a pyr4t package on local device
+    ├── prod [--proj-name] <proj-name>                                                              # Prod commands
+    │   ├── build                                                                                       # Unstall a pyr4t package from local device
+    │   ├── run                                                                                         # Run __main__.py file
+    │   └── test                                                                                        # Run integration test files
+    ├── proj                                                                                        # Python project manager
+    │   ├── add <proj-name> <path>                                                                      # Add a local project to the pyr4t project DB
+    │   ├── init <proj-name> (--cli | --import)
+    │   │       [--authors] <authors> [--path] <path> [--version] <version>                             # Generate a new python project architecture (`cli` or `import`)
+    │   ├── list                                                                                        # List projects from the pyr4t project DB
+    │   ├── modify <proj-name> [--name] [--path]                                                        # Modify project informations in the pyr4t project DB
+    │   ├── rm <proj-name>                                                                              # Remove a project from the pyr4t project DB
+    │   ├── whoami                                                                                      # Print in console the active project
+    │   └── switch <proj-name>                                                                          # Switch to an other active project from the pyr4t project DB
+    └── user                                                                                        # User manager
+        ├── add <alias> [--email] <email> [--name] <name>                                               # Add an user to the pyr4t user DB
+        ├── list                                                                                        # List users from the pyr4t user DB
+        ├── modify <alias> [--email] <email> [--name] <name>                                            # Modify user informations in the pyr4t project DB
+        ├── rm <alias>                                                                                  # Remove an user from the pyr4t project DB
+        ├── switch <alias>                                                                              # Switch to an other active user from the pyr4t user DB
+        └── whoami                                                                                      # Print in console the active user
 ```
 
 ```python
