@@ -70,8 +70,8 @@ commands = {
                 "description": "Build project in editable mode with `pip install -e .[dev]`"
             },
             "cls": {
-                "description": "Clean cache, tmp file and log files args = [`all`, `cache`, `tmp`, `log`]",
-                "args": ["file-to-clean"]
+                "description": "Clean cache, logs and tmp files (select an option to chose files to clean just)",
+                "options": ["--cache", "--log", "--tmp"]
             },
             "docstr": {
                 "description": "Check doctring and create/update template if necessary",
@@ -91,6 +91,7 @@ commands = {
             }
         },
         "package": {
+            "description": "Pyr4t package manager",
             "install": {
                 "description": "Install a pyr4t package from `R4tL` github repo",
                 "args": ["package-name"]
@@ -110,49 +111,71 @@ commands = {
             "build": {
                 "description": "Unstall a pyr4t package from local device",
             },
-            "run": {},
-            "test": {}
+            "run": {
+                "description": "Run __main__.py file"
+            },
+            "test": {
+                "description": "Run integration test files"
+            }
         },
         "proj": {
+            "description": "Python project manager",
             "add": {
+                "description": "Add a local project to the pyr4t project DB",
                 "args": ["proj-name", "path"]
             },
             "init": {
-                "args": ["proj-name"],
+                "description": "Generate a new python project architecture (`cli` or `import`), automaticaly added to the DB and slected like active project",
+                "args": ["proj-type", "proj-name"],
                 "options": ["--authors", "--path", "--version"]
             },
-            "list": {},
+            "list": {
+                "description": "List projects from the pyr4t project DB"
+            },
             "modify": {
+                "description": "Modify project informations in the pyr4t project DB",
                 "args": ["proj-name"],
                 "options": ["--name", "--path"]
             },
             "rm": {
+                "description": "Remove a project from the pyr4t project DB",
                 "args": ["proj-name"]
             },
-            "whoami": {},
+            "whoami": {
+                "description": "Print in console the active project"
+            },
             "switch": {
+                "description": "Switch to an other active project from the pyr4t project DB",
                 "args": ["proj-name"]
             }
         },
         "user": {
+            "description": "User manager",
             "add": {
+                "description": "Add an user to the pyr4t user DB",
                 "args": ["alias"],
                 "options": ["--email", "--name"]
             },
-            "list": {},
+            "list": {
+                "description": "List users from the pyr4t user DB"
+            },
             "modify": {
+                "description": "Modify user informations in the pyr4t project DB",
                 "args": ["alias"],
                 "options": ["--email", "--name"]
             },
             "rm": {
+                "description": "Remove an user from the pyr4t project DB",
                 "args": ["alias"]
             },
             "switch": {
+                "description": "Switch to an other active user from the pyr4t user DB",
                 "args": ["alias"]
             },
-            "whoami": {}            
-        },
-        
+            "whoami": {
+                "description": "Print in console the active user"
+            }            
+        }   
     }
 }
 
