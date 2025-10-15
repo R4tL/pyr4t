@@ -69,6 +69,8 @@ LES DIFFERENTS MODULES de "pyr4t"
 - build -> build le projet en prod
 - test -> lance les scripts de tests
 
+  
+Pour ça faudrait prendre la taille de la cmd et revenir a la ligne pour les arg si pas la place (comme dans le pyrat proj init)
 ```
 └── pyr4t
     ├── dev [--proj-name] <proj-name>                                                               # Dev commands
