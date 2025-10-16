@@ -1,0 +1,120 @@
+{
+    "pyr4t": {
+        "dev": {
+            "__desc__": "Dev commands",
+            "__seq__": ["[--proj-name] <proj-name>"],
+            "build": {
+                "__desc__": "Build project in editable mode with `pip install -e .[dev]`",
+            },
+            "cls": {
+                "__desc__": "Clean cache, logs and tmp files (choose specific type or all)",
+                "__seq__": ["[--cache]", "[--log]", "[--tmp]"],
+            },
+            "docstr": {
+                "__desc__": "Check doctring and create/update template if necessary",
+            },
+            "fmt": {
+                "__desc__": "Format scripts in ./src using black and isort",
+            },
+            "init": {
+                "__desc__": "Generate a dev environment in ./dev",
+            },
+            "test": {
+                "__desc__": "Launch all or specific test scripts",
+                "__seq__": ["[--test-script] <test-script>"],
+            },
+            "venv": {
+                "__desc__": "Generate a python venv in ./.venv"
+            },
+        },
+
+        "package": {
+            "__desc__": "Pyr4t package manager",
+            "install": {
+                "__desc__": "Install a pyr4t package from `R4tL` GitHub repo",
+                "__seq__": ["<package-name>"],
+            },
+            "uninstall": {
+                "__desc__": "Uninstall a pyr4t package from local device",
+                "__seq__": ["<package-name>"],
+            },
+            "update": {
+                "__desc__": "Update a pyr4t package on local device",
+                "__seq__": ["<package-name>"],
+            },
+        },
+
+        "prod": {
+            "__desc__": "Prod commands",
+            "__seq__": ["[--proj-name] <proj-name>"],
+            "build": {
+                "__desc__": "Build production-ready package or binary",
+            },
+            "run": {
+                "__desc__": "Run __main__.py file",
+            },
+            "test": {
+                "__desc__": "Run integration or production tests",
+            },
+        },
+
+        "project": {
+            "__desc__": "Python project manager",
+            "add": {
+                "__desc__": "Add a local project to the pyr4t project DB",
+                "__seq__": ["<proj-name>", "<path>"],
+            },
+            "init": {
+                "__desc__": "Generate a new python project architecture (`cli`, `app`, or `lib`)",
+                "__seq__": [
+                    "(--app | --cli | --lib)", "<proj-name>", "[--authors] <authors>",
+                    "[--path] <path>", "[--version] <version>"
+                ],
+            },
+            "list": {
+                "__desc__": "List projects from the pyr4t project DB",
+            },
+            "modify": {
+                "__desc__": "Modify project information in the pyr4t project DB",
+                "__seq__": ["<proj-name>", "[--name] <name>", "[--path] <path>"],
+            },
+            "rm": {
+                "__desc__": "Remove a project from the pyr4t project DB",
+                "__seq__": ["<proj-name>"],
+            },
+            "whoami": {
+                "__desc__": "Print in console the active project",
+            },
+            "switch": {
+                "__desc__": "Switch to another active project from the pyr4t project DB",
+                "__seq__": ["<proj-name>"],
+            },
+        },
+
+        "user": {
+            "__desc__": "User manager",
+            "add": {
+                "__desc__": "Add a user to the pyr4t user DB",
+                "__seq__": ["<alias>", "[--email] <email>", "[--name] <name>"],
+            },
+            "list": {
+                "__desc__": "List users from the pyr4t user DB",
+            },
+            "modify": {
+                "__desc__": "Modify user information in the pyr4t user DB",
+                "__seq__": ["<alias>", "[--email] <email>", "[--name] <name>"],
+            },
+            "rm": {
+                "__desc__": "Remove a user from the pyr4t user DB",
+                "__seq__": ["<alias>"],
+            },
+            "switch": {
+                "__desc__": "Switch to another active user from the pyr4t user DB",
+                "__seq__": ["<alias>"],
+            },
+            "whoami": {
+                "__desc__": "Print in console the active user",
+            },
+        },
+    }
+}
