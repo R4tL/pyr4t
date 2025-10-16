@@ -1,8 +1,10 @@
 {
     "pyr4t": {
+        "__desc__": "Pyr4t CLI",
+        "__seq__":["[(--help | -h) | (--version | -v)]"],
         "dev": {
             "__desc__": "Dev commands",
-            "__seq__": ["[--proj-name] <proj-name>"],
+            "__seq__": ["[(--proj-title | -t) <proj-title>]"],
             "build": {
                 "__desc__": "Build project in editable mode with `pip install -e .[dev]`",
             },
@@ -21,7 +23,7 @@
             },
             "test": {
                 "__desc__": "Launch all or specific test scripts",
-                "__seq__": ["[--test-script] <test-script>"],
+                "__seq__": ["[--test-script <test-script>]"],
             },
             "venv": {
                 "__desc__": "Generate a python venv in ./.venv"
@@ -46,7 +48,7 @@
 
         "prod": {
             "__desc__": "Prod commands",
-            "__seq__": ["[--proj-name] <proj-name>"],
+            "__seq__": ["[(--proj-title | -t) <proj-title>]"],
             "build": {
                 "__desc__": "Build production-ready package or binary",
             },
@@ -58,17 +60,17 @@
             },
         },
 
-        "project": {
+        "proj": {
             "__desc__": "Python project manager",
             "add": {
                 "__desc__": "Add a local project to the pyr4t project DB",
-                "__seq__": ["<proj-name>", "<path>"],
+                "__seq__": ["<proj-title>", "<path>"],
             },
             "init": {
-                "__desc__": "Generate a new python project architecture (`cli`, `app`, or `lib`)",
+                "__desc__": "Generate a new python project architecture",
                 "__seq__": [
-                    "(--app | --cli | --lib)", "<proj-name>", "[--authors] <authors>",
-                    "[--path] <path>", "[--version] <version>"
+                    "(--app | --cli | --lib)", "<proj-title>", "[(--authors | -a) <list-alias>]",
+                    "[(--path | -p) <path>]", "[(--version | -v) <proj-version>]"
                 ],
             },
             "list": {
@@ -76,18 +78,21 @@
             },
             "modify": {
                 "__desc__": "Modify project information in the pyr4t project DB",
-                "__seq__": ["<proj-name>", "[--name] <name>", "[--path] <path>"],
+                "__seq__": [
+                    "<proj-title>", "[(--proj-title | -t) <new-proj-title>]", 
+                    "[(--path | -p) <new-path>]", "(--version | -v) <new-proj-version>]"
+                ],
             },
             "rm": {
                 "__desc__": "Remove a project from the pyr4t project DB",
-                "__seq__": ["<proj-name>"],
+                "__seq__": ["<proj-title>"],
             },
             "whoami": {
-                "__desc__": "Print in console the active project",
+                "__desc__": "Print the active project in console",
             },
             "switch": {
                 "__desc__": "Switch to another active project from the pyr4t project DB",
-                "__seq__": ["<proj-name>"],
+                "__seq__": ["<proj-title>"],
             },
         },
 
@@ -95,14 +100,14 @@
             "__desc__": "User manager",
             "add": {
                 "__desc__": "Add a user to the pyr4t user DB",
-                "__seq__": ["<alias>", "[--email] <email>", "[--name] <name>"],
+                "__seq__": ["<alias>", "[(--email | -e) <email>]", "[(--name | -n) <name>]"],
             },
             "list": {
                 "__desc__": "List users from the pyr4t user DB",
             },
             "modify": {
                 "__desc__": "Modify user information in the pyr4t user DB",
-                "__seq__": ["<alias>", "[--email] <email>", "[--name] <name>"],
+                "__seq__": ["<alias>", "[(--email | -e) <new-email>]", "[(--name | -n) <new-name>]"],
             },
             "rm": {
                 "__desc__": "Remove a user from the pyr4t user DB",
@@ -113,7 +118,7 @@
                 "__seq__": ["<alias>"],
             },
             "whoami": {
-                "__desc__": "Print in console the active user",
+                "__desc__": "Print  the active user in console",
             },
         },
     }
