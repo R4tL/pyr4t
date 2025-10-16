@@ -1,4 +1,9 @@
 {
+    "__info__": {
+        "description": "Command structure and metadata for the Pyr4t CLI tool",
+        "version": "0.1.0",
+    },
+    
     "pyr4t": {
         "__desc__": "Pyr4t CLI",
         "__seq__":["[(--help | -h) | (--version | -v)]"],
