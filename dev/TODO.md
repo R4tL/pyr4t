@@ -135,4 +135,5 @@ commands = {
 print_tree(commands)
 ```
 
-faire une commande quo créer automatiquement le template de cli avec le json "commands"
+fairz une commande quo créer automatiquement le template de cli avec le json "commands"
+pyrat dev code pour ouvrir le projet actuel dans vs code
