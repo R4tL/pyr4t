@@ -4,7 +4,6 @@ Handles creation, listing, updating, selection, and removal of user profiles.
 """
 
 import json
-from pathlib import Path
 from typing import TypedDict
 
 from pyr4t.utils import PATH_JSON_PROFILES

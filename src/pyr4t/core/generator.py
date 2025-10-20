@@ -1,8 +1,9 @@
 """
 Project generator for Python projects.
 This module provides the GenerateProject class, which automates the creation of a standardized Python project structure,
-including directories, configuration files, scripts, and metadata. It supports customization of project name, version,
-authors, and base path, and generates files such as README, LICENSE, .gitignore, pyproject.toml, and Makefiles.
+including directories, configuration files, scripts, and metadata.It supports customization of project name,
+version, authors, and base path, and generates files such as README, LICENSE, .gitignore,
+pyproject.toml,and Makefiles.
 """
 
 import json
@@ -46,7 +47,7 @@ class GenerateProject:
         self.create_luncher()
         self.create_pyproject()
         self.create_cli_base()
-        self.create_basic_scritps()
+        self.create_scritps()
         self.create_dev_scritps()
         print("[info] Project generation complete.")
 
@@ -65,7 +66,6 @@ class GenerateProject:
 
             # Create subdirectories
             subdirs = ["docs", "scripts", "src", "tests", "dev"]
-            subdirs_dev = ["tmp", "scripts"]
             subdirs_src = ["core", "api", "cli"]
 
             for subdir in subdirs:
@@ -80,14 +80,6 @@ class GenerateProject:
                         print(
                             f"[info] Created subdirectory: {self.project_path / subdir / self.package_name / sub_subdir_src}"
                         )
-                elif subdir == "dev":
-                    for sub_subdir_dev in subdirs_dev:
-                        (self.project_path / subdir / sub_subdir_dev).mkdir(
-                            parents=True, exist_ok=True
-                        )
-                    print(
-                        f"[info] reated subdirectory: {self.project_path / subdir / sub_subdir_dev}"
-                    )
                 else:
                     (self.project_path / subdir).mkdir(parents=True, exist_ok=True)
                     print(f"[info] Created subdirectory: {self.project_path / subdir}")
@@ -100,8 +92,7 @@ class GenerateProject:
                         "tests",
                         self.package_name,
                         "cli",
-                        "dev",
-                        "tmp"
+                        "tmp",
                     ]:
                         self._create_file(dir / "__init__.py")
                     if dir.name == self.package_name:
@@ -133,16 +124,16 @@ A collection of reusable utility functions for general purposes.
         """Create a docs/python_doc.md file with a link to the official Python docs."""
 
         docs_path = self.project_path / "docs" / "python_doc.md"
-        CONTENT = """# Python Documentation
+        content = """# Python Documentation
 Official Python documentation: [https://docs.python.org/3/](https://docs.python.org/3/)
 """
-        self._create_file(docs_path, CONTENT)
+        self._create_file(docs_path, content)
 
     def create_gitignore(self):
         """Create a .gitignore file with standard Python, IDE, and OS exclusions."""
 
         print("[info] Creating .gitignore file...")
-        CONTENT = """# Python bytecode
+        content = """# Python bytecode
 __pycache__/
 *.py[cod]
 *$py.class
@@ -175,14 +166,14 @@ dev/tmp/
 .DS_Store
 Thumbs.db
 """
-        self._create_file(self.project_path / ".gitignore", CONTENT)
+        self._create_file(self.project_path / ".gitignore", content)
 
     def create_readme(self):
         """Create a README.md file with project information, installation, usage, development, and license sections."""
 
         print("[info] Creating README file...")
         author_names = ", ".join(a.get("name", "") for a in self.authors)
-        CONTENT = f"""# {self.project_name} v{self.project_version}
+        content = f"""# {self.project_name} v{self.project_version}
 
 Short description of the project.
 
@@ -438,14 +429,14 @@ python -m dev.scripts.manage -c tmp
 
 MIT License. See [LICENSE](LICENSE) for details.
 """
-        self._create_file(self.project_path / "README.md", CONTENT)
+        self._create_file(self.project_path / "README.md", content)
 
     def create_license(self):
         """Create a LICENSE file with the MIT license and author information."""
 
         print("[info] Creating LICENSE file...")
         author_names = ", ".join(a.get("name", "") for a in self.authors)
-        CONTENT = f"""MIT License
+        content = f"""MIT License
 
 Copyright (c) {time.strftime("%Y")} {author_names}
 
@@ -467,7 +458,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
-        self._create_file(self.project_path / "LICENSE", CONTENT)
+        self._create_file(self.project_path / "LICENSE", content)
 
     def create_pyproject(self):
         """Create a pyproject.toml file with project metadata, dependencies, and build configuration."""
@@ -482,7 +473,7 @@ SOFTWARE.
             ]
         )
 
-        CONTENT = f"""[project]
+        content = f"""[project]
 name = "{self.project_name}"
 version = "{self.project_version}"
 description = ""
@@ -505,13 +496,13 @@ build-backend = "setuptools.build_meta"
 [tool.setuptools.packages.find]
 where = ["src"]
 """
-        self._create_file(self.project_path / "pyproject.toml", CONTENT)
+        self._create_file(self.project_path / "pyproject.toml", content)
 
     def create_luncher(self):
         """Create a CLI runner script for the project."""
 
         print("[info] Creating CLI runner script...")
-        CONTENT = f'''"""
+        content = f'''"""
 Launcher module for the CLI.
 Provides the entry point for running the application from the command line.
 """ 
@@ -526,40 +517,38 @@ def main():
 '''
         self._create_file(
             self.project_path / "src" / self.package_name / "luncher.py",
-            CONTENT,
+            content,
         )
 
-    def create_basic_scritps(self):
-        """Create basic utility scripts for testing and project management."""
+    def create_scripts_files(self):
+        self._create_scritps(self.project_path)
 
-        print("[info] Creating basic scripts...")
+    def create_dev_env(self):
 
-        RUN_TEST = """\"\"\"
-Run tests module.
-Contains a main function to run all project tests using pytest.
-\"\"\"
+
+    def _create_scritps(self, parent_path: Path):
+        """Create utility scripts for project management."""
+
+        print("[info] Creating scripts...")
+
+        script = '''"""A script example."""
 
 import subprocess
 
 
 def main():
-    \"\"\"Run all project tests using pytest.\"\"\"
+    """Example."""
 
-    print("[info] Running tests...")
-    try:
-        subprocess.run(["pytest", "tests"], check=True)
-        print("[info] All tests passed!")
-    except subprocess.CalledProcessError:
-        print("[warning] Some tests failed.")
-"""
+    print("Script example !")
+'''
 
-        MANAGE = f"""\"\"\"
+        manage = """\"\"\"
 Management CLI module.
 Provides a command-line interface to run tests and other project management tasks.
 \"\"\"
 
 import argparse
-from . import run_tests
+from . import script_example
 
 
 def main():
@@ -569,11 +558,11 @@ def main():
         description="Project utility CLI for common development tasks."
     )
 
-    parser.add_argument("-t", "--tests", action="store_true", help="Run tests using pytest")
+    parser.add_argument("example", action="store_true", help="Example of script")
     args = parser.parse_args()
 
-    if args.tests:
-        run_tests.main()
+    if args.example:
+        example.main()
     else:
         parser.print_help()
 
@@ -581,7 +570,7 @@ if __name__ == "__main__":
     main()
 """
 
-        MAKEFILE = f"""# -------------------------------------------
+        makefile = """# -------------------------------------------
 # pyr4t Makefile
 # -------------------------------------------
 
@@ -595,29 +584,20 @@ MODE ?= classic    # For build (optional extra arguments)
 help:
 \t@echo ""
 \t@echo "[help] Available commands:"
-\t@echo "  build MODE=prod   - Build project in prod mode with pip"
-\t@echo "  test              - Run tests"
+\t@echo "  example       - Example of script"
 \t@echo ""
 
 # -------------------------------------------
-# Build project
+# Example
 # -------------------------------------------
-build:
+example:
 \t@echo "[info] Build in production mode..."
-\t$(PYTHON) -m pip install .
+\t$(PYTHON) -m pip scripts.manage example
 \t@echo "[info] Build complete."
-
-# -------------------------------------------
-# Run test scripts
-# -------------------------------------------
-test:
-\t@echo "[info] Running test scripts..."
-\t$(PYTHON) -m scripts.manage -t
-\t@echo "[info] Tests complete."
 """
-        self._create_file(self.project_path / "scripts" / "run_tests.py", RUN_TEST)
-        self._create_file(self.project_path / "scripts" / "manage.py", MANAGE)
-        self._create_file(self.project_path / "Makefile", MAKEFILE)
+        self._create_file(parent_path / "scripts" / "script_example.py", script)
+        self._create_file(parent_path / "scripts" / "manage.py", manage)
+        self._create_file(parent_path / "Makefile", makefile)
         print("[info] Basic scripts created.")
 
     def create_dev_scritps(self):
@@ -625,7 +605,7 @@ test:
 
         print("[info] Creating dev scripts...")
 
-        CLEAN = """\"\"\"
+        clean = """\"\"\"
 Clean module.
 Provides a function to clean cache, logs, and temporary files.
 \"\"\"
@@ -669,7 +649,7 @@ def main(mode="all"):
     print("[info] Cleaning complete!")
 """
 
-        FORMAT = f"""\"\"\"
+        format = f"""\"\"\"
 Format code module.
 Provides functions to format code and manage docstrings.
 \"\"\"
@@ -682,11 +662,11 @@ import ast
 
 BECON = "# TOD" + "O:"  # Dont interpret as T0-D0
 SINGLE_LINE_DOC = f"{{BECON}} add description"
-GOOGLE_DOC_TEMPLATE = f\"\"\"
-{{{{prefix}}}}{{{{args}}}}{{{{returns}}}}
+GOOGLE_DOC_TEMPLATE = \"\"\"
+{{prefix}}{{args}}{{returns}}
 \"\"\"
-DO_RETURN_TYPE = f"    {{{{BECON}}}} add return type"
-DO_UPDATE = f"{{{{BECON}}}} update docstring"
+DO_RETURN_TYPE = f"    {{BECON}} add return type"
+DO_UPDATE = f"{{BECON}} update docstring"
 
 def main():
     \"\"\"Format code and check docstrings.\"\"\"
@@ -822,7 +802,7 @@ def has_non_none_return(node: ast.FunctionDef) -> bool:
     return False
 """
 
-        MANAGE = f"""\"\"\"
+        manage = """\"\"\"
 Development management CLI module.
 Provides a CLI to format code and clean the project.
 \"\"\"
@@ -860,7 +840,7 @@ if __name__ == "__main__":
     main()
 """
 
-        MAKEFILE = f"""# -------------------------------------------
+        makefile = f"""# -------------------------------------------
 # pyr4t Development Makefile
 # -------------------------------------------
 
@@ -935,13 +915,12 @@ build:
 \t@echo "[info] Build complete."
 """
 
-        self._create_file(self.project_path / "dev" / "scripts" / "clean.py", CLEAN)
+        self._create_file(self.project_path / "dev" / "scripts" / "clean.py", clean)
         self._create_file(
-            self.project_path / "dev" / "scripts" / "format_code.py", FORMAT
+            self.project_path / "dev" / "scripts" / "format_code.py", format
         )
-        self._create_file(self.project_path / "dev" / "scripts" / "manage.py", MANAGE)
-        self._create_file(self.project_path / "dev" / "Makefile", MAKEFILE)
-        MAKEFILE
+        self._create_file(self.project_path / "dev" / "scripts" / "manage.py", manage)
+        self._create_file(self.project_path / "dev" / "Makefile", makefile)
         print("[info] Dev scripts created.")
 
     def create_cli_base(self):
@@ -1075,7 +1054,7 @@ if __name__ == "__main__":
         # Return TOML-style list
         return f'["{pytest}", "{black}", "{isort}"]'
 
-    def _get_authors(self, authors: list[str]) -> list[dict]:        
+    def _get_authors(self, authors: list[str]) -> list[dict]:
         authors_list = []
         for author in authors:
             with open(PATH_JSON_PROFILES, "r") as file:

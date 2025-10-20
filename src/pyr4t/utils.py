@@ -3,3 +3,4 @@
 from pathlib import Path
 
 PATH_JSON_PROFILES = Path.home() / ".pyr4t" / "profiles.json"
+

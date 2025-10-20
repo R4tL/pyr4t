@@ -13,7 +13,6 @@ def cmd_init(args: argparse.Namespace):
         args (argparse.Namespace): Parsed command-line arguments containing project details.
     """
 
-    """Function executed for 'init' command."""
     generator = GenerateProject(
         project_name=args.project_name,
         base_path=args.base_path,
@@ -33,7 +32,6 @@ def add_init_parser(subparsers: argparse._SubParsersAction):
         subparsers (argparse._SubParsersAction): The subparsers object from the main parser.
     """
 
-    """Add the 'init' subcommand parser."""
     parser: argparse.ArgumentParser = subparsers.add_parser(
         "init", help="Generate a new Python project structure"
     )
