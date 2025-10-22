@@ -19,7 +19,9 @@ def cmd_install(args: argparse.Namespace):
     """
 
     pyr4t_install(args.name, version=args.version, protocol=args.protocol)
-    print(f"[info] Installed Pyr4t package: {args.name} (version: {args.version})")
+    print(
+        f"[info] Installed Pyr4t package: {args.name} (version: {args.version})"
+    )
 
 
 def add_install_parser(subparsers: argparse._SubParsersAction):
@@ -34,7 +36,11 @@ def add_install_parser(subparsers: argparse._SubParsersAction):
     )
     parser.add_argument("name", type=str, help="Name of the Pyr4t package")
     parser.add_argument(
-        "-v", "--version", type=str, default="main", help='Version (default: "main")'
+        "-v",
+        "--version",
+        type=str,
+        default="main",
+        help='Version (default: "main")',
     )
     parser.add_argument(
         "-p",

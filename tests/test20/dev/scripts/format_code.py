@@ -3,11 +3,10 @@ Format code module.
 Provides functions to format code and manage docstrings.
 """
 
+import ast
 import subprocess
 import sys
 from pathlib import Path
-import ast
-
 
 BECON = "# TOD" + "O:"  # Dont interpret as T0-D0
 SINGLE_LINE_DOC = f"{BECON} add description"
@@ -17,13 +16,15 @@ GOOGLE_DOC_TEMPLATE = """
 DO_RETURN_TYPE = f"    {BECON} add return type"
 DO_UPDATE = f"{BECON} update docstring"
 
+
 def main():
     """Format code and check docstrings."""
 
     pack_path = Path(__file__).parents[2].resolve() / "src" / "test20"
     format_code(pack_path)
     process_folder(pack_path)
-    
+
+
 def format_code(path: Path):
     """Format code using Black and isort."""
 
@@ -35,6 +36,7 @@ def format_code(path: Path):
     except subprocess.CalledProcessError:
         print("[warning] Formatting failed.")
 
+
 def process_folder(folder: Path):
     """Manage docstrings in a folder."""
 
@@ -42,37 +44,62 @@ def process_folder(folder: Path):
         print(f"[info] Processing {py_file}")
         process_file(py_file)
 
-def generate_google_docstring(node: ast.FunctionDef, indent: str, update=False) -> str:
+
+def generate_google_docstring(
+    node: ast.FunctionDef, indent: str, update=False
+) -> str:
     """Generate a Google-style docstring with proper indentation."""
 
     prefix = f"{DO_UPDATE}" if update else f"{SINGLE_LINE_DOC}"
-    filtered_args = [arg.arg for arg in node.args.args if arg.arg not in ("self", "cls")]
-    if node.returns is None and not has_non_none_return(node) and not filtered_args:
+    filtered_args = [
+        arg.arg for arg in node.args.args if arg.arg not in ("self", "cls")
+    ]
+    if (
+        node.returns is None
+        and not has_non_none_return(node)
+        and not filtered_args
+    ):
         return f'{indent}"""{prefix}"""\n'
     inner_indent = indent + "    "
     args_lines = "\n".join(f"{inner_indent}{arg}:" for arg in filtered_args)
     args_section = f"\nArgs:\n{args_lines}" if filtered_args else ""
     if node.returns is not None:
-        return_section = f"\nReturns:\n{inner_indent}{ast.unparse(node.returns)}"
+        return_section = (
+            f"\nReturns:\n{inner_indent}{ast.unparse(node.returns)}"
+        )
     elif has_non_none_return(node):
         return_section = f"\nReturns:\n{inner_indent}{DO_RETURN_TYPE}"
     else:
         return_section = ""
-    docstring_body = GOOGLE_DOC_TEMPLATE.format(prefix=prefix, args=args_section, returns=return_section)
+    docstring_body = GOOGLE_DOC_TEMPLATE.format(
+        prefix=prefix, args=args_section, returns=return_section
+    )
     for line in docstring_body.splitlines():
         if line.strip() == "":
             continue
-        if not line.startswith(inner_indent) and line not in (DO_RETURN_TYPE, DO_UPDATE):
+        if not line.startswith(inner_indent) and line not in (
+            DO_RETURN_TYPE,
+            DO_UPDATE,
+        ):
             docstring_body = docstring_body.replace(line, indent + line)
     return f'{indent}"""{docstring_body}{indent}"""\n'
 
-def check_docstring_needs_update(node: ast.FunctionDef, docstring: str) -> bool:
+
+def check_docstring_needs_update(
+    node: ast.FunctionDef, docstring: str
+) -> bool:
     """Check if the docstring is missing any arguments or the return value."""
 
     if docstring is None:
         return True
-    filtered_args = [arg.arg for arg in node.args.args if arg.arg not in ("self", "cls")]
-    if node.returns is None and not has_non_none_return(node) and not filtered_args:
+    filtered_args = [
+        arg.arg for arg in node.args.args if arg.arg not in ("self", "cls")
+    ]
+    if (
+        node.returns is None
+        and not has_non_none_return(node)
+        and not filtered_args
+    ):
         return False
     for arg in filtered_args:
         if arg not in docstring:
@@ -80,12 +107,13 @@ def check_docstring_needs_update(node: ast.FunctionDef, docstring: str) -> bool:
     if (
         node.returns is not None
         and has_non_none_return(node)
-        and "Returns" not in docstring 
+        and "Returns" not in docstring
         and ast.unparse(node.returns) not in docstring
         and ast.unparse(node.returns) != "None"
-        ):
+    ):
         return True
     return False
+
 
 def get_indent(line: str) -> str:
     """Return the whitespace at the start of a line for indentation."""
@@ -93,7 +121,8 @@ def get_indent(line: str) -> str:
     base = ""
     if ":" in line:
         base = "    "
-    return line[:len(line) - len(line.lstrip())] + base
+    return line[: len(line) - len(line.lstrip())] + base
+
 
 def process_file(path: Path):
     """Manage docstrings in a file."""
@@ -115,10 +144,14 @@ def process_file(path: Path):
             line_idx = find_signature_end(lines, node.lineno - 1)
             indent = get_indent(lines[line_idx])
             if check_docstring_needs_update(node, docstring):
-                edits.append((
-                    line_idx + 1, 
-                    generate_google_docstring(node, indent, update= bool(docstring))
-                ))
+                edits.append(
+                    (
+                        line_idx + 1,
+                        generate_google_docstring(
+                            node, indent, update=bool(docstring)
+                        ),
+                    )
+                )
         elif isinstance(node, ast.ClassDef):
             docstring = ast.get_docstring(node)
             line_idx = find_signature_end(lines, node.lineno - 1)
@@ -131,6 +164,7 @@ def process_file(path: Path):
     with open(path, "w", encoding="utf-8") as f:
         f.write("\n".join(lines))
 
+
 def find_signature_end(lines: list[str], start_line: int) -> int:
     """Return the index where the function signature ends."""
 
@@ -141,6 +175,7 @@ def find_signature_end(lines: list[str], start_line: int) -> int:
         if open_parens <= 0 and line.strip().endswith(":"):
             return i
     return start_line
+
 
 def has_non_none_return(node: ast.FunctionDef) -> bool:
     """Return True if the function has at least one 'return' with a value."""

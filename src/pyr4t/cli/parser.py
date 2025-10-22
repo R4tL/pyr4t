@@ -5,17 +5,18 @@ This module defines the CLI argument parser for the Pyr4t project management too
 import argparse
 import sys
 
-from .cmd_init import add_init_parser
-from .cmd_install import add_install_parser
-from .cmd_profile import add_profile_parser
 from .cmd_help import cmd_help
+from .cmd_proj import add_init_parser
+from .cmd_install import add_install_parser
+from .cmd_user import add_profile_parser
 
 
 def build_parser():
     """
     Creates and configures the main argument parser for the Pyr4t CLI.
     Returns:
-        argparse.ArgumentParser: The configured argument parser for the Pyr4t CLI.
+        argparse.ArgumentParser: The configured argument parser for
+        the Pyr4t CLI.
     """
 
     parser = argparse.ArgumentParser(
@@ -27,7 +28,6 @@ def build_parser():
         print("\nCommand Tree:\n")
         cmd_help()
         print("\nHelp:\n")
-
 
     add_init_parser(subparsers)
     add_install_parser(subparsers)

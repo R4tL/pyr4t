@@ -1,5 +1,6 @@
 import subprocess
 
+
 def main():
     """Run all project tests using pytest."""
     print("[info] Running tests...")

@@ -1,5 +1,7 @@
 import argparse
+
 from . import run_tests
+
 
 def main():
     parser = argparse.ArgumentParser(
@@ -7,7 +9,9 @@ def main():
     )
 
     # Define optional flags
-    parser.add_argument("-t", "--tests", action="store_true", help="Run tests using pytest")
+    parser.add_argument(
+        "-t", "--tests", action="store_true", help="Run tests using pytest"
+    )
     args = parser.parse_args()
 
     # Execute based on flags
@@ -15,6 +19,7 @@ def main():
         run_tests.main()
     else:
         parser.print_help()
+
 
 if __name__ == "__main__":
     main()

@@ -4,7 +4,8 @@ Provides a CLI to format code and clean the project.
 """
 
 import argparse
-from . import format_code, clean
+
+from . import clean, format_code
 
 
 def main():
@@ -14,13 +15,19 @@ def main():
         description="Project utility CLI for common development tasks."
     )
 
-    parser.add_argument("-f", "--format", action="store_true", help="Format code with black and isort")
     parser.add_argument(
-        "-c", "--clean",
+        "-f",
+        "--format",
+        action="store_true",
+        help="Format code with black and isort",
+    )
+    parser.add_argument(
+        "-c",
+        "--clean",
         nargs="?",
-        const="cache",  
+        const="cache",
         choices=["all", "cache", "log", "tmp"],
-        help="Clean files: 'all' (default), 'cache', 'log' (log files), or 'tmp' (files in /dev/tmp/)"
+        help="Clean files: 'all' (default), 'cache', 'log' (log files), or 'tmp' (files in /dev/tmp/)",
     )
 
     args = parser.parse_args()
@@ -31,6 +38,7 @@ def main():
         clean.main(args.clean)
     else:
         parser.print_help()
+
 
 if __name__ == "__main__":
     main()

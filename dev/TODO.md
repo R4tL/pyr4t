@@ -70,41 +70,44 @@ LES DIFFERENTS MODULES de "pyr4t"
 - test -> lance les scripts de tests
 
   
-Pour ça faudrait prendre la taille de la cmd et revenir a la ligne pour les arg si pas la place (comme dans le pyrat proj init)
+Fait : Pour ça faudrait prendre la taille de la cmd et revenir a la ligne pour les arg si pas la place (comme dans le pyrat proj init)
 ```
-└── pyr4t
-    ├── dev [--proj-name] <proj-name>                                                               # Dev commands
-    │   ├── build                                                                                       # Build project in editable mode with `pip install -e .[dev]`
-    │   │ cls [--cache] [--log] [--tmp]                                                                 # Clean cache, logs and tmp files (select an option to chose files to clean just)                                                                     
-    │   ├── docstr                                                                                      # Check doctring and create/update template if necessary
-    │   ├── fmt                                                                                         # Format scripts in ./src using black and isort
-    │   ├── init                                                                                        # Generate a dev environment in ./dev
-    │   ├── test [--test-script] <test-script>                                                          # Lunch all or specific test scripts
-    │   └── venv                                                                                        # Generate a python venv in ./.venv
-    ├── package                                                                                     # Pyr4t package manager
-    │   ├── install <package-name>                                                                      # Install a pyr4t package from `R4tL` github repo
-    │   ├── uninstall <package-name>                                                                    # Unstall a pyr4t package from local device
-    │   └── update <package-name>                                                                       # Update a pyr4t package on local device
-    ├── prod [--proj-name] <proj-name>                                                              # Prod commands
-    │   ├── build                                                                                       # Unstall a pyr4t package from local device
-    │   ├── run                                                                                         # Run __main__.py file
-    │   └── test                                                                                        # Run integration test files
-    ├── proj                                                                                        # Python project manager
-    │   ├── add <proj-name> <path>                                                                      # Add a local project to the pyr4t project DB
-    │   ├── init <proj-name> (--app | --cli | --import)
-    │   │       [--authors] <authors> [--path] <path> [--version] <version>                             # Generate a new python project architecture (`cli` or `import`)
-    │   ├── list                                                                                        # List projects from the pyr4t project DB
-    │   ├── modify <proj-name> [--name] [--path]                                                        # Modify project informations in the pyr4t project DB
-    │   ├── rm <proj-name>                                                                              # Remove a project from the pyr4t project DB
-    │   ├── whoami                                                                                      # Print in console the active project
-    │   └── switch <proj-name>                                                                          # Switch to an other active project from the pyr4t project DB
-    └── user                                                                                        # User manager
-        ├── add <alias> [--email] <email> [--name] <name>                                               # Add an user to the pyr4t user DB
-        ├── list                                                                                        # List users from the pyr4t user DB
-        ├── modify <alias> [--email] <email> [--name] <name>                                            # Modify user informations in the pyr4t project DB
-        ├── rm <alias>                                                                                  # Remove an user from the pyr4t project DB
-        ├── switch <alias>                                                                              # Switch to an other active user from the pyr4t user DB
-        └── whoami                                                                                      # Print in console the active user
+└── pyr4t [(--help | -h) | (--version | -V)]                                             # Pyr4t CLI
+    ├── dev [(--proj-title | -t) <proj-title>]                                           # Dev commands
+    │   ├── build                                                                        # Build project in editable mode with `pip install -e
+    │   │                                                                                  .[dev]`
+    │   ├── cls [--cache] [--log] [--tmp]                                                # Clean cache, logs and tmp files (choose specific type or
+    │   │                                                                                  all)
+    │   ├── docstr                                                                       # Check doctring and create/update template if necessary
+    │   ├── fmt                                                                          # Format scripts in ./src using black and isort
+    │   ├── init                                                                         # Generate a dev environment in ./dev
+    │   └── venv                                                                         # Generate a python venv in ./.venv
+    ├── package                                                                          # Pyr4t package manager
+    │   ├── install <package-name>                                                       # Install a pyr4t package from `R4tL` GitHub repo
+    │   ├── uninstall <package-name>                                                     # Uninstall a pyr4t package from local device
+    │   └── update <package-name>                                                        # Update a pyr4t package on local device
+    ├── prod [(--proj-title | -t) <proj-title>]                                          # Prod commands
+    │   ├── build                                                                        # Build production-ready package or binary
+    │   ├── run                                                                          # Run __main__.py file
+    │   └── test                                                                         # Run integration or production tests
+    ├── proj                                                                             # Python project manager
+    │   ├── add <proj-title> <path>                                                      # Add a local project to the pyr4t project DB
+    │   ├── init (--app | --cli | --lib) <proj-title> [(--authors | -a) <list-alias>]    # Generate a new python project architecture
+    │   │        [(--path | -p) <path>] [(--version | -v) <proj-version>]
+    │   ├── list                                                                         # List projects from the pyr4t project DB
+    │   ├── modify <proj-title> [(--proj-title | -t) <new-proj-title>]                   # Modify project information in the pyr4t project DB
+    │   │          [(--path | -p) <new-path>] (--version | -v) <new-proj-version>]
+    │   ├── rm <proj-title>                                                              # Remove a project from the pyr4t project DB
+    │   ├── whoami                                                                       # Print the active project in console
+    │   └── switch <proj-title>                                                          # Switch to another active project from the pyr4t project
+    │                                                                                      DB
+    └── user                                                                             # User manager
+        ├── add <alias> <name> <email>                                                   # Add a user to the pyr4t user DB
+        ├── list                                                                         # List users from the pyr4t user DB
+        ├── modify <alias> [(--email | -e) <new-email>] [(--name | -n) <new-name>]       # Modify user information in the pyr4t user DB
+        ├── rm <alias>                                                                   # Remove a user from the pyr4t user DB
+        ├── switch <alias>                                                               # Switch to another active user from the pyr4t user DB
+        └── whoami                                                                       # Print  the active user in console
 ```
 
 ```python
@@ -137,3 +140,24 @@ print_tree(commands)
 
 fairz une commande quo créer automatiquement le template de cli avec le json "commands"
 pyrat dev code pour ouvrir le projet actuel dans vs code
+
+a faire :
+```
+my_app/
+└── gui/
+    ├── __init__.py
+    ├── main_window.py      # fenêtre principale
+    ├── dialogs.py          # boîtes de dialogue, popups
+    ├── widgets.py          # widgets customisés
+    └── styles.py           # thèmes, CSS, couleurs
+```
+
+```
+my_app/
+└── api/
+    ├── __init__.py
+    ├── app.py           # point d’entrée de l’API (FastAPI, Flask)
+    ├── routes.py        # définition des endpoints
+    ├── dependencies.py  # dépendances, injections de services
+    └── schemas.py       # schémas de données (Pydantic)
+```

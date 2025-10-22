@@ -11,7 +11,7 @@ def build_parser():
     Returns:
         argparse.ArgumentParser: The configured argument parser for the CLI.
     """
-    
+
     parser = argparse.ArgumentParser(
         prog="test20", description="CLI of test20."
     )

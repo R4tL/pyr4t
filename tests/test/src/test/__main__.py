@@ -5,6 +5,7 @@ Provides the entry point for command-line interface operation.
 
 from pyr4t.cli import build_parser
 
+
 def main():
     """Main entry point for the test CLI program."""
     parser = build_parser()
@@ -14,6 +15,7 @@ def main():
         args.func(args)
     else:
         print("Hello World")  # default comportement
+
 
 if __name__ == "__main__":
     main()

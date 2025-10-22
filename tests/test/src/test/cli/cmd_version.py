@@ -1,7 +1,7 @@
 """
 Version command for the CLI.
 Provides a parser for the --version option.
-""" 
+"""
 
 import argparse
 
@@ -12,6 +12,7 @@ def cmd_version(args: argparse.Namespace):
     """Print the current version of the package."""
 
     print(__version__)
+
 
 def add_version_parser(subparsers: argparse._SubParsersAction):
     """Add the --version command to the CLI parser."""

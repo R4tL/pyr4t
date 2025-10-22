@@ -1,8 +1,7 @@
 """Functions to print a better --help."""
 
-import shutil
 import json
-
+import shutil
 from pathlib import Path
 
 
@@ -14,16 +13,22 @@ def wrap_sequence(
     have_children: bool,
     desc="",
 ):
-    """Builds wrapped text lines for a tree node with optional sequence and description.
+    """Builds wrapped text lines for a tree node with optional sequence
+     and description.
     Args:
-        prefix (str): The prefix for the current tree level (indentation + connectors).
-        connector (str): The connector symbol linking the node to its parent (e.g., "├──" or "└──").
+        prefix (str): The prefix for the current tree level
+        (indentation + connectors).
+        connector (str): The connector symbol linking the node to its parent
+        (e.g., "├──" or "└──").
         key (str): The name of the current node.
-        seq_list (list[str]): A list of elements to display on the same line as the key.
+        seq_list (list[str]): A list of elements to display on the same
+        line as the key.
         have_children (bool): Whether the node has child elements.
-        desc (str, optional): Description text to display on the right side of the node.
+        desc (str, optional): Description text to display on the right
+        side of the node.
     Returns:
-        list[str]: A list of formatted strings representing this node and its wrapped lines.
+        list[str]: A list of formatted strings representing this node and its
+        wrapped lines.
     """
 
     # Init term dimentions
@@ -76,7 +81,8 @@ def wrap_desc(desc: str, desc_width: int) -> list[str]:
         desc: The description text to wrap.
         desc_width: The maximum width for each wrapped line.
     Returns:
-        list[str]: A list of formatted strings representing this node and its wrapped lines.
+        list[str]: A list of formatted strings representing this node and
+        its wrapped lines.
     """
 
     words = desc.split(" ")
@@ -111,34 +117,36 @@ def build_lines(dict_cmd: dict, prefix="") -> list[str]:
         list[str]: A list of formatted strings.
     """
 
-
     lines = []
     items = list(dict_cmd.items())
     for i, (key, value) in enumerate(items):
-        connector = "└──" if i == len(items) - 1 else "├──"
-        seq_list = value.get("__seq__", [])
-        desc = value.get("__desc__", "")
-        children = {
-            k: v
-            for k, v in value.items()
-            if isinstance(v, dict) and k not in ("__seq__", "__desc__")
-        }
-        if desc:
-            desc = "# " + desc
-        wrapped_lines = wrap_sequence(
-            prefix, connector, key, seq_list, children != {}, desc
-        )
-        lines.extend(wrapped_lines)
-        if children:
-            extension = "    " if i == len(items) - 1 else "│   "
-            lines.extend(build_lines(children, prefix + extension))
+        if not key == "__info__":
+            connector = "└──" if i == len(items) - 1 else "├──"
+            seq_list = value.get("__seq__", [])
+            desc = value.get("__desc__", "")
+            children = {
+                k: v
+                for k, v in value.items()
+                if isinstance(v, dict) and k not in ("__seq__", "__desc__")
+            }
+            if desc:
+                desc = "# " + desc
+            wrapped_lines = wrap_sequence(
+                prefix, connector, key, seq_list, children != {}, desc
+            )
+            lines.extend(wrapped_lines)
+            if children:
+                extension = "    " if i == len(items) - 1 else "│   "
+                lines.extend(build_lines(children, prefix + extension))
     return lines
 
 
 def cmd_help():
     """Prints a formatted tree representation commands using commands.json."""
 
-    with open(Path(__file__).parent / "commands.json", encoding="UTF-8") as file:
+    with open(
+        Path(__file__).parent / "commands.json", encoding="UTF-8"
+    ) as file:
         data_cmd = json.load(file)
     lines = build_lines(data_cmd)
     for line in lines:
