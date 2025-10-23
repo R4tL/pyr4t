@@ -5,17 +5,27 @@ import argparse
 from pyr4t.core import ProjectArchM4nager, ProjectDBM4nager
 
 
-def cmd_proj(args: ):
+def cmd_proj(args: argparse.Namespace):
     """
     Initializes a new Python project using the provided arguments.
     Args:
-        args (argparse.pathspace): Parsed command-line arguments containing project details.
+        args (argparse.pathspace): Parsed command-line arguments containing
+        project details.
     """
 
     if args.action == "init":
-        ...
-
-
+        amgr = ProjectArchM4nager(
+            args.title,
+            args.path,
+            args.authors,
+            args.version
+        )
+        if args.app:
+            amgr.generate_app_project()
+        elif args.cli:
+            amgr.generate_cli_project()
+        elif args.lib:
+            amgr.generate_lib_project()
 
     else:
         dbmgr = ProjectDBM4nager()
@@ -24,41 +34,38 @@ def cmd_proj(args: ):
             case "add":
                 dbmgr.add(args.title, path=args.path)
                 print(
-                    f"[info] Profile added: {args.title}: {args.path}"
+                    f"[info] Project added: {args.title}: {args.path}"
                 )
 
             case "list":
-                profiles = dbmgr.list()
-                if not profiles:
-                    print("[warning] No profiles found.")
+                projects = dbmgr.list()
+                if not projects:
+                    print("[warning] No projects found.")
                 else:
-                    for title, profile in profiles.items():
+                    for title, project in projects.items():
                         print(
-                            f"[info] {title}: {profile.get("path", "")}"
+                            f"[info] {title}: {project.get("path", "")}"
                         )
 
             case "modify":
                 dbmgr.modify(args.title, path=args.path)
-                print(f"Profile updated: {args.title}")
+                print(f"Project updated: {args.title}")
 
             case "rm":
                 dbmgr.remove(args.title)
-                print(f"[info] Profile removed: {args.title}")
+                print(f"[info] Project removed: {args.title}")
 
             case "swicth":
                 dbmgr.switch(args.title)
-                print(f"[info] Default profile selected: {args.title}")
+                print(f"[info] Default project selected: {args.title}")
 
             case "whoami":
-                title, profile = dbmgr.whoami()
-                print(
-                    f"[info] {title}: {profile.get("path", "")} "
-                    f"<{profile.get("email", "")}>"
-                )
+                title, project = dbmgr.whoami()
+                print(f"[info] {title}: {project.get("path", "")}")
 
 
 
-def add_init_parser(subparsers: argparse._SubParsersAction):
+def add_proj_parser(subparsers: argparse._SubParsersAction):
     """
     Adds the 'init' subcommand parser to the CLI.
     Args:
@@ -85,13 +92,14 @@ def add_init_parser(subparsers: argparse._SubParsersAction):
         "architecture"
         )
     )
-    init_parser.add_argument(
+    group_init = init_parser.add_mutually_exclusive_group(required=True)
+    group_init.add_argument(
         "--app", action="store_true", help="Application architecture"
     )
-    init_parser.add_argument(
+    group_init.add_argument(
         "--cli", action="store_true", help="CLI architecture"
     )
-    init_parser.add_argument(
+    group_init.add_argument(
         "--lib", action="store_true", help="Librairie architecture"
     )
     init_parser.add_argument("title", required=True, help="Project title")

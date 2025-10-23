@@ -12,7 +12,7 @@ class JSOND4ta(TypedDict):
     list: dict[str, EntryType]
 
 
-class Profile(TypedDict):
+class User(TypedDict):
     """# TODO: add description"""
 
     name: str

@@ -3,7 +3,7 @@ Main module for the Pyr4t CLI.
 Provides the entry point for command-line interface operations.
 """
 
-from pyr4t.cli import build_parser
+from .cli import build_parser
 
 
 def main():

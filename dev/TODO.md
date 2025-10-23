@@ -72,42 +72,42 @@ LES DIFFERENTS MODULES de "pyr4t"
   
 Fait : Pour ça faudrait prendre la taille de la cmd et revenir a la ligne pour les arg si pas la place (comme dans le pyrat proj init)
 ```
-└── pyr4t [(--help | -h) | (--version | -V)]                                             # Pyr4t CLI
-    ├── dev [(--proj-title | -t) <proj-title>]                                           # Dev commands
-    │   ├── build                                                                        # Build project in editable mode with `pip install -e
-    │   │                                                                                  .[dev]`
-    │   ├── cls [--cache] [--log] [--tmp]                                                # Clean cache, logs and tmp files (choose specific type or
-    │   │                                                                                  all)
-    │   ├── docstr                                                                       # Check doctring and create/update template if necessary
-    │   ├── fmt                                                                          # Format scripts in ./src using black and isort
-    │   ├── init                                                                         # Generate a dev environment in ./dev
-    │   └── venv                                                                         # Generate a python venv in ./.venv
-    ├── package                                                                          # Pyr4t package manager
-    │   ├── install <package-name>                                                       # Install a pyr4t package from `R4tL` GitHub repo
-    │   ├── uninstall <package-name>                                                     # Uninstall a pyr4t package from local device
-    │   └── update <package-name>                                                        # Update a pyr4t package on local device
-    ├── prod [(--proj-title | -t) <proj-title>]                                          # Prod commands
-    │   ├── build                                                                        # Build production-ready package or binary
-    │   ├── run                                                                          # Run __main__.py file
-    │   └── test                                                                         # Run integration or production tests
-    ├── proj                                                                             # Python project manager
-    │   ├── add <proj-title> <path>                                                      # Add a local project to the pyr4t project DB
-    │   ├── init (--app | --cli | --lib) <proj-title> [(--authors | -a) <list-alias>]    # Generate a new python project architecture
+└── pyr4t [(--help | -h) | (--version | -V)]                                         
+    ├── dev [(--proj-title | -t) <proj-title>]                                       
+    │   ├── build                                                                    
+    │   │                                                                            
+    │   ├── cls [--cache] [--log] [--tmp]                                            
+    │   │                                                                            
+    │   ├── docstr                                                                   
+    │   ├── fmt                                                                      
+    │   ├── init                                                                     
+    │   └── venv                                                                     
+    ├── package                                                                      
+    │   ├── install <package-name>                                                   
+    │   ├── uninstall <package-name>                                                 
+    │   └── update <package-name>                                                    
+    ├── prod [(--proj-title | -t) <proj-title>]                                      
+    │   ├── build                                                                    
+    │   ├── run                                                                      
+    │   └── test                                                                     
+    ├── proj                                                                         
+    │   ├── add <proj-title> <path>                                                  
+    │   ├── init (--app | --cli | --lib) <proj-title> [(--authors | -a) <list-alias>]
     │   │        [(--path | -p) <path>] [(--version | -v) <proj-version>]
-    │   ├── list                                                                         # List projects from the pyr4t project DB
-    │   ├── modify <proj-title> [(--proj-title | -t) <new-proj-title>]                   # Modify project information in the pyr4t project DB
+    │   ├── list                                                                     
+    │   ├── modify <proj-title> [(--proj-title | -t) <new-proj-title>]               
     │   │          [(--path | -p) <new-path>] (--version | -v) <new-proj-version>]
-    │   ├── rm <proj-title>                                                              # Remove a project from the pyr4t project DB
-    │   ├── whoami                                                                       # Print the active project in console
-    │   └── switch <proj-title>                                                          # Switch to another active project from the pyr4t project
-    │                                                                                      DB
-    └── user                                                                             # User manager
-        ├── add <alias> <name> <email>                                                   # Add a user to the pyr4t user DB
-        ├── list                                                                         # List users from the pyr4t user DB
-        ├── modify <alias> [(--email | -e) <new-email>] [(--name | -n) <new-name>]       # Modify user information in the pyr4t user DB
-        ├── rm <alias>                                                                   # Remove a user from the pyr4t user DB
-        ├── switch <alias>                                                               # Switch to another active user from the pyr4t user DB
-        └── whoami                                                                       # Print  the active user in console
+    │   ├── rm <proj-title>                                                          
+    │   ├── whoami                                                                   
+    │   └── switch <proj-title>                                                      
+    │                                                                                
+    └── user                                                                         
+        ├── add <alias> <name> <email>                                               
+        ├── list                                                                     
+        ├── modify <alias> [(--email | -e) <new-email>] [(--name | -n) <new-name>]   
+        ├── rm <alias>                                                               
+        ├── switch <alias>                                                           
+        └── whoami                                                                   
 ```
 
 ```python
@@ -160,4 +160,28 @@ my_app/
     ├── routes.py        # définition des endpoints
     ├── dependencies.py  # dépendances, injections de services
     └── schemas.py       # schémas de données (Pydantic)
+```
+
+
+github json:
+```
+{
+  "url": "https://api.github.com/repos/username/repo/releases/123456",
+  "tag_name": "v0.2.0",
+  "name": "v0.2.0",
+  "assets": [
+    {
+      "id": 987654,
+      "name": "pyr4tlogger-0.2.0-py3-none-any.whl",
+      "browser_download_url": "https://github.com/username/repo/releases/download/v0.2.0/pyr4tlogger-0.2.0-py3-none-any.whl",
+      "size": 123456
+    },
+    {
+      "id": 987655,
+      "name": "pyr4tlogger-0.2.0.tar.gz",
+      "browser_download_url": "https://github.com/username/repo/releases/download/v0.2.0/pyr4tlogger-0.2.0.tar.gz",
+      "size": 234567
+    }
+  ]
+}
 ```

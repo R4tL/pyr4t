@@ -9,6 +9,7 @@ from pathlib import Path
 
 from pyr4t.models import Project
 from pyr4t.utils import PATH_JSON_PROFILES, PATH_JSON_PROJECTS, _JSONDBM4nager
+from .user import UserDBM4nager
 
 # TODO : verifier les strings avec retour a la ligne car mal fait !
 
@@ -23,41 +24,29 @@ class _ProjectGenerator:
         proj_title: str,
         base_path: str,
         authors: list[str],
-        project_version: str,
+        proj_version: str,
     ):
 
         self.proj_title = proj_title.replace(" ", "-")
         self.package_name = self.proj_title.lower().replace("-", "_")
-        self.project_path = Path(base_path) / self.proj_title
+        self.proj_path = Path(base_path) / self.proj_title
         self.authors = self._get_authors(authors)
-        self.project_version = project_version
+        self.proj_version = proj_version
 
-    def generate_project(self, project_type: str) -> bool:
-        """
-# TODO: update docstring
-        Args:
-            project_type:
-        Returns:
-            bool
-        """
-
+    def generate_project(self, project_type: str):
         """
         Create the main project directory and subdirectories.
+        Args:
+            project_type: Type of project (app, cli, lib)
         Returns:
             bool: True if successful, False otherwise.
         """
 
         print("[info] Generating a project architecture...")
-        try:
-            # Create main project directory
-            self.project_path.mkdir(parents=True, exist_ok=False)
-        except FileExistsError:
-            print(
-                f"[error] The directory '{self.project_path}' already exists."
-            )
-            return False
 
-        print(f"[info] Created project directory: {self.project_path}")
+        # Create main project directory
+        self.proj_path.mkdir(parents=True, exist_ok=False)
+        print(f"[info] Created project directory: {self.proj_path}")
 
         # Create dirs
         self._generate_dirs(project_type)
@@ -69,11 +58,11 @@ class _ProjectGenerator:
         self._generate_license()
         self._generate_readme(project_type)
         self._generate_pyproject(project_type)
-        self.generate_scripts(self.project_path)
+        self.generate_scripts(self.proj_path)
         self._generate_tests(project_type)
         models = '''"""Typing variables."""\n\n'''
         self._create_file(
-            self.project_path / "src" / self.package_name / "models.py", models
+            self.proj_path / "src" / self.package_name / "models.py", models
         )
 
         # Create project type files
@@ -84,8 +73,13 @@ class _ProjectGenerator:
         elif project_type == "lib":
             self._generate_lib()
 
+        # Add to DB and current
+        pdbmgr = ProjectDBM4nager()
+        pdbmgr.add(self.proj_title, str(self.proj_path))
+        pdbmgr.switch(self.proj_title)
+
         print("[info] Project architecture created with success.")
-        return True
+
 
     def generate_scripts(self, parent_path: Path):
         """
@@ -184,18 +178,18 @@ example:
 
         # Create subdirectories
         for subdir in subdirs:
-            (self.project_path / subdir).mkdir()
+            (self.proj_path / subdir).mkdir()
             print(f"[info] Cretation of dir: {subdir}")
-        (self.project_path / "src" / self.package_name).mkdir()
+        (self.proj_path / "src" / self.package_name).mkdir()
         print(f"[info] Cretation of dir: {self.package_name}")
         for subdir_src in subdirs_src:
             (
-                self.project_path / self.package_name / "src" / subdir_src
+                self.proj_path / self.package_name / "src" / subdir_src
             ).mkdir()
             print(f"[info] Cretation of dir: {subdir_src}")
         for subdir_core in subdirs_core:
             (
-                self.project_path
+                self.proj_path
                 / self.package_name
                 / "src"
                 / "core"
@@ -205,7 +199,7 @@ example:
 
     def _generate_init_files(self, project_type: str):
 
-        for proj_dir in (self.project_path / "src" / self.package_name).rglob(
+        for proj_dir in (self.proj_path / "src" / self.package_name).rglob(
             "*"
         ):
             if proj_dir.is_dir():
@@ -221,10 +215,10 @@ __all__ = ['Example']
                     content = f'''\
 """This module provides the main interface for {self.package_name}.
 {sub_cont1 if project_type == "lib" else ""}Version:
-{self.project_version}
+{self.proj_version}
 
 {sub_cont2 if project_type == "lib" else ""}
-__version__ = {self.project_version}
+__version__ = {self.proj_version}
 
 '''
 
@@ -248,7 +242,7 @@ __all__ = ["build_parser"]
         Python docs.
         """
 
-        docs_path = self.project_path / "docs" / "python_doc.md"
+        docs_path = self.proj_path / "docs" / "python_doc.md"
         content = """\
 # Python Documentation
 Official Python documentation: [https://docs.python.org/3/](https://docs.python.org/3/)
@@ -296,7 +290,7 @@ dev
 .DS_Store
 Thumbs.db
 """
-        self._create_file(self.project_path / ".gitignore", content)
+        self._create_file(self.proj_path / ".gitignore", content)
 
     def _generate_readme(self, project_type: str):
         """
@@ -337,7 +331,7 @@ ex.example()
 """
         # pylint: disable=line-too-long
         content = f"""\
-# {self.proj_title} v{self.project_version}
+# {self.proj_title} v{self.proj_version}
 
 Short description of the project.
 
@@ -357,7 +351,7 @@ Short description of the project.
 
 ## About
 
-* **Version ->** {self.project_version}
+* **Version ->** {self.proj_version}
 * **{"Authors" if "," in author_names else "Author"} ->** {author_names}
 * **License ->** MIT
 
@@ -390,18 +384,18 @@ source .venv/bin/activate
 
 - HTTPS
 ```bash
-pip install git+https://github.com/{author_names[0]}/{self.proj_title}.git@v{self.project_version}
+pip install git+https://github.com/{author_names[0]}/{self.proj_title}.git@v{self.proj_version}
 ```
 
 - SSH
 ```bash
-pip install git+ssh://github.com/{author_names[0]}/{self.proj_title}.git@v{self.project_version}
+pip install git+ssh://github.com/{author_names[0]}/{self.proj_title}.git@v{self.proj_version}
 ```
 
 * **Install directly from Pypi**
 
 ```bash
-pip install {self.proj_title.lower()}=={self.project_version}
+pip install {self.proj_title.lower()}=={self.proj_version}
 ```
 
 * **Cloning the repository**
@@ -476,7 +470,7 @@ python -m scripts.manage example
 MIT License. See [LICENSE](LICENSE) for details.
 """
         # pylint: enable=line-too-long
-        self._create_file(self.project_path / "README.md", content)
+        self._create_file(self.proj_path / "README.md", content)
 
     def _generate_license(self):
         """
@@ -508,7 +502,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
-        self._create_file(self.project_path / "LICENSE", content)
+        self._create_file(self.proj_path / "LICENSE", content)
 
     def _generate_pyproject(self, project_type: str):
         """
@@ -518,7 +512,7 @@ SOFTWARE.
 
         authors_toml = ", ".join(
             [
-                f'{{ name = "{a.get("name")}", email = "{a.get("email")}" }}' # TODO : utiliser DBProfiles
+                f'{{ name = "{a.get("name")}", email = "{a.get("email")}" }}'
                 for a in self.authors
             ]
         )
@@ -530,7 +524,7 @@ SOFTWARE.
         content = f"""\
 [project]
 name = "{self.proj_title}"
-version = "{self.project_version}"
+version = "{self.proj_version}"
 description = ""
 authors = [{authors_toml}]
 requires-python = ">={f"{sys.version_info.major}.{sys.version_info.minor}"}"
@@ -548,7 +542,7 @@ build-backend = "setuptools.build_meta"
 [tool.setuptools.packages.find]
 where = ["src"]
 """
-        self._create_file(self.project_path / "pyproject.toml", content)
+        self._create_file(self.proj_path / "pyproject.toml", content)
 
     def _generate_tests(self, project_type: str):
 
@@ -598,7 +592,7 @@ def test_cli_{self.package_name}(monkeypatch, capsys):
 '''
 
         self._create_file(
-            self.project_path / "tests" / "test_example.py", test
+            self.proj_path / "tests" / "test_example.py", test
         )
 
     def _generate_cli(self):
@@ -863,7 +857,7 @@ def main():
 '''
 
         self._create_file(
-            self.project_path
+            self.proj_path
             / "src"
             / self.package_name
             / "core"
@@ -871,7 +865,7 @@ def main():
             version,
         )
         self._create_file(
-            self.project_path
+            self.proj_path
             / "src"
             / self.package_name
             / "core"
@@ -879,7 +873,7 @@ def main():
             helper,
         )
         self._create_file(
-            self.project_path
+            self.proj_path
             / "src"
             / self.package_name
             / "core"
@@ -887,7 +881,7 @@ def main():
             parser,
         )
         self._create_file(
-            self.project_path
+            self.proj_path
             / "src"
             / self.package_name
             / "core"
@@ -896,10 +890,10 @@ def main():
         )
 
         self._create_file(
-            self.project_path / "src" / self.package_name / "__main__.py", main
+            self.proj_path / "src" / self.package_name / "__main__.py", main
         )
         self._create_file(
-            self.project_path / "src" / self.package_name / "luncher.py",
+            self.proj_path / "src" / self.package_name / "luncher.py",
             luncher,
         )
 
@@ -921,7 +915,7 @@ def main():
         schemas = '''"""Data schemas (Pydantic)."""\n\n'''
 
         self._create_file(
-            self.project_path
+            self.proj_path
             / "src"
             / self.package_name
             / "gui"
@@ -929,7 +923,7 @@ def main():
             main_window,
         )
         self._create_file(
-            self.project_path
+            self.proj_path
             / "src"
             / self.package_name
             / "gui"
@@ -937,7 +931,7 @@ def main():
             dialogs,
         )
         self._create_file(
-            self.project_path
+            self.proj_path
             / "src"
             / self.package_name
             / "gui"
@@ -945,7 +939,7 @@ def main():
             styles,
         )
         self._create_file(
-            self.project_path
+            self.proj_path
             / "src"
             / self.package_name
             / "gui"
@@ -954,11 +948,11 @@ def main():
         )
 
         self._create_file(
-            self.project_path / "src" / self.package_name / "api" / "app.py",
+            self.proj_path / "src" / self.package_name / "api" / "app.py",
             app,
         )
         self._create_file(
-            self.project_path
+            self.proj_path
             / "src"
             / self.package_name
             / "api"
@@ -966,7 +960,7 @@ def main():
             routes,
         )
         self._create_file(
-            self.project_path
+            self.proj_path
             / "src"
             / self.package_name
             / "api"
@@ -974,7 +968,7 @@ def main():
             dependencies,
         )
         self._create_file(
-            self.project_path
+            self.proj_path
             / "src"
             / self.package_name
             / "api"
@@ -997,7 +991,7 @@ class Example:
 
 '''
         self._create_file(
-            self.project_path / "src" / self.package_name / "example.py",
+            self.proj_path / "src" / self.package_name / "example.py",
             example,
         )
 
@@ -1035,22 +1029,25 @@ class Example:
         return f'["{pytest}", "{black}", "{isort}"]'
 
     def _get_authors(self, authors: list[str]) -> list[dict]:
+        udbmgr = UserDBM4nager()
         authors_list = []
         for author in authors:
-            with open(PATH_JSON_PROFILES, "r", encoding="utf-8") as file:
-                try:
-                    profiles = json.load(file)
-                except json.JSONDecodeError:
-                    profiles = {}
-                profile = profiles.get(author, {})
-                if profile:
-                    authors_list.append(profile)
-                else:
-                    print(
-                        f"[warning] No profile found for name '{author}'."
-                        " Using name as name."
-                    )
-                    authors_list.append({"name": author, "email": ""})
+            if author == "current":
+                profile = udbmgr.listd.get(udbmgr.current, {})
+            else:
+                profile = udbmgr.listd.get(author, {})
+            if profile:
+                authors_list.append(profile)
+            else:
+                print(
+                    f"[warning] No user found for alias '{author}'."
+                    " Add new user data:"
+                )
+                udbmgr.add(
+                    author, input(f"`{author}` name: "),
+                    input(f"`{author}` email: ")
+                )
+                authors_list.append({"name": author, "email": ""})
         return authors_list
 
 
@@ -1135,12 +1132,12 @@ class ProjectArchM4nager:
         proj_title: str,
         base_path: str,
         authors: list[str],
-        project_version: str,
+        proj_version: str,
     ):
         if authors == "current":
             ...  # TODO
         self._pg = _ProjectGenerator(
-            proj_title, base_path, authors, project_version
+            proj_title, base_path, authors, proj_version
         )
 
     def generate_app_project(self):
@@ -1162,10 +1159,10 @@ class ProjectArchM4nager:
         """# TODO: add description"""
 
         print("[info] Generating a dev environment...")
-        (self._pg.project_path / "dev").mkdir()
+        (self._pg.proj_path / "dev").mkdir()
         print("[info] Cretation of dir: dev")
-        (self._pg.project_path / "dev" / "scripts").mkdir()
+        (self._pg.proj_path / "dev" / "scripts").mkdir()
         print("[info] Cretation of dir: scripts")
-        (self._pg.project_path / "dev" / "tmp").mkdir()
+        (self._pg.proj_path / "dev" / "tmp").mkdir()
         print("[info] Cretation of dir: tmp")
-        self._pg.generate_scripts((self._pg.project_path / "dev"))
+        self._pg.generate_scripts((self._pg.proj_path / "dev"))

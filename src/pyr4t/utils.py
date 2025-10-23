@@ -58,6 +58,10 @@ class _JSONDBM4nager(Generic[EntryType]):
         if action in ["updt", "add"] and entry:
             self.listd[key] = entry
             self.data["list"] = self.listd
+            if not self.current:
+                print("[info] Adding first entry like current")
+                self.current = key
+                self.data["current"] = self.current
         elif action == "rm":
             if key == self.current:
                 raise ValueError(f"[error] Can't delete current: {key}")

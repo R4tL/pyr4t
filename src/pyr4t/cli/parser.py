@@ -6,9 +6,9 @@ import argparse
 import sys
 
 from .cmd_help import cmd_help
-from .cmd_proj import add_init_parser
-from .cmd_install import add_install_parser
-from .cmd_user import add_profile_parser
+from .cmd_package import add_package_parser
+from .cmd_proj import add_proj_parser
+from .cmd_user import add_user_parser
 
 
 def build_parser():
@@ -29,8 +29,8 @@ def build_parser():
         cmd_help()
         print("\nHelp:\n")
 
-    add_init_parser(subparsers)
-    add_install_parser(subparsers)
-    add_profile_parser(subparsers)
+    add_package_parser(subparsers)
+    add_proj_parser(subparsers)
+    add_user_parser(subparsers)
 
     return parser

@@ -1,15 +1,15 @@
 """
-Profile management for pyr4t.
-Handles creation, listing, updating, selection, and removal of user profiles.
+User management for pyr4t.
+Handles creation, listing, updating, selection, and removal of user users.
 """
 
-from pyr4t.models import Profile
+from pyr4t.models import User
 from pyr4t.utils import PATH_JSON_PROFILES, _JSONDBM4nager
 
 
-class ProfileDBM4nager(_JSONDBM4nager[Profile]):
+class UserDBM4nager(_JSONDBM4nager[User]):
     """
-    Manages user profiles: add, list, update, select, and remove profiles
+    Manages user users: add, list, update, select, and remove users
     stored in a JSON file.
     """
 
@@ -18,67 +18,67 @@ class ProfileDBM4nager(_JSONDBM4nager[Profile]):
 
     def add(self, alias: str, name: str, email: str):
         """
-        Adds a new user profile.
+        Adds a new user user.
         Args:
-            alias (str): Unique identifier for the profile.
+            alias (str): Unique identifier for the user.
             name (str): Name of the user.
             email (str): Email address of the user.
         """
 
-        profile: Profile = {"name": name, "email": email}
-        self.update_data(alias, "add", profile)
+        user: User = {"name": name, "email": email}
+        self.update_data(alias, "add", user)
 
-    def list(self) -> dict[str, Profile]:
+    def list(self) -> dict[str, User]:
         """
-        Lists all user profiles except the default profile 'me'.
+        Lists all user users except the default user 'me'.
         Returns:
-            dict[str, Profile]: Dictionary of profile aliases
-            to Profile objects.
+            dict[str, User]: Dictionary of user aliases
+            to User objects.
         """
 
         return self.listd
 
     def remove(self, alias: str):
         """
-        Removes a user profile by alias.
+        Removes a user user by alias.
         Args:
-            alias (str): The alias of the profile to remove.
+            alias (str): The alias of the user to remove.
         """
 
         self.update_data(alias, "rm")
 
     def modify(self, alias: str, name: str = None, email: str = None):
         """
-        Updates an existing user profile.
+        Updates an existing user user.
         Args:
-            alias (str): The alias of the profile to update.
-            name (str, optional): New name for the profile.
-            email (str, optional): New email for the profile.
+            alias (str): The alias of the user to update.
+            name (str, optional): New name for the user.
+            email (str, optional): New email for the user.
         """
 
-        profile = self.listd.get(alias)
+        user = self.listd.get(alias)
         if name:
-            profile["name"] = name
+            user["name"] = name
         if email:
-            profile["email"] = email
-        self.update_data(alias, "updt", profile)
+            user["email"] = email
+        self.update_data(alias, "updt", user)
 
     def switch(self, alias: str):
         """
-        Selects a profile as the default profile ('me').
+        Selects a user as the default user ('me').
         Args:
-            alias (str): The alias of the profile to set as default.
+            alias (str): The alias of the user to set as default.
         Raises:
-            ValueError: If alias is 'me' or if the profile does not exist.
+            ValueError: If alias is 'me' or if the user does not exist.
         """
 
         self.update_data(alias, "slct")
 
-    def whoami(self) -> tuple[str, Profile]:
+    def whoami(self) -> tuple[str, User]:
         """
-        Returns the alias and profile information ofthe current profile.
+        Returns the alias and user information ofthe current user.
         Returns:
-            tuple[str, Profile]: Alias and profile data of the default profile.
+            tuple[str, User]: Alias and user data of the default user.
         """
 
         return self.get_current()

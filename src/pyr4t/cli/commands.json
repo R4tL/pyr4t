@@ -5,8 +5,8 @@
         "dev": {
             "__desc__": "Dev commands",
             "__seq__": ["[(--title | -t) <title>]"],
-            "build": {
-                "__desc__": "Build project in editable mode with `pip install -e .[dev]`"
+            "deploy": {
+                "__desc__": "Deploy project in editable mode with `pip install -e .[dev]`"
             },
             "cls": {
                 "__desc__": "Clean cache, logs and tmp files (choose specific type or all)",
@@ -28,17 +28,21 @@
 
         "package": {
             "__desc__": "Pyr4t package manager",
+            "downgrade": {
+                "__desc__": "Downgrade a pyr4t package on local device",
+                "__seq__": ["<package-name>", "[(--version | -V) <package-version>]"]
+            },
             "install": {
                 "__desc__": "Install a pyr4t package from `R4tL` GitHub repo",
-                "__seq__": ["<package-name>"]
+                "__seq__": ["<package-name>", "[(--version | -V) <package-version>]"]
             },
             "uninstall": {
                 "__desc__": "Uninstall a pyr4t package from local device",
                 "__seq__": ["<package-name>"]
             },
-            "update": {
-                "__desc__": "Update a pyr4t package on local device",
-                "__seq__": ["<package-name>"]
+            "upgrade": {
+                "__desc__": "Upgrade a pyr4t package on local device",
+                "__seq__": ["<package-name>", "[(--version | -V) <package-version>]"]
             }
         },
 
@@ -47,6 +51,9 @@
             "__seq__": ["[(--title | -t) <title>]"],
             "build": {
                 "__desc__": "Build production-ready package or binary"
+            },
+            "deploy": {
+                "__desc__": "Deploy project in permanent mode with `pip install .`"
             },
             "run": {
                 "__desc__": "Run __main__.py file"

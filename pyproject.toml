@@ -6,7 +6,9 @@ authors = [{ name = "R4tL", email = "simon33910.lambert@gmail.com" }]
 requires-python = ">=3.13"
 readme = "README.md"
 license = { file = "LISENSE" }
-dependencies = []
+dependencies = [
+    "requests>=2.0.0,<3.0.0",
+]
 
 [project.optional-dependencies]
 dev = ["pytest>=8.3.2", "black>=24.3.0", "isort>=5.13.2"]
