@@ -2,16 +2,16 @@
 # TODO
 """
 
-import json
 import sys
 import time
 from pathlib import Path
 
 from pyr4t.models import Project
-from pyr4t.utils import PATH_JSON_PROFILES, PATH_JSON_PROJECTS, _JSONDBM4nager
+from pyr4t.utils import PATH_JSON_PROJECTS, _JSONDBM4nager
+
 from .user import UserDBM4nager
 
-# TODO : verifier les strings avec retour a la ligne car mal fait !
+
 
 class _ProjectGenerator:
     """
@@ -58,7 +58,7 @@ class _ProjectGenerator:
         self._generate_license()
         self._generate_readme(project_type)
         self._generate_pyproject(project_type)
-        self.generate_scripts(self.proj_path)
+        self.generate_scripts(self.proj_path, project_type)
         self._generate_tests(project_type)
         models = '''"""Typing variables."""\n\n'''
         self._create_file(
@@ -75,93 +75,46 @@ class _ProjectGenerator:
 
         # Add to DB and current
         pdbmgr = ProjectDBM4nager()
-        pdbmgr.add(self.proj_title, str(self.proj_path))
+        pdbmgr.add(self.proj_title, str(self.proj_path), self.proj_version)
         pdbmgr.switch(self.proj_title)
 
         print("[info] Project architecture created with success.")
 
-
-    def generate_scripts(self, parent_path: Path):
+    def generate_scripts(self, parent_path: Path, project_type: str = ""):
         """
-# TODO: update docstring
-        Args:
-            parent_path:
+        Create utility scripts for project management.
+                Args:
+                    parent_path: # TODO
         """
 
-        """Create utility scripts for project management."""
+        if project_type in ["app", "cli"]:
+            name = "main.py"
+            content = f'''\
+"""Run main script."""
 
-        script = '''\
+from {self.package_name}.__main__ import main as run_main
+
+if __name__ == main:
+    run_main()
+
+'''
+        else:
+            name = "example.py"
+            content = '''\
 """A script example."""
-
-import subprocess
-
 
 def main():
     """Example."""
 
     print("Script example !")
-'''
 
-        manage = '''\
-"""
-Management CLI module.
-Provides a command-line interface to run tests and other project management tasks.
-"""
-
-import argparse
-from . import script_example
-
-
-def main():
-    """Main entry point for the management CLI."""
-
-    parser = argparse.ArgumentParser(
-        description="Project utility CLI for common development tasks."
-    )
-
-    parser.add_argument("example", action="store_true", help="Example of script")
-    args = parser.parse_args()
-
-    if args.example:
-        example.main()
-    else:
-        parser.print_help()
-
-if __name__ == "__main__":
+if __name__ == __main__:
     main()
+
 '''
-
-        makefile = """\
-# -------------------------------------------
-# pyr4t Makefile
-# -------------------------------------------
-
-# Variables
-PYTHON := python
-MODE ?= classic    # For build (optional extra arguments)
-
-# -------------------------------------------
-# Default target
-# -------------------------------------------
-help:
-\t@echo ""
-\t@echo "[help] Available commands:"
-\t@echo "  example       - Example of script"
-\t@echo ""
-
-# -------------------------------------------
-# Example
-# -------------------------------------------
-example:
-\t@echo "[info] Build in production mode..."
-\t$(PYTHON) -m pip scripts.manage example
-\t@echo "[info] Build complete."
-"""
         self._create_file(
-            parent_path / "scripts" / "script_example.py", script
+            parent_path / "scripts" / name, content
         )
-        self._create_file(parent_path / "scripts" / "manage.py", manage)
-        self._create_file(parent_path / "Makefile", makefile)
 
     def _generate_dirs(self, project_type: str):
 
@@ -183,9 +136,7 @@ example:
         (self.proj_path / "src" / self.package_name).mkdir()
         print(f"[info] Cretation of dir: {self.package_name}")
         for subdir_src in subdirs_src:
-            (
-                self.proj_path / self.package_name / "src" / subdir_src
-            ).mkdir()
+            (self.proj_path / self.package_name / "src" / subdir_src).mkdir()
             print(f"[info] Cretation of dir: {subdir_src}")
         for subdir_core in subdirs_core:
             (
@@ -591,18 +542,13 @@ def test_cli_{self.package_name}(monkeypatch, capsys):
 
 '''
 
-        self._create_file(
-            self.proj_path / "tests" / "test_example.py", test
-        )
+        self._create_file(self.proj_path / "tests" / "test_example.py", test)
 
     def _generate_cli(self):
 
         # Scripts in CLI dir
         version = f'''\
-"""
-Version command for the CLI.
-Provides a parser for the --version option.
-""" 
+"""CLI command for printing package version."""
 
 import argparse
 
@@ -794,7 +740,8 @@ def build_parser():
     """
     
     parser = argparse.ArgumentParser(
-        prog="{self.proj_title.lower()}", description="CLI of {self.proj_title}."
+        prog="{self.proj_title.lower()}",
+        description="CLI of {self.proj_title}."
     )
     subparsers = parser.add_subparsers(dest="command", required=True)
 
@@ -873,11 +820,7 @@ def main():
             helper,
         )
         self._create_file(
-            self.proj_path
-            / "src"
-            / self.package_name
-            / "core"
-            / "parser.py",
+            self.proj_path / "src" / self.package_name / "core" / "parser.py",
             parser,
         )
         self._create_file(
@@ -923,27 +866,15 @@ def main():
             main_window,
         )
         self._create_file(
-            self.proj_path
-            / "src"
-            / self.package_name
-            / "gui"
-            / "dialogs.py",
+            self.proj_path / "src" / self.package_name / "gui" / "dialogs.py",
             dialogs,
         )
         self._create_file(
-            self.proj_path
-            / "src"
-            / self.package_name
-            / "gui"
-            / "styles.py",
+            self.proj_path / "src" / self.package_name / "gui" / "styles.py",
             styles,
         )
         self._create_file(
-            self.proj_path
-            / "src"
-            / self.package_name
-            / "gui"
-            / "widgets.py",
+            self.proj_path / "src" / self.package_name / "gui" / "widgets.py",
             widgets,
         )
 
@@ -952,11 +883,7 @@ def main():
             app,
         )
         self._create_file(
-            self.proj_path
-            / "src"
-            / self.package_name
-            / "api"
-            / "routes.py",
+            self.proj_path / "src" / self.package_name / "api" / "routes.py",
             routes,
         )
         self._create_file(
@@ -968,11 +895,7 @@ def main():
             dependencies,
         )
         self._create_file(
-            self.proj_path
-            / "src"
-            / self.package_name
-            / "api"
-            / "schemas.py",
+            self.proj_path / "src" / self.package_name / "api" / "schemas.py",
             schemas,
         )
 
@@ -1044,8 +967,9 @@ class Example:
                     " Add new user data:"
                 )
                 udbmgr.add(
-                    author, input(f"`{author}` name: "),
-                    input(f"`{author}` email: ")
+                    author,
+                    input(f"`{author}` name: "),
+                    input(f"`{author}` email: "),
                 )
                 authors_list.append({"name": author, "email": ""})
         return authors_list
@@ -1060,7 +984,7 @@ class ProjectDBM4nager(_JSONDBM4nager[Project]):
     def __init__(self):
         super().__init__(PATH_JSON_PROJECTS)
 
-    def add(self, title: str, path: str):
+    def add(self, title: str, path: str, version: str):
         """
         Adds a new project.
         Args:
@@ -1068,7 +992,7 @@ class ProjectDBM4nager(_JSONDBM4nager[Project]):
             path (str): Name of the user.
         """
 
-        project: Project = {"path": path}
+        project: Project = {"path": path, "versison": version}
         self.update_data(title, "add", project)
 
     def list(self) -> dict[str, Project]:
@@ -1090,7 +1014,7 @@ class ProjectDBM4nager(_JSONDBM4nager[Project]):
 
         self.update_data(title, "rm")
 
-    def modify(self, title: str, path: str):
+    def modify(self, title: str, path: str = None, version: str = None):
         """
         Updates an existing user project.
         Args:
@@ -1099,7 +1023,10 @@ class ProjectDBM4nager(_JSONDBM4nager[Project]):
         """
 
         project = self.listd.get(title)
-        project["path"] = path
+        if path:
+            project["path"] = path
+        if version:
+            project["version"] = version
         self.update_data(title, "updt", project)
 
     def switch(self, title: str):
@@ -1126,18 +1053,34 @@ class ProjectDBM4nager(_JSONDBM4nager[Project]):
 class ProjectArchM4nager:
     """# TODO: add description"""
 
-
     def __init__(
         self,
         proj_title: str,
-        base_path: str,
-        authors: list[str],
-        proj_version: str,
+        proj_path: str = None,
+        authors: list[str] = None,
+        proj_version: str = None,
     ):
-        if authors == "current":
-            ...  # TODO
+
+        self.pdb = ProjectDBM4nager()
+        if proj_title == "current":
+            self.proj_title = self.pdb.current
+            self.proj_path = self.pdb.listd.get(
+                self.proj_title, {"": ""}
+                ).get("path", "")
+            self.proj_version = self.pdb.listd.get(
+                self.proj_title, {"": ""}
+                ).get("version", "")
+        else:
+            self.proj_title = proj_title
+            self.proj_path = proj_path
+            self.proj_version = proj_version
+        if authors is None:
+            self.authors = ["current"]
+        else:
+            self.authors = authors
+
         self._pg = _ProjectGenerator(
-            proj_title, base_path, authors, proj_version
+            self.proj_title, self.proj_path, self.authors, self.proj_version
         )
 
     def generate_app_project(self):

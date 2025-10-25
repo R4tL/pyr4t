@@ -50,7 +50,7 @@
             "__desc__": "Prod commands",
             "__seq__": ["[(--title | -t) <title>]"],
             "build": {
-                "__desc__": "Build production-ready package or binary"
+                "__desc__": "Build production-ready binary"
             },
             "deploy": {
                 "__desc__": "Deploy project in permanent mode with `pip install .`"

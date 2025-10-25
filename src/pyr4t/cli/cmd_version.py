@@ -1,7 +1,4 @@
-"""
-Version command for the CLI.
-Provides a parser for the --version option.
-"""
+"""CLI command for printing package version."""
 
 import argparse
 
@@ -12,6 +9,7 @@ def cmd_version():
     """Print the current version of the package."""
 
     print(f"Pyr4t {__version__}")
+
 
 def add_version_parser(subparsers: argparse._SubParsersAction):
     """

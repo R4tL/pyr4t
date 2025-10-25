@@ -23,3 +23,4 @@ class Project(TypedDict):
     """# TODO: add description"""
 
     path: str
+    version: str

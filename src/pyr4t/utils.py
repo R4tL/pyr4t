@@ -45,7 +45,6 @@ class _JSONDBM4nager(Generic[EntryType]):
             entry:
         """
 
-
         if not key in self.listd:
             raise ValueError(f"[error] No entry found with key: {key}")
         if action == "add":
@@ -93,3 +92,6 @@ class _JSONDBM4nager(Generic[EntryType]):
             if value == entry:
                 return key
         return ""
+    
+def exec_cmd(cmd: str):
+    ...

@@ -1,55 +1,130 @@
-"""
-Format code module.
-Provides functions to format code and manage docstrings.
-"""
+"""Functions to manage prod mode."""
 
+import shutil
 import ast
 import subprocess
 import sys
+
 from pathlib import Path
+from .project import ProjectDBM4nager, ProjectArchM4nager
+
+# TODO : possibiliote de choissir specific pour fmt et dctr
+
+pdb = ProjectDBM4nager()
+proj_path = Path(pdb.listd.get(pdb.current, {"": ""}).get("path", ""))
 
 BECON = "# TOD" + "O:"  # Dont interpret as T0-D0
 SINGLE_LINE_DOC = f"{BECON} add description"
 GOOGLE_DOC_TEMPLATE = """
-{{prefix}}{{args}}{{returns}}
+{prefix}{args}{returns}
 """
-DO_RETURN_TYPE = f"    {{BECON}} add return type"
-DO_UPDATE = f"{{BECON}} update docstring"
+DO_RETURN_TYPE = f"    {BECON} add return type"
+DO_UPDATE = f"{BECON} update docstring"
+
+def init():
+
+    ProjectArchM4nager("current").genretate_dev_env()
 
 
-def main():
-    """Format code and check docstrings."""
+def run(script: str):
+    """
+    Run a script in the `script` dir.
+    Args:
+        script (str): name of the script
+    """
 
-    pack_path = Path(__file__).parents[2].resolve() / "src" / "test"
-    format_code(pack_path)
-    process_folder(pack_path)
+    print(f"[info] Run dev mode {script} ...")
+    subprocess.check_call(
+        [sys.executable, "-m", script], cwd=str(proj_path / "dev" / "scripts")
+    )
 
+def deploy():
+    """Deploy the package using pip."""
 
-def format_code(path: Path):
-    """Format code using Black and isort."""
+    print("[info] Deploy editable package ...")
+    subprocess.check_call(
+        [sys.executable, "-m", "pip", "install", "-e", ".[dev]"],
+        cwd=str(proj_path)
+    )
+
+def fmt(specific: str):
+    """
+    Format code using Black and isort.
+    Args:
+        specific (str): specific file to format (dir, file, file::fuction)
+    """
 
     print("[info] Formatting code...")
-    try:
-        subprocess.run([sys.executable, "-m", "black", str(path)], check=True)
-        subprocess.run([sys.executable, "-m", "isort", str(path)], check=True)
-        print("[info] Code formatted successfully!")
-    except subprocess.CalledProcessError:
-        print("[warning] Formatting failed.")
+    subprocess.check_call(
+        [sys.executable, "-m", "black", "--line-length", "79",
+        str(proj_path / specific)]
+    )
+    subprocess.check_call(
+        [sys.executable, "-m", "isort", str(proj_path / specific)]
+    )
 
+def cls(files: list[str] = None):
+    """
+    Clean cache, logs, or all temporary files.
+    Args:
+        mode (str): Files to clean.
+    """
+    if files is None or all(v is None for v in files):
+        files = ["cache", "log", "tmp"]
 
-def process_folder(folder: Path):
-    """Manage docstrings in a folder."""
+    print(f"[info] Cleaning files {", ".join(v for v in files)} ...")
 
-    for py_file in folder.rglob("*.py"):
-        print(f"[info] Processing {py_file}")
-        process_file(py_file)
+    if "cache" in files:
+        # Remove __pycache__ folders
+        cache_count = 0
+        for path in Path(".").rglob("__pycache__"):
+            shutil.rmtree(path, ignore_errors=True)
+            cache_count += 1
+        print(f"[info] Removed {cache_count} __pycache__ folders.")
 
+        # Remove .pyc and .pyo files
+        file_count = 0
+        for ext in ("*.pyc", "*.pyo"):
+            for file in Path(".").rglob(ext):
+                file.unlink(missing_ok=True)
+                file_count += 1
+        print(
+            f"[info] Deleted {file_count} compiled Python "
+            "files (*.pyc, *.pyo)."
+        )
+
+    if "log" in files:
+        log_count = 0
+        for file in Path(".").rglob("*.log"):
+            file.unlink(missing_ok=True)
+            log_count += 1
+        print(f"[info] Deleted {log_count} log files.")
+
+    if "tmp" in files:
+        for path in Path("./dev/tmp").rglob("*"):
+            shutil.rmtree(path, ignore_errors=True)
+
+    print("[info] Cleaning complete!")
+
+def dctr(specific: str = None):
+    """Manage doscstrings in a folder or file."""
+    if specific is None:
+        specific_path = proj_path
+    else:
+        specific_path = Path(specific)
+        if not Path(specific).exists():
+            raise FileNotFoundError(f"Path not found: {specific}")
+        if specific_path.is_file():
+            process_file(specific_path)
+    if specific_path.is_dir():
+        for py_file in specific_path.rglob("*.py"):
+            print(f"[info] Processing {py_file}")
+            process_file(py_file)
 
 def generate_google_docstring(
     node: ast.FunctionDef, indent: str, update=False
 ) -> str:
     """Generate a Google-style docstring with proper indentation."""
-
     prefix = f"{DO_UPDATE}" if update else f"{SINGLE_LINE_DOC}"
     filtered_args = [
         arg.arg for arg in node.args.args if arg.arg not in ("self", "cls")
@@ -89,7 +164,6 @@ def check_docstring_needs_update(
     node: ast.FunctionDef, docstring: str
 ) -> bool:
     """Check if the docstring is missing any arguments or the return value."""
-
     if docstring is None:
         return True
     filtered_args = [
@@ -117,7 +191,6 @@ def check_docstring_needs_update(
 
 def get_indent(line: str) -> str:
     """Return the whitespace at the start of a line for indentation."""
-
     base = ""
     if ":" in line:
         base = "    "
@@ -126,7 +199,6 @@ def get_indent(line: str) -> str:
 
 def process_file(path: Path):
     """Manage docstrings in a file."""
-
     with open(path, "r", encoding="utf-8") as f:
         lines = f.read().splitlines()
     if not lines:
@@ -167,7 +239,6 @@ def process_file(path: Path):
 
 def find_signature_end(lines: list[str], start_line: int) -> int:
     """Return the index where the function signature ends."""
-
     open_parens = 0
     for i, line in enumerate(lines[start_line:], start=start_line):
         open_parens += line.count("(")
@@ -179,7 +250,6 @@ def find_signature_end(lines: list[str], start_line: int) -> int:
 
 def has_non_none_return(node: ast.FunctionDef) -> bool:
     """Return True if the function has at least one 'return' with a value."""
-
     for n in ast.walk(node):
         if isinstance(n, ast.Return) and n.value is not None:
             return True

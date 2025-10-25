@@ -1,16 +1,9 @@
-"""
-CLI command for installing Pyr4t packages.
-This module provides the 'install' command for the Pyr4t CLI, allowing users to install packages from GitHub using specified protocols and versions.
-"""
+"""CLI command for managing Pyr4t packages."""
 
 import argparse
 
-from pyr4t.core import(
-    downgrade_pyr4tpackage,
-    install_pyr4tpackage,
-    upgrade_pyr4tpackage,
-    uninstall_pyr4tpackage
-)
+from pyr4t.core import (downgrade_pyr4tpackage, install_pyr4tpackage,
+                        uninstall_pyr4tpackage, upgrade_pyr4tpackage)
 
 
 def cmd_package(args: argparse.Namespace):
@@ -30,6 +23,7 @@ def cmd_package(args: argparse.Namespace):
         case "upgrade":
             upgrade_pyr4tpackage(args.package, args.version)
 
+
 def add_package_parser(subparsers: argparse._SubParsersAction):
     """
     Adds the 'install' command parser to the CLI.
@@ -48,9 +42,7 @@ def add_package_parser(subparsers: argparse._SubParsersAction):
         "downgrade", help="Install a pyr4t package"
     )
     dwn_parser.add_argument("package", required=True, help="Package name")
-    dwn_parser.add_argument(
-        "version", required=True, help="Package version"
-    )
+    dwn_parser.add_argument("version", required=True, help="Package version")
     dwn_parser.set_defaults(func=cmd_package)
 
     # ----- install -----

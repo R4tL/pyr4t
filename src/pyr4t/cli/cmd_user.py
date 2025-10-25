@@ -1,8 +1,4 @@
-"""
-User command-line interface for managing Pyr4t users.
-Provides commands to list, add, select, remove, update,
-and show the current user.
-"""
+"""CLI command for managing Pyr4t users."""
 
 import argparse
 
@@ -16,19 +12,19 @@ def cmd_user(args: argparse.Namespace):
         args: Parsed command-line arguments.
     """
 
-    dbmgr = UserDBM4nager()
+    dbu = UserDBM4nager()
 
     match args.action:
 
         case "add":
-            dbmgr.add(args.alias, name=args.name, email=args.email)
+            dbu.add(args.alias, name=args.name, email=args.email)
             print(
                 f"[info] User added: {args.alias}: {args.name}"
                 f" <{args.email}>"
             )
 
         case "list":
-            users = dbmgr.list()
+            users = dbu.list()
             if not users:
                 print("[warning] No users found.")
             else:
@@ -39,25 +35,25 @@ def cmd_user(args: argparse.Namespace):
                     )
 
         case "modify":
-            if not args.name and not args.email:
-                raise ValueError("Need --name or --email for 'update'")
-            dbmgr.modify(args.alias, name=args.name, email=args.email)
-            print(f"User updated: {args.alias}")
+            dbu.modify(args.alias, name=args.name, email=args.email)
+            if args.name or args.email:
+                print(f"User updated: {args.alias}")
 
         case "rm":
-            dbmgr.remove(args.alias)
+            dbu.remove(args.alias)
             print(f"[info] User removed: {args.alias}")
 
         case "swicth":
-            dbmgr.switch(args.alias)
+            dbu.switch(args.alias)
             print(f"[info] Default user selected: {args.alias}")
 
         case "whoami":
-            alias, user = dbmgr.whoami()
+            alias, user = dbu.whoami()
             print(
                 f"[info] {alias}: {user.get("name", "")} "
                 f"<{user.get("email", "")}>"
             )
+
 
 def add_user_parser(subparsers: argparse._SubParsersAction):
     """
@@ -84,9 +80,7 @@ def add_user_parser(subparsers: argparse._SubParsersAction):
     list_parser.set_defaults(func=cmd_user)
 
     # ----- modify -----
-    modify_parser = user_subparsers.add_parser(
-        "modify", help="Modify a user"
-    )
+    modify_parser = user_subparsers.add_parser("modify", help="Modify a user")
     modify_parser.add_argument("alias", required=True, help="User alias")
     modify_parser.add_argument("-n", "--name", help="New user name")
     modify_parser.add_argument("-e", "--email", help="New user email")

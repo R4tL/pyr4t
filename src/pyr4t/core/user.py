@@ -25,6 +25,7 @@ class UserDBM4nager(_JSONDBM4nager[User]):
             email (str): Email address of the user.
         """
 
+        self._validate_email(email)
         user: User = {"name": name, "email": email}
         self.update_data(alias, "add", user)
 
@@ -60,6 +61,7 @@ class UserDBM4nager(_JSONDBM4nager[User]):
         if name:
             user["name"] = name
         if email:
+            self._validate_email(email)
             user["email"] = email
         self.update_data(alias, "updt", user)
 
@@ -82,3 +84,10 @@ class UserDBM4nager(_JSONDBM4nager[User]):
         """
 
         return self.get_current()
+
+    def _validate_email(self, email: str):
+        if "@" not in email or email.count("@") != 1:
+            raise ValueError("Email must contain exactly one '@'")
+        local, domain = email.split("@")
+        if not local or not domain or "." not in domain:
+            raise ValueError("Invalid format for email")

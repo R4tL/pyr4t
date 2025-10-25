@@ -1,12 +1,15 @@
-import requests
-import tempfile
-import subprocess
-from pathlib import Path
-import sys
+"""Fuctions to manage pyr4t packges."""
+
 import platform
+import subprocess
+import sys
+import tempfile
+from pathlib import Path
+
+import requests
 
 
-def install_pyr4tpackage(package: str, version: str):
+def install_pyr4tpackage(package: str, version: str = None):
     """
     Install a pyr4t package from a binary (wheel or tar.gz) GitHub release
     without relying on Git.
@@ -25,7 +28,7 @@ def install_pyr4tpackage(package: str, version: str):
         url = f"https://api.github.com/packages/R4tL/{package}/releases/latest"
 
     headers = {}
-    response = requests.get(url)
+    response = requests.get(url, timeout=5)
 
     if response.status_code != 200:
         raise RuntimeError(
@@ -33,21 +36,21 @@ def install_pyr4tpackage(package: str, version: str):
         )
 
     # Token management
-    if response.status_code in (401, 403): # need token
+    if response.status_code in (401, 403):  # need token
         need_input_tok = False
         token_file = Path().home() / ".pyr4t" / "token"
         if token_file.exists():
             with open(token_file, "r", encoding="utf-8") as f:
                 token = f.read()
             headers["Authorization"] = f"token {token}"
-            response = requests.get(url, headers=headers)
-            if response.status_code in (401, 403): # invalid token
+            response = requests.get(url, headers=headers, timeout=5)
+            if response.status_code in (401, 403):  # invalid token
                 need_input_tok = True
         if need_input_tok:
             token = input("Token: ")
             headers["Authorization"] = f"token {token}"
-            response = requests.get(url, headers=headers)
-            if response.status_code in (401, 403): # invalid token
+            response = requests.get(url, headers=headers, timeout=5)
+            if response.status_code in (401, 403):  # invalid token
                 raise RuntimeError(
                     f"[{response.status_code}] Invalid token: {response.text}"
                 )
@@ -73,11 +76,13 @@ def install_pyr4tpackage(package: str, version: str):
     if not asset:
         asset = next(
             (
-                a for a in assets if a["name"].endswith(".whl")
+                a
+                for a in assets
+                if a["name"].endswith(".whl")
                 and py_version in a["name"].lower()
                 and os_tag in a["name"].lower()
             ),
-            None
+            None,
         )
 
     # If not, fallback a tar.gz
@@ -89,7 +94,7 @@ def install_pyr4tpackage(package: str, version: str):
     if not asset:
         raise RuntimeError(
             "No compatible file (.whl or .tar.gz) found for"
-             " your system and Python."
+            " your system and Python."
         )
 
     download_url = asset["browser_download_url"]
@@ -98,7 +103,7 @@ def install_pyr4tpackage(package: str, version: str):
     # DL tmp file
     suffix = Path(asset["name"]).suffix
     with tempfile.NamedTemporaryFile(delete=False, suffix=suffix) as tmp_file:
-        r = requests.get(download_url, headers=headers, stream=True)
+        r = requests.get(download_url, headers=headers, stream=True, timeout=5)
         r.raise_for_status()
         for chunk in r.iter_content(chunk_size=8192):
             tmp_file.write(chunk)
@@ -114,6 +119,7 @@ def install_pyr4tpackage(package: str, version: str):
     tmp_path.unlink()
     print(f"[info] Installation of {package} finished")
 
+
 def upgrade_pyr4tpackage(package: str, version):
     """
     Upgrade a pyr4t package.
@@ -124,6 +130,7 @@ def upgrade_pyr4tpackage(package: str, version):
 
     install_pyr4tpackage(package, version)
 
+
 def downgrade_pyr4tpackage(package: str, version: str):
     """
     Downgrade a pyr4t package.
@@ -133,6 +140,7 @@ def downgrade_pyr4tpackage(package: str, version: str):
     """
 
     install_pyr4tpackage(package, version)
+
 
 def uninstall_pyr4tpackage(package: str):
     """

@@ -1,4 +1,4 @@
-"""CLI command for initializing a new Python project."""
+"""CLI command for managing Pyr4t projects."""
 
 import argparse
 
@@ -15,10 +15,7 @@ def cmd_proj(args: argparse.Namespace):
 
     if args.action == "init":
         amgr = ProjectArchM4nager(
-            args.title,
-            args.path,
-            args.authors,
-            args.version
+            args.title, args.path, args.authors, args.version
         )
         if args.app:
             amgr.generate_app_project()
@@ -28,52 +25,48 @@ def cmd_proj(args: argparse.Namespace):
             amgr.generate_lib_project()
 
     else:
-        dbmgr = ProjectDBM4nager()
+        dbp = ProjectDBM4nager()
         match args.action:
 
             case "add":
-                dbmgr.add(args.title, path=args.path)
-                print(
-                    f"[info] Project added: {args.title}: {args.path}"
-                )
+                dbp.add(args.title, args.path, args.version)
+                print(f"[info] Project added: {args.title}: {args.path}")
 
             case "list":
-                projects = dbmgr.list()
+                projects = dbp.list()
                 if not projects:
                     print("[warning] No projects found.")
                 else:
                     for title, project in projects.items():
-                        print(
-                            f"[info] {title}: {project.get("path", "")}"
-                        )
+                        print(f"[info] {title}: {project.get("path", "")}")
 
             case "modify":
-                dbmgr.modify(args.title, path=args.path)
-                print(f"Project updated: {args.title}")
+                dbp.modify(args.title, path=args.path, version=args.version)
+                if args.path or args.version:
+                    print(f"Project updated: {args.title}")
 
             case "rm":
-                dbmgr.remove(args.title)
+                dbp.remove(args.title)
                 print(f"[info] Project removed: {args.title}")
 
             case "swicth":
-                dbmgr.switch(args.title)
+                dbp.switch(args.title)
                 print(f"[info] Default project selected: {args.title}")
 
             case "whoami":
-                title, project = dbmgr.whoami()
+                title, project = dbp.whoami()
                 print(f"[info] {title}: {project.get("path", "")}")
-
 
 
 def add_proj_parser(subparsers: argparse._SubParsersAction):
     """
-    Adds the 'init' subcommand parser to the CLI.
+    Adds the 'proj' subcommand parser to the CLI.
     Args:
         subparsers: The subparsers object from the main parser.
     """
 
     parser: argparse.ArgumentParser = subparsers.add_parser(
-        "proj", help="Generate a new Python project structure"
+        "proj", help="Manage a pyr4t project"
     )
 
     proj_subparsers = parser.add_subparsers(dest="action", required=True)
@@ -82,15 +75,16 @@ def add_proj_parser(subparsers: argparse._SubParsersAction):
     add_parser = proj_subparsers.add_parser("add", help="Add a new project")
     add_parser.add_argument("title", required=True, help="Project title")
     add_parser.add_argument("path", required=True, help="Project path")
+    add_parser.add_argument("version", required=True, help="Project version")
     add_parser.set_defaults(func=cmd_proj)
 
     # ----- init -----
     init_parser = proj_subparsers.add_parser(
-        "init", 
+        "init",
         help=(
-        "Init a new python project creating a normalise package "
-        "architecture"
-        )
+            "Init a new python project creating a normalise package "
+            "architecture"
+        ),
     )
     group_init = init_parser.add_mutually_exclusive_group(required=True)
     group_init.add_argument(
@@ -104,10 +98,11 @@ def add_proj_parser(subparsers: argparse._SubParsersAction):
     )
     init_parser.add_argument("title", required=True, help="Project title")
     init_parser.add_argument(
-        "-a", "--authors",
+        "-a",
+        "--authors",
         nargs="+",
         default=["current"],
-        help="List of authors"
+        help="List of authors",
     )
     init_parser.add_argument(
         "-p", "--path", default=".", help="Base path to create project"
@@ -126,25 +121,20 @@ def add_proj_parser(subparsers: argparse._SubParsersAction):
         "modify", help="Modify a project"
     )
     modify_parser.add_argument("title", required=True, help="Project title")
-    modify_parser.add_argument("path", help="New project path")
+    modify_parser.add_argument("-p", "--path", help="New project path")
+    modify_parser.add_argument("-V", "--version", help="New project verrsion")
     modify_parser.set_defaults(func=cmd_proj)
 
     # ----- switch -----
     select_parser = proj_subparsers.add_parser(
         "switch", help="Switch current project"
     )
-    select_parser.add_argument(
-        "title", required=True, help="Project title"
-    )
+    select_parser.add_argument("title", required=True, help="Project title")
     select_parser.set_defaults(func=cmd_proj)
 
     # ----- remove -----
-    remove_parser = proj_subparsers.add_parser(
-        "rm", help="Remove a project"
-    )
-    remove_parser.add_argument(
-        "title", required=True, help="Project title"
-    )
+    remove_parser = proj_subparsers.add_parser("rm", help="Remove a project")
+    remove_parser.add_argument("title", required=True, help="Project title")
     remove_parser.set_defaults(func=cmd_proj)
 
     # ----- whoami -----

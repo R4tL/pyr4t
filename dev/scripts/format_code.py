@@ -16,7 +16,7 @@ def main():
     """Format code and check docstrings."""
     pack_path = Path(__file__).parents[2] / "src" / "pyr4t"
     format_code(pack_path)
-    process_folder(pack_path)
+    dctr(pack_path)
 
 
 def format_code(path: Path):
@@ -33,7 +33,7 @@ def format_code(path: Path):
         print("[warning] Formatting failed.")
 
 
-def process_folder(folder: Path):
+def dctr(folder: Path):
     """Manage doscstrings in a folder."""
     for py_file in folder.rglob("*.py"):
         print(f"[info] Processing {py_file}")

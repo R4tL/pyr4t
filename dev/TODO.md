@@ -88,7 +88,7 @@ Fait : Pour ça faudrait prendre la taille de la cmd et revenir a la ligne pour 
     │   └── update <package-name>                                                    
     ├── prod [(--proj-title | -t) <proj-title>]                                      
     │   ├── build                                                                    
-    │   ├── run                                                                      
+    │   ├── run <script>  # dans la bdd on a les path des scripts a run EN UTILISANT LE PATH SCRIPT                                                         
     │   └── test                                                                     
     ├── proj                                                                         
     │   ├── add <proj-title> <path>                                                  
