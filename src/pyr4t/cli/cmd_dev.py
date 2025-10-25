@@ -2,7 +2,7 @@
 
 import argparse
 
-from pyr4t.core import dev_deploy, dev_run, cls, dctr, fmt, init
+from pyr4t.core import dev_deploy, dev_run, cls, dstr, fmt, init
 
 def cmd_dev(args: argparse.Namespace):
     """
@@ -19,8 +19,8 @@ def cmd_dev(args: argparse.Namespace):
             dev_run(args.scipt)
         case "cls":
             cls([args.cache, args.log, args.tmp])
-        case "dctr":
-            dctr(args.specific)
+        case "dstr":
+            dstr(args.specific)
         case "fmt":
             fmt(args.specific)
         case "init":
@@ -50,7 +50,9 @@ def add_dev_parser(subparsers: argparse._SubParsersAction):
     run_parser = dev_subparsers.add_parser(
         "run", help="Run a script from /script dir"
     )
-    run_parser.add_argument("script", default="main", help="Script name")
+    run_parser.add_argument(
+        "script", default="main", nargs="?", help="Script name (default: main)"
+    )
     run_parser.set_defaults(func=cmd_dev)
 
     # ----- init -----
@@ -60,17 +62,19 @@ def add_dev_parser(subparsers: argparse._SubParsersAction):
     init_parser.set_defaults(func=cmd_dev)
 
     # ----- cls -----
-    cls_parser = dev_subparsers.add_parser("cls", help="Clean files")
+    cls_parser = dev_subparsers.add_parser(
+        "cls", help="Clean files (default: all)"
+    )
     cls_parser.add_argument(
-        "--cache", action="store_true", const="cache",
+        "--cache", action="store_const", const="cache",
         default=None, help="Clean cache"
     )
     cls_parser.add_argument(
-        "--log", action="store_true", const="log",
+        "--log", action="store_const", const="log",
         default=None, help="Clean logs"
     )
     cls_parser.add_argument(
-        "--tmp", action="store_true", const="tmp",
+        "--tmp", action="store_const", const="tmp",
         default=None, help="Clean tmp"
     )
     cls_parser.set_defaults(func=cmd_dev)
@@ -80,7 +84,7 @@ def add_dev_parser(subparsers: argparse._SubParsersAction):
     fmt_parser.add_argument("specific", help="Specific file(s) (dir or file)")
     fmt_parser.set_defaults(func=cmd_dev)
 
-    # ----- dctr -----
-    dctr_parser = dev_subparsers.add_parser("dctr", help="Analyse docstrings")
-    dctr_parser.add_argument("specific", help="Specific file(s) (dir or file)")
-    dctr_parser.set_defaults(func=cmd_dev)
+    # ----- dstr -----
+    dstr_parser = dev_subparsers.add_parser("dstr", help="Analyse docstrings")
+    dstr_parser.add_argument("specific", help="Specific file(s) (dir or file)")
+    dstr_parser.set_defaults(func=cmd_dev)

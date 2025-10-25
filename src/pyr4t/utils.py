@@ -83,6 +83,7 @@ class _JSONDBM4nager(Generic[EntryType]):
                 listd: dict[str, EntryType] = data.get("list", {})
                 current: str = data.get("current", "")
             except json.JSONDecodeError:
+                data: dict = {}
                 listd: dict[str, EntryType] = {}
                 current = ""
         return data, listd, current
@@ -92,6 +93,3 @@ class _JSONDBM4nager(Generic[EntryType]):
             if value == entry:
                 return key
         return ""
-    
-def exec_cmd(cmd: str):
-    ...

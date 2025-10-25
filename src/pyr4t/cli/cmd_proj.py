@@ -73,9 +73,9 @@ def add_proj_parser(subparsers: argparse._SubParsersAction):
 
     # ----- add -----
     add_parser = proj_subparsers.add_parser("add", help="Add a new project")
-    add_parser.add_argument("title", required=True, help="Project title")
-    add_parser.add_argument("path", required=True, help="Project path")
-    add_parser.add_argument("version", required=True, help="Project version")
+    add_parser.add_argument("title",  help="Project title")
+    add_parser.add_argument("path",  help="Project path")
+    add_parser.add_argument("version",  help="Project version")
     add_parser.set_defaults(func=cmd_proj)
 
     # ----- init -----
@@ -96,7 +96,7 @@ def add_proj_parser(subparsers: argparse._SubParsersAction):
     group_init.add_argument(
         "--lib", action="store_true", help="Librairie architecture"
     )
-    init_parser.add_argument("title", required=True, help="Project title")
+    init_parser.add_argument("title",  help="Project title")
     init_parser.add_argument(
         "-a",
         "--authors",
@@ -120,7 +120,7 @@ def add_proj_parser(subparsers: argparse._SubParsersAction):
     modify_parser = proj_subparsers.add_parser(
         "modify", help="Modify a project"
     )
-    modify_parser.add_argument("title", required=True, help="Project title")
+    modify_parser.add_argument("title",  help="Project title")
     modify_parser.add_argument("-p", "--path", help="New project path")
     modify_parser.add_argument("-V", "--version", help="New project verrsion")
     modify_parser.set_defaults(func=cmd_proj)
@@ -129,12 +129,12 @@ def add_proj_parser(subparsers: argparse._SubParsersAction):
     select_parser = proj_subparsers.add_parser(
         "switch", help="Switch current project"
     )
-    select_parser.add_argument("title", required=True, help="Project title")
+    select_parser.add_argument("title",  help="Project title")
     select_parser.set_defaults(func=cmd_proj)
 
     # ----- remove -----
     remove_parser = proj_subparsers.add_parser("rm", help="Remove a project")
-    remove_parser.add_argument("title", required=True, help="Project title")
+    remove_parser.add_argument("title",  help="Project title")
     remove_parser.set_defaults(func=cmd_proj)
 
     # ----- whoami -----

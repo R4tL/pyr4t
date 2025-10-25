@@ -547,20 +547,21 @@ def test_cli_{self.package_name}(monkeypatch, capsys):
     def _generate_cli(self):
 
         # Scripts in CLI dir
-        version = f'''\
+        example = '''\
 """CLI command for printing package version."""
 
 import argparse
 
-from pyr4t import __version__
 
-
-def cmd_version(args: argparse.Namespace):
+def cmd_example(args: argparse.Namespace):
     """Print the current version of the package."""
 
-    print(f"{self.proj_title} {{__version__}}")
+    a = args.string
+    if args.upper:
+        a.upper()
+    print(a)
 
-def add_version_parser(subparsers: argparse._SubParsersAction):
+def add_example_parser(subparsers: argparse._SubParsersAction):
     """
     Add the --version command to the CLI parser.
     Args:
@@ -568,15 +569,19 @@ def add_version_parser(subparsers: argparse._SubParsersAction):
     """
 
     parser: argparse.ArgumentParser = subparsers.add_parser(
-        "-V",
-        "--version",
-        help="Print the version of package {self.package_name}"
+    "example", help="Example print cmd"
     )
-    parser.set_defaults(func=cmd_version)
+    example_subparsers = parser.add_subparsers(dest="action", required=True)
+
+    example_parser.add_argument("string", help="string to print")
+    example_parser.add_argument(
+    "-u", "--upper"", help="print in capital letters",
+    action = "store_true"
+    )
 
 '''
-        helper = '''\
-"""Functions to print a better --help."""
+        tree = '''\
+"""Functions to print a cmd tree."""
 
 import shutil
 import json
@@ -710,14 +715,19 @@ def build_lines(dict_cmd: dict, prefix="") -> list[str]:
     return lines
 
 
-def cmd_help():
-    """Prints a formatted tree representation commands using commands.json."""
+def get_tree():
+    """
+    Prints a formatted tree representation commands using commands.json.
+    Returns:
+        str: The string to print in the terminal.
+    """
 
-    with open(Path(__file__).parent / "commands.json", encoding="UTF-8") as file:
+    with open(
+        Path(__file__).parent / "commands.json", encoding="UTF-8"
+    ) as file:
         data_cmd = json.load(file)
     lines = build_lines(data_cmd)
-    for line in lines:
-        print(line)
+    return "\n".join(lines)
 
 '''
         parser = f'''\
@@ -729,9 +739,27 @@ Creates the main argument parser and registers subcommands.
 import argparse
 import sys
 
-from .cmd_version import add_version_parser
-from .cmd_help import cmd_help
+from {self.package_name} import __version__
+from .command_tree import get_tree
+from .cmd_example import add_example_parser
+from .comma
 
+def cmd_base(args: argparse.Namespace):
+    """
+    Base commands in the root of CLI.
+    Args:
+        args (argparse.pathspace): Parsed command-line arguments containing
+        project details.
+    """
+    
+    if args.help_requested:
+        print(get_tree())
+        build_parser().print_help()
+    elif args.version:
+        print(f"{self.proj_title} {{__version__}}")
+    elif args.command is None:
+        print("[error] No command was entered. Use `-h` or `--help` for help.")
+    sys.exit(0)
 
 def build_parser():
     """Creates and configures the main argument parser for the CLI.
@@ -741,16 +769,21 @@ def build_parser():
     
     parser = argparse.ArgumentParser(
         prog="{self.proj_title.lower()}",
-        description="CLI of {self.proj_title}."
+        description="CLI of {self.proj_title}.",
+        add_help=False
     )
-    subparsers = parser.add_subparsers(dest="command", required=True)
+    parser.add_argument(
+    "-V", "--version", action = "store_true", help="Show version and exit"
+    )
+    parser.add_argument(
+        "-h", "--help", action="store_true",
+        dest="help_requested", help="Show help"
+    )
+    parser.set_defaults(func=cmd_base)
+    subparsers = parser.add_subparsers(dest="command")
+    subparsers = parser.add_subparsers(dest="command")
 
-    if "-h" in sys.argv or "--help" in sys.argv:
-        print("\nCommand Tree:\n")
-        cmd_help()
-        print("\nHelp:\n")
-
-    add_version_parser(subparsers)
+    add_example_parser(subparsers)
 
     return parser
     
@@ -759,7 +792,11 @@ def build_parser():
 {{
     "{self.proj_title.lower()}": {{
         "__desc__": "{self.proj_title} CLI",
-        "__seq__":["[(--help | -h) | (--version | -V)]"]
+        "__seq__":["[(--help | -h) | (--version | -V)]"],
+        "example": {{
+        "__desc__": Example of command,
+        "__seq__": ["<script>", "[(--uper | -u)]"]
+        }}
     }}
 }}
 """
@@ -807,27 +844,27 @@ def main():
             self.proj_path
             / "src"
             / self.package_name
-            / "core"
-            / "cmd_version.py",
-            version,
+            / "cli"
+            / "cmd_example.py",
+            example,
         )
         self._create_file(
             self.proj_path
             / "src"
             / self.package_name
-            / "core"
-            / "cmd_help.py",
-            helper,
+            / "cli"
+            / "command_tree.py",
+            tree,
         )
         self._create_file(
-            self.proj_path / "src" / self.package_name / "core" / "parser.py",
+            self.proj_path / "src" / self.package_name / "cli" / "parser.py",
             parser,
         )
         self._create_file(
             self.proj_path
             / "src"
             / self.package_name
-            / "core"
+            / "cli"
             / "commands.json",
             commands,
         )

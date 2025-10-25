@@ -52,7 +52,9 @@ def add_prod_parser(subparsers: argparse._SubParsersAction):
     run_parser = prod_subparsers.add_parser(
         "run", help="Run a script from /script dir"
     )
-    run_parser.add_argument("script", default="main", help="Script name")
+    run_parser.add_argument(
+        "script", default="main", nargs="?", help="Script name (default: main)"
+    )
     run_parser.set_defaults(func=cmd_prod)
 
     # ----- test -----

@@ -141,13 +141,16 @@ def build_lines(dict_cmd: dict, prefix="") -> list[str]:
     return lines
 
 
-def cmd_help():
-    """Prints a formatted tree representation commands using commands.json."""
+def get_tree():
+    """
+    Prints a formatted tree representation commands using commands.json.
+    Returns:
+        str: The string to print in the terminal
+    """
 
     with open(
         Path(__file__).parent / "commands.json", encoding="UTF-8"
     ) as file:
         data_cmd = json.load(file)
     lines = build_lines(data_cmd)
-    for line in lines:
-        print(line)
+    return "\n".join(lines)

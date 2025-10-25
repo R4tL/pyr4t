@@ -12,7 +12,7 @@
                 "__desc__": "Clean cache, logs and tmp files (choose specific type or all)",
                 "__seq__": ["[--cache]", "[--log]", "[--tmp]"]
             },
-            "docstr": {
+            "dstr": {
                 "__desc__": "Check doctring and create/update template if necessary"
             },
             "fmt": {

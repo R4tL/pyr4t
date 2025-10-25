@@ -106,7 +106,7 @@ def cls(files: list[str] = None):
 
     print("[info] Cleaning complete!")
 
-def dctr(specific: str = None):
+def dstr(specific: str = None):
     """Manage doscstrings in a folder or file."""
     if specific is None:
         specific_path = proj_path

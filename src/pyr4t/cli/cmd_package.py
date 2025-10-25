@@ -41,15 +41,15 @@ def add_package_parser(subparsers: argparse._SubParsersAction):
     dwn_parser = package_subparsers.add_parser(
         "downgrade", help="Install a pyr4t package"
     )
-    dwn_parser.add_argument("package", required=True, help="Package name")
-    dwn_parser.add_argument("version", required=True, help="Package version")
+    dwn_parser.add_argument("package", help="Package name")
+    dwn_parser.add_argument("version", help="Package version")
     dwn_parser.set_defaults(func=cmd_package)
 
     # ----- install -----
     inst_parser = package_subparsers.add_parser(
         "install", help="Install a pyr4t package"
     )
-    inst_parser.add_argument("package", required=True, help="Package name")
+    inst_parser.add_argument("package", help="Package name")
     inst_parser.add_argument(
         "-V", "--version", default="", help="Package version"
     )
@@ -59,14 +59,14 @@ def add_package_parser(subparsers: argparse._SubParsersAction):
     uninst_parser = package_subparsers.add_parser(
         "uninstall", help="Uninstall a pyr4t package"
     )
-    uninst_parser.add_argument("package", required=True, help="Package name")
+    uninst_parser.add_argument("package", help="Package name")
     uninst_parser.set_defaults(func=cmd_package)
 
     # ----- upgrade -----
     up_parser = package_subparsers.add_parser(
         "upgrade", help="Install a pyr4t package"
     )
-    up_parser.add_argument("package", required=True, help="Package name")
+    up_parser.add_argument("package", help="Package name")
     up_parser.add_argument(
         "-V", "--version", default="", help="Package version"
     )

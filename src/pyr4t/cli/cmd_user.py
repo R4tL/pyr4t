@@ -70,9 +70,9 @@ def add_user_parser(subparsers: argparse._SubParsersAction):
 
     # ----- add -----
     add_parser = user_subparsers.add_parser("add", help="Add a new user")
-    add_parser.add_argument("alias", required=True, help="User alias")
-    add_parser.add_argument("name", required=True, help="User name")
-    add_parser.add_argument("email", required=True, help="User email")
+    add_parser.add_argument("alias",  help="User alias")
+    add_parser.add_argument("name",  help="User name")
+    add_parser.add_argument("email",  help="User email")
     add_parser.set_defaults(func=cmd_user)
 
     # ----- list -----
@@ -81,7 +81,7 @@ def add_user_parser(subparsers: argparse._SubParsersAction):
 
     # ----- modify -----
     modify_parser = user_subparsers.add_parser("modify", help="Modify a user")
-    modify_parser.add_argument("alias", required=True, help="User alias")
+    modify_parser.add_argument("alias",  help="User alias")
     modify_parser.add_argument("-n", "--name", help="New user name")
     modify_parser.add_argument("-e", "--email", help="New user email")
     modify_parser.set_defaults(func=cmd_user)
@@ -90,12 +90,12 @@ def add_user_parser(subparsers: argparse._SubParsersAction):
     select_parser = user_subparsers.add_parser(
         "switch", help="Switch current user"
     )
-    select_parser.add_argument("alias", required=True, help="User alias")
+    select_parser.add_argument("alias",  help="User alias")
     select_parser.set_defaults(func=cmd_user)
 
     # ----- remove -----
     remove_parser = user_subparsers.add_parser("rm", help="Remove an user")
-    remove_parser.add_argument("alias", required=True, help="User alias")
+    remove_parser.add_argument("alias",  help="User alias")
     remove_parser.set_defaults(func=cmd_user)
 
     # ----- whoami -----

@@ -4,7 +4,7 @@ This module provides essential classes and functions for project generation,
 installation, and profile management.
 """
 
-from .dev import cls, dctr, fmt, init
+from .dev import cls, dstr, fmt, init
 from .dev import deploy as dev_deploy
 from .dev import run as dev_run
 from .package import (downgrade_pyr4tpackage, install_pyr4tpackage,
@@ -26,7 +26,7 @@ __all__ = [
     "run",
     "test",
     "cls",
-    "dctr",
+    "dstr",
     "fmt",
     "init",
     "dev_deploy",
