@@ -1,8 +1,16 @@
+"""# TODO: add description"""
+
 import shutil
 from pathlib import Path
 
 
 def main(mode="all"):
+    """
+# TODO: update docstring
+    Args:
+        mode:
+    """
+
     """Clean cache, logs, or all temporary files."""
     print(f"[info] Cleaning mode: {mode}")
 

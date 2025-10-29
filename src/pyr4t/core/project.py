@@ -48,6 +48,12 @@ class _ProjectGenerator:
         self.proj_path.mkdir(parents=True, exist_ok=False)
         print(f"[info] Created project directory: {self.proj_path}")
 
+        pdb = ProjectDBM4nager()
+        if self.proj_title in pdb.listd:
+            raise ValueError(
+                f"A project named {self.proj_title} already exixsts."
+            )
+
         # Create dirs
         self._generate_dirs(project_type)
 
@@ -60,7 +66,7 @@ class _ProjectGenerator:
         self._generate_pyproject(project_type)
         self.generate_scripts(self.proj_path, project_type)
         self._generate_tests(project_type)
-        models = '''"""Typing variables."""\n\n'''
+        models = '''"""Typing variables."""\n'''
         self._create_file(
             self.proj_path / "src" / self.package_name / "models.py", models
         )
@@ -74,13 +80,21 @@ class _ProjectGenerator:
             self._generate_lib()
 
         # Add to DB and current
-        pdbmgr = ProjectDBM4nager()
-        pdbmgr.add(self.proj_title, str(self.proj_path), self.proj_version)
-        pdbmgr.switch(self.proj_title)
+        pdb.add(
+            self.proj_title, str(self.proj_path.resolve()), self.proj_version
+        )
+        pdb.switch(self.proj_title)
 
         print("[info] Project architecture created with success.")
 
     def generate_scripts(self, parent_path: Path, project_type: str = ""):
+        """
+# TODO: update docstring
+        Args:
+            parent_path:
+            project_type:
+        """
+
         """
         Create utility scripts for project management.
                 Args:
@@ -94,9 +108,8 @@ class _ProjectGenerator:
 
 from {self.package_name}.__main__ import main as run_main
 
-if __name__ == main:
+if __name__ == "__main__":
     run_main()
-
 '''
         else:
             name = "example.py"
@@ -110,7 +123,6 @@ def main():
 
 if __name__ == __main__:
     main()
-
 '''
         self._create_file(
             parent_path / "scripts" / name, content
@@ -123,11 +135,11 @@ if __name__ == __main__:
         subdirs_src: list[str] = ["utils"]
         subdirs_core: list[str] = []
         if project_type in ["app", "cli"]:
-            subdirs_src.append("cli", "core")
-            subdirs_core.append("services")
+            for d in ["cli", "clients", "core", "services"]:
+                subdirs_src.append(d)
             if project_type == "app":
-                subdirs_src.append("api", "gui", "services")
-                subdirs_core.append("clients")
+                for d in ["api", "gui"]:
+                    subdirs_src.append(d)
 
         # Create subdirectories
         for subdir in subdirs:
@@ -136,13 +148,13 @@ if __name__ == __main__:
         (self.proj_path / "src" / self.package_name).mkdir()
         print(f"[info] Cretation of dir: {self.package_name}")
         for subdir_src in subdirs_src:
-            (self.proj_path / self.package_name / "src" / subdir_src).mkdir()
+            (self.proj_path / "src" / self.package_name / subdir_src).mkdir()
             print(f"[info] Cretation of dir: {subdir_src}")
         for subdir_core in subdirs_core:
             (
                 self.proj_path
-                / self.package_name
                 / "src"
+                / self.package_name
                 / "core"
                 / subdir_core
             ).mkdir()
@@ -150,12 +162,12 @@ if __name__ == __main__:
 
     def _generate_init_files(self, project_type: str):
 
-        for proj_dir in (self.proj_path / "src" / self.package_name).rglob(
+        for proj_dir in (self.proj_path / "src").rglob(
             "*"
         ):
             if proj_dir.is_dir():
                 content = ""
-                if proj_dir == self.package_name:
+                if proj_dir.name == self.package_name:
                     sub_cont1 = "Exports:\n\tExample (class): Description.\n"
                     sub_cont2 = """\
 from .example import Example
@@ -165,15 +177,13 @@ __all__ = ['Example']
 """
                     content = f'''\
 """This module provides the main interface for {self.package_name}.
-{sub_cont1 if project_type == "lib" else ""}Version:
-{self.proj_version}
+{sub_cont1 if project_type == "lib" else ""}Version: {self.proj_version}"""
 
 {sub_cont2 if project_type == "lib" else ""}
-__version__ = {self.proj_version}
-
+__version__ = "{self.proj_version}"
 '''
 
-                elif proj_dir == "cli":
+                elif proj_dir.name == "cli":
 
                     content = '''\
 """CLI package: provides the parser builder and sub-commands."""
@@ -182,7 +192,6 @@ from .parser import build_parser
 
 
 __all__ = ["build_parser"]
-
 '''
 
                 self._create_file(proj_dir / "__init__.py", content)
@@ -324,7 +333,7 @@ source .venv/bin/activate
 
 - Windows
 ```bash
-.venv\Scripts\\activate
+.venv\\Scripts\\activate
 ```
 
 ---
@@ -370,21 +379,6 @@ pip install -e .[dev]
 
 ## Requirements
 
-### Install `make` (*optional*)
-
-If you want to have acces to the `make` commands.
-
-* **Linux/macOS**
-```bash
-sudo apt install make
-```
-
-* **Windows (with Chocolatey)**
-
-```bash
-choco install make
-```
-
 ---
 
 ## Usage
@@ -398,12 +392,8 @@ Go to the root project folder and use the following commands:
 pytest
 ```
 {cli if project_type in {"cli", "app"} else lib}
-### Make commands
 
-* **Run `example` script**
-```bash
-make example
-```
+---
 
 ### Scripts
 
@@ -556,10 +546,11 @@ import argparse
 def cmd_example(args: argparse.Namespace):
     """Print the current version of the package."""
 
-    a = args.string
-    if args.upper:
-        a.upper()
-    print(a)
+    if args.action == "print":
+        a = args.string
+        if args.upper:
+            a.upper()
+        print(a)
 
 def add_example_parser(subparsers: argparse._SubParsersAction):
     """
@@ -573,12 +564,15 @@ def add_example_parser(subparsers: argparse._SubParsersAction):
     )
     example_subparsers = parser.add_subparsers(dest="action", required=True)
 
-    example_parser.add_argument("string", help="string to print")
-    example_parser.add_argument(
-    "-u", "--upper"", help="print in capital letters",
+    print_parser = example_subparsers.add_parser(
+        "print", help="Print user inut"
+    )
+    print_parser.add_argument("string", help="string to print")
+    print_parser.add_argument(
+    "-u", "--upper", help="print in capital letters",
     action = "store_true"
     )
-
+    print_parser.set_defaults(func=cmd_example)
 '''
         tree = '''\
 """Functions to print a cmd tree."""
@@ -597,16 +591,22 @@ def wrap_sequence(
     have_children: bool,
     desc="",
 ):
-    """Builds wrapped text lines for a tree node with optional sequence and description.
+    """Builds wrapped text lines for a tree node with optional
+    sequence and description.
     Args:
-        prefix (str): The prefix for the current tree level (indentation + connectors).
-        connector (str): The connector symbol linking the node to its parent (e.g., "├──" or "└──").
+        prefix (str): The prefix for the current tree level 
+        (indentation + connectors).
+        connector (str): The connector symbol linking the node to
+        its parent (e.g., "├──" or "└──").
         key (str): The name of the current node.
-        seq_list (list[str]): A list of elements to display on the same line as the key.
+        seq_list (list[str]): A list of elements to display on the
+        same line as the key.
         have_children (bool): Whether the node has child elements.
-        desc (str, optional): Description text to display on the right side of the node.
+        desc (str, optional): Description text to display on the
+        right side of the node.
     Returns:
-        list[str]: A list of formatted strings representing this node and its wrapped lines.
+        list[str]: A list of formatted strings representing this
+        node and its wrapped lines.
     """
 
     # Init term dimentions
@@ -658,7 +658,8 @@ def wrap_desc(desc: str, desc_width: int) -> list[str]:
         desc: The description text to wrap.
         desc_width: The maximum width for each wrapped line.
     Returns:
-        list[str]: A list of formatted strings representing this node and its wrapped lines.
+        list[str]: A list of formatted strings representing
+        this node and its wrapped lines.
     """
 
     words = desc.split(" ")
@@ -727,8 +728,7 @@ def get_tree():
     ) as file:
         data_cmd = json.load(file)
     lines = build_lines(data_cmd)
-    return "\n".join(lines)
-
+    return "\\n".join(lines)
 '''
         parser = f'''\
 """
@@ -742,7 +742,7 @@ import sys
 from {self.package_name} import __version__
 from .command_tree import get_tree
 from .cmd_example import add_example_parser
-from .comma
+
 
 def cmd_base(args: argparse.Namespace):
     """
@@ -754,6 +754,7 @@ def cmd_base(args: argparse.Namespace):
     
     if args.help_requested:
         print(get_tree())
+        print("")
         build_parser().print_help()
     elif args.version:
         print(f"{self.proj_title} {{__version__}}")
@@ -786,7 +787,6 @@ def build_parser():
     add_example_parser(subparsers)
 
     return parser
-    
 '''
         commands = f"""\
 {{
@@ -794,7 +794,7 @@ def build_parser():
         "__desc__": "{self.proj_title} CLI",
         "__seq__":["[(--help | -h) | (--version | -V)]"],
         "example": {{
-        "__desc__": Example of command,
+        "__desc__": "Example of command",
         "__seq__": ["<script>", "[(--uper | -u)]"]
         }}
     }}
@@ -822,7 +822,6 @@ def main():
 
 if __name__ == "__main__":
     main()
-
 '''
         luncher = f'''\
 """
@@ -837,7 +836,6 @@ def main():
     """Runs the {self.package_name} application from the command line."""
 
     core_main()
-
 '''
 
         self._create_file(
@@ -883,16 +881,16 @@ def main():
         self._generate_cli()
 
         # GUI
-        main_window = '''"""Main window of the app."""\n\n'''
-        dialogs = '''"""Dialog boxes, popups"""\n\n'''
-        styles = '''"""Styles of the app (CSS, theme, colors)."""\n\n'''
-        widgets = '''"""Custom widgets."""\n\n'''
+        main_window = '''"""Main window of the app."""\n'''
+        dialogs = '''"""Dialog boxes, popups"""\n'''
+        styles = '''"""Styles of the app (CSS, theme, colors)."""\n'''
+        widgets = '''"""Custom widgets."""\n'''
 
         # API
-        app = '''"""API entry point (FastAPI, Flask)"""\n\n'''
-        routes = '''"""Endpoint definitions."""\n\n'''
+        app = '''"""API entry point (FastAPI, Flask)"""\n'''
+        routes = '''"""Endpoint definitions."""\n'''
         dependencies = '''"""Dependencies, service injections."""'''
-        schemas = '''"""Data schemas (Pydantic)."""\n\n'''
+        schemas = '''"""Data schemas (Pydantic)."""\n'''
 
         self._create_file(
             self.proj_path
@@ -939,16 +937,15 @@ def main():
     def _generate_lib(self):
 
         example = '''\
-"""Example of a module for a lib."
+"""Example of a module for a lib."""
 
 class Example:
-    """Example class.""
+    """Example class."""
 
     def example(self):
-        """ Example of a function."""
+        """Example of a function."""
 
         print("Hello World")
-
 '''
         self._create_file(
             self.proj_path / "src" / self.package_name / "example.py",
@@ -989,13 +986,13 @@ class Example:
         return f'["{pytest}", "{black}", "{isort}"]'
 
     def _get_authors(self, authors: list[str]) -> list[dict]:
-        udbmgr = UserDBM4nager()
+        udb = UserDBM4nager()
         authors_list = []
         for author in authors:
             if author == "current":
-                profile = udbmgr.listd.get(udbmgr.current, {})
+                profile = udb.listd.get(udb.current, {})
             else:
-                profile = udbmgr.listd.get(author, {})
+                profile = udb.listd.get(author, {})
             if profile:
                 authors_list.append(profile)
             else:
@@ -1003,7 +1000,9 @@ class Example:
                     f"[warning] No user found for alias '{author}'."
                     " Add new user data:"
                 )
-                udbmgr.add(
+                if author == "current":
+                    author = input("Alias: ").upper()
+                udb.add(
                     author,
                     input(f"`{author}` name: "),
                     input(f"`{author}` email: "),
@@ -1022,6 +1021,14 @@ class ProjectDBM4nager(_JSONDBM4nager[Project]):
         super().__init__(PATH_JSON_PROJECTS)
 
     def add(self, title: str, path: str, version: str):
+        """
+# TODO: update docstring
+        Args:
+            title:
+            path:
+            version:
+        """
+
         """
         Adds a new project.
         Args:
@@ -1052,6 +1059,14 @@ class ProjectDBM4nager(_JSONDBM4nager[Project]):
         self.update_data(title, "rm")
 
     def modify(self, title: str, path: str = None, version: str = None):
+        """
+# TODO: update docstring
+        Args:
+            title:
+            path:
+            version:
+        """
+
         """
         Updates an existing user project.
         Args:
@@ -1085,6 +1100,7 @@ class ProjectDBM4nager(_JSONDBM4nager[Project]):
         """
 
         return self.get_current()
+
 
 
 class ProjectArchM4nager:
@@ -1121,22 +1137,22 @@ class ProjectArchM4nager:
         )
 
     def generate_app_project(self):
-        """# TODO: add description"""
+        """Generate a python app architecture."""
 
         self._pg.generate_project("app")
 
     def generate_cli_project(self):
-        """# TODO: add description"""
+        """Generate a python CLI architecture."""
 
         self._pg.generate_project("cli")
 
     def generate_lib_project(self):
-        """# TODO: add description"""
+        """Generate a python lib architecture."""
 
         self._pg.generate_project("lib")
 
     def genretate_dev_env(self):
-        """# TODO: add description"""
+        """Generate a dev env in /dev"""
 
         print("[info] Generating a dev environment...")
         (self._pg.proj_path / "dev").mkdir()

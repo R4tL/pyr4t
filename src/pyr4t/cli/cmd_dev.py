@@ -2,7 +2,7 @@
 
 import argparse
 
-from pyr4t.core import dev_deploy, dev_run, cls, dstr, fmt, init
+from pyr4t.core import dev_deploy, dev_run, cls, dstr, fmt, init, venv
 
 def cmd_dev(args: argparse.Namespace):
     """
@@ -25,6 +25,8 @@ def cmd_dev(args: argparse.Namespace):
             fmt(args.specific)
         case "init":
             init()
+        case "venv":
+            venv()
 
 def add_dev_parser(subparsers: argparse._SubParsersAction):
     """
@@ -38,7 +40,6 @@ def add_dev_parser(subparsers: argparse._SubParsersAction):
     )
 
     dev_subparsers = parser.add_subparsers(dest="action", required=True)
-
 
     # ----- deploy -----
     dep_parser = dev_subparsers.add_parser(
@@ -81,10 +82,22 @@ def add_dev_parser(subparsers: argparse._SubParsersAction):
 
     # ----- fmt -----
     fmt_parser = dev_subparsers.add_parser("fmt", help="Format code")
-    fmt_parser.add_argument("specific", help="Specific file(s) (dir or file)")
+    fmt_parser.add_argument(
+        "specific", nargs="?", default=None,
+        help="Specific file(s) (dir or file)"
+    )
     fmt_parser.set_defaults(func=cmd_dev)
 
     # ----- dstr -----
     dstr_parser = dev_subparsers.add_parser("dstr", help="Analyse docstrings")
-    dstr_parser.add_argument("specific", help="Specific file(s) (dir or file)")
+    dstr_parser.add_argument(
+        "specific", nargs="?", default=None,
+        help="Specific file(s) (dir or file)"
+    )
     dstr_parser.set_defaults(func=cmd_dev)
+
+    # ----- venv -----
+    venv_parser = dev_subparsers.add_parser(
+        "venv", help="Generate a python venv in /.venv"
+    )
+    venv_parser.set_defaults(func=cmd_dev)

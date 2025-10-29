@@ -1,0 +1,21 @@
+[project]
+name = "app2"
+version = "0.1.0"
+description = ""
+authors = [{ name = "a", email = "t@d.com" }]
+requires-python = ">=3.13"
+readme = "README.md"
+license = { file = "LISENSE" }
+dependencies = []
+
+[project.optional-dependencies]
+dev = ["pytest>=8.3.2", "black>=24.3.0", "isort>=5.13.2"]
+[project.scripts]
+app2 = "app2.luncher:core_main"
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]

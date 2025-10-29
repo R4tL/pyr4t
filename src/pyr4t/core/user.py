@@ -27,7 +27,7 @@ class UserDBM4nager(_JSONDBM4nager[User]):
 
         self._validate_email(email)
         user: User = {"name": name, "email": email}
-        self.update_data(alias, "add", user)
+        self.update_data(alias.upper(), "add", user)
 
     def list(self) -> dict[str, User]:
         """
@@ -46,7 +46,7 @@ class UserDBM4nager(_JSONDBM4nager[User]):
             alias (str): The alias of the user to remove.
         """
 
-        self.update_data(alias, "rm")
+        self.update_data(alias.upper(), "rm")
 
     def modify(self, alias: str, name: str = None, email: str = None):
         """
@@ -57,13 +57,13 @@ class UserDBM4nager(_JSONDBM4nager[User]):
             email (str, optional): New email for the user.
         """
 
-        user = self.listd.get(alias)
+        user = self.listd.get(alias.upper())
         if name:
             user["name"] = name
         if email:
             self._validate_email(email)
             user["email"] = email
-        self.update_data(alias, "updt", user)
+        self.update_data(alias.upper(), "updt", user)
 
     def switch(self, alias: str):
         """
@@ -74,7 +74,7 @@ class UserDBM4nager(_JSONDBM4nager[User]):
             ValueError: If alias is 'me' or if the user does not exist.
         """
 
-        self.update_data(alias, "slct")
+        self.update_data(alias.upper(), "slct")
 
     def whoami(self) -> tuple[str, User]:
         """

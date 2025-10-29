@@ -1,9 +1,13 @@
+"""# TODO: add description"""
+
 import argparse
 
 from . import run_tests
 
 
 def main():
+    """# TODO: add description"""
+
     parser = argparse.ArgumentParser(
         description="Project utility CLI for common development tasks."
     )

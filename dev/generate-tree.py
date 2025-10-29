@@ -1,3 +1,5 @@
+"""# TODO: add description"""
+
 import shutil
 
 
@@ -65,6 +67,15 @@ def wrap_sequence(
 
 
 def wrap_desc(desc: str, desc_width: int):
+    """
+    # TODO: add description
+    Args:
+        desc:
+        desc_width:
+    Returns:
+            # TODO: add return type
+    """
+
 
     words = desc.split(" ")
     lines = []
@@ -89,6 +100,15 @@ def wrap_desc(desc: str, desc_width: int):
 
 
 def build_lines(dict_cmd: dict, prefix=""):
+    """
+    # TODO: add description
+    Args:
+        dict_cmd:
+        prefix:
+    Returns:
+            # TODO: add return type
+    """
+
 
     lines = []
     items = list(dict_cmd.items())
@@ -114,10 +134,22 @@ def build_lines(dict_cmd: dict, prefix=""):
 
 
 def print_tree(dict_cmd):
+    """
+    # TODO: add description
+    Args:
+        dict_cmd:
+    """
+
     lines = build_lines(dict_cmd)
     for line in lines:
         print(line)
 
 
 def main(cmd):
+    """
+    # TODO: add description
+    Args:
+        cmd:
+    """
+
     print_tree(cmd)

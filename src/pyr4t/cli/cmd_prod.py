@@ -59,10 +59,10 @@ def add_prod_parser(subparsers: argparse._SubParsersAction):
 
     # ----- test -----
     test_parser = prod_subparsers.add_parser(
-        "test", help="Run tests from /test dir"
+        "test",  help="Run tests from /test dir"
     )
     test_parser.add_argument(
-        "specific", default="",
+        "specific", nargs="?", default="",
         help="Run specific test (dir or file or file::function)"
     )
     test_parser.set_defaults(func=cmd_prod)

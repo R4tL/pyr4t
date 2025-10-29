@@ -1,0 +1,10 @@
+{
+    "app2": {
+        "__desc__": "app2 CLI",
+        "__seq__":["[(--help | -h) | (--version | -V)]"],
+        "example": {
+        "__desc__": "Example of command",
+        "__seq__": ["<script>", "[(--uper | -u)]"]
+        }
+    }
+}

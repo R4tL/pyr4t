@@ -1,3 +1,5 @@
+"""# TODO: add description"""
+
 import argparse
 
 from pyr4t.__main__ import main as run_main
@@ -6,6 +8,8 @@ from . import clean, format_code
 
 
 def main():
+    """# TODO: add description"""
+
     parser = argparse.ArgumentParser(
         description="Project utility CLI for common development tasks."
     )

@@ -120,27 +120,6 @@ def install_pyr4tpackage(package: str, version: str = None):
     print(f"[info] Installation of {package} finished")
 
 
-def upgrade_pyr4tpackage(package: str, version):
-    """
-    Upgrade a pyr4t package.
-    Args:
-        package (str): package name
-        version (str, optional): version to install. If "": latest release.
-    """
-
-    install_pyr4tpackage(package, version)
-
-
-def downgrade_pyr4tpackage(package: str, version: str):
-    """
-    Downgrade a pyr4t package.
-    Args:
-        package (str): package name
-        version (str): version to install.
-    """
-
-    install_pyr4tpackage(package, version)
-
 
 def uninstall_pyr4tpackage(package: str):
     """

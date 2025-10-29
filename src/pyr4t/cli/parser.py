@@ -13,12 +13,19 @@ from .cmd_user import add_user_parser
 
 def cmd_base(args: argparse.Namespace):
     """
+# TODO: update docstring
+    Args:
+        args:
+    """
+
+    """
     Base commands in the root of CLI.
-    
+
     """
 
     if args.help_requested:
         print(get_tree())
+        print("")
         build_parser().print_help()
     elif args.version:
         print(f"Pyr4t {__version__}")

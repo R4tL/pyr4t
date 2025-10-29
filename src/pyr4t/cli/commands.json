@@ -28,10 +28,6 @@
 
         "package": {
             "__desc__": "Pyr4t package manager",
-            "downgrade": {
-                "__desc__": "Downgrade a pyr4t package on local device",
-                "__seq__": ["<package-name>", "[(--version | -V) <package-version>]"]
-            },
             "install": {
                 "__desc__": "Install a pyr4t package from `R4tL` GitHub repo",
                 "__seq__": ["<package-name>", "[(--version | -V) <package-version>]"]
@@ -39,10 +35,6 @@
             "uninstall": {
                 "__desc__": "Uninstall a pyr4t package from local device",
                 "__seq__": ["<package-name>"]
-            },
-            "upgrade": {
-                "__desc__": "Upgrade a pyr4t package on local device",
-                "__seq__": ["<package-name>", "[(--version | -V) <package-version>]"]
             }
         },
 
@@ -56,10 +48,11 @@
                 "__desc__": "Deploy project in permanent mode with `pip install .`"
             },
             "run": {
-                "__desc__": "Run __main__.py file"
+                "__desc__": "Run a script file from /scripts",
+                "__seq__": ["[<script>]"]
             },
             "test": {
-                "__desc__": "Run integration or production tests"
+                "__desc__": "Run tests"
             }
         },
 
@@ -67,10 +60,10 @@
             "__desc__": "Python project manager",
             "add": {
                 "__desc__": "Add a local project to the pyr4t project DB",
-                "__seq__": ["<title>", "<path>"]
+                "__seq__": ["<title>", "<path>", "<version>"]
             },
             "init": {
-                "__desc__": "Generate a new python project architecture",
+                "__desc__": "Generate a new python project architecture default switch as current",
                 "__seq__": [
                     "(--app | --cli | --lib)", "<title>", "[(--authors | -a) <list-alias>]",
                     "[(--path | -p) <path>]", "[(--version | -V) <proj-version>]"
@@ -81,7 +74,7 @@
             },
             "modify": {
                 "__desc__": "Modify project information in the pyr4t project DB",
-                "__seq__": ["<title>", "<new-path>"]
+                "__seq__": ["<title>", "[(--path | -p) <new-path>]", "[(--version | -V) <new-version>]"]
             },
             "rm": {
                 "__desc__": "Remove a project from the pyr4t project DB",

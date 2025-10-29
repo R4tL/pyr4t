@@ -6,7 +6,7 @@ from typing import Generic
 
 from .models import EntryType, JSOND4ta
 
-PATH_JSON_PROFILES = Path.home() / ".pyr4t" / "listd.json"
+PATH_JSON_PROFILES = Path.home() / ".pyr4t" / "users.json"
 PATH_JSON_PROJECTS = Path.home() / ".pyr4t" / "projects.json"
 
 
@@ -32,28 +32,29 @@ class _JSONDBM4nager(Generic[EntryType]):
         """
 
         if not self.current:
-            raise ValueError("[error] No current set. Please add entry first.")
+            raise ValueError("No current set. Please add entry first.")
         entry = self.listd.get(self.current)
         return self.current, entry
 
     def update_data(self, key: str, action: str, entry: EntryType = None):
         """
-        # TODO: add description
+        Update DB.
         Args:
-            key:
-            action:
-            entry:
+            key (str): Data key.
+            action (str): Type (add, rm, updt)
+            entry (EntryType): Data
         """
 
-        if not key in self.listd:
-            raise ValueError(f"[error] No entry found with key: {key}")
         if action == "add":
             duplicate_key = self._find_duplicate(entry)
             if duplicate_key:
                 raise ValueError(
-                    f"[error] Entry: {entry}"
+                    f"Entry: {entry}"
                     f"already exists with key '{duplicate_key}'."
                 )
+        elif not key in self.listd:
+            raise ValueError(f"No entry found with key: {key}")
+
         if action in ["updt", "add"] and entry:
             self.listd[key] = entry
             self.data["list"] = self.listd
@@ -63,7 +64,7 @@ class _JSONDBM4nager(Generic[EntryType]):
                 self.data["current"] = self.current
         elif action == "rm":
             if key == self.current:
-                raise ValueError(f"[error] Can't delete current: {key}")
+                raise ValueError(f"Can't delete current: {key}")
             self.listd.pop(key)
             self.data["list"] = self.listd
         elif action == "slct":

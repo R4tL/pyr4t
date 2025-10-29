@@ -1,3 +1,5 @@
+"""# TODO: add description"""
+
 import ast
 import subprocess
 import sys
@@ -20,6 +22,12 @@ def main():
 
 
 def format_code(path: Path):
+    """
+# TODO: update docstring
+    Args:
+        path:
+    """
+
     """Format code using Black and isort."""
     print("[info] Formatting code...")
     try:
@@ -43,6 +51,16 @@ def dctr(folder: Path):
 def generate_google_docstring(
     node: ast.FunctionDef, indent: str, update=False
 ) -> str:
+    """
+# TODO: update docstring
+    Args:
+        node:
+        indent:
+        update:
+    Returns:
+        str
+    """
+
     """Generate a Google-style docstring with proper indentation."""
     prefix = f"{DO_UPDATE}" if update else f"{SINGLE_LINE_DOC}"
     filtered_args = [
@@ -82,6 +100,15 @@ def generate_google_docstring(
 def check_docstring_needs_update(
     node: ast.FunctionDef, docstring: str
 ) -> bool:
+    """
+# TODO: update docstring
+    Args:
+        node:
+        docstring:
+    Returns:
+        bool
+    """
+
     """Check if the docstring is missing any arguments or the return value."""
     if docstring is None:
         return True
@@ -109,6 +136,14 @@ def check_docstring_needs_update(
 
 
 def get_indent(line: str) -> str:
+    """
+# TODO: update docstring
+    Args:
+        line:
+    Returns:
+        str
+    """
+
     """Return the whitespace at the start of a line for indentation."""
     base = ""
     if ":" in line:
@@ -117,6 +152,12 @@ def get_indent(line: str) -> str:
 
 
 def process_file(path: Path):
+    """
+# TODO: update docstring
+    Args:
+        path:
+    """
+
     """Manage docstrings in a file."""
     with open(path, "r", encoding="utf-8") as f:
         lines = f.read().splitlines()
@@ -157,6 +198,15 @@ def process_file(path: Path):
 
 
 def find_signature_end(lines: list[str], start_line: int) -> int:
+    """
+# TODO: update docstring
+    Args:
+        lines:
+        start_line:
+    Returns:
+        int
+    """
+
     """Return the index where the function signature ends."""
     open_parens = 0
     for i, line in enumerate(lines[start_line:], start=start_line):
@@ -168,6 +218,14 @@ def find_signature_end(lines: list[str], start_line: int) -> int:
 
 
 def has_non_none_return(node: ast.FunctionDef) -> bool:
+    """
+# TODO: update docstring
+    Args:
+        node:
+    Returns:
+        bool
+    """
+
     """Return True if the function has at least one 'return' with a value."""
     for n in ast.walk(node):
         if isinstance(n, ast.Return) and n.value is not None:
