@@ -1,1 +1,0 @@
-"""Data schemas (Pydantic)."""

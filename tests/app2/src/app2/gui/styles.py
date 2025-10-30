@@ -1,1 +1,0 @@
-"""Styles of the app (CSS, theme, colors)."""
