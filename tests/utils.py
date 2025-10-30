@@ -7,15 +7,8 @@ import venv
 
 
 def make_tmp_venv(tmp_path: Path):
-    """
-# TODO: update docstring
-    Args:
-        tmp_path:
-    Returns:
-            # TODO: add return type
-    """
-
     """Create an isolated virtualenv and return its bin path."""
+
     env_dir = tmp_path / ".venv"
     venv.EnvBuilder(with_pip=True).create(env_dir)
     bin_path = env_dir / ("Scripts" if os.name == "nt" else "bin")
@@ -78,15 +71,6 @@ def ensure_project_init(
         authors: str = None,
         dev: bool = False
     ):
-        """
-# TODO: update docstring
-        Args:
-            tmp_home:
-            title:
-            authors:
-            dev:
-        """
-
     """
     Initialize a minimal Pyr4t project so that dev/prod commands can run.
     """
@@ -102,3 +86,12 @@ def ensure_project_init(
     )
     if dev:
         run_cli("dev", "init")
+
+def check_in_file(file: Path, term: str, presence: bool):
+    """Check a term in a file."""
+
+    with open(file, "r", encoding="UTF-8") as f:
+        content = f.read()
+    if presence:
+        return term in content
+    return term not in content

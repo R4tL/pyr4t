@@ -6,12 +6,6 @@ from .utils import run_cli, make_tmp_venv, ensure_project_init
 
 
 def test_prod_build(tmp_path: Path):
-    """
-# TODO: update docstring
-    Args:
-        tmp_path:
-    """
-
     """Test prod build."""
 
     ensure_project_init(tmp_path)
@@ -20,12 +14,6 @@ def test_prod_build(tmp_path: Path):
 
 
 def test_prod_run(tmp_path: Path):
-    """
-# TODO: update docstring
-    Args:
-        tmp_path:
-    """
-
     """Test prod run."""
 
     ensure_project_init(tmp_path)
@@ -33,12 +21,6 @@ def test_prod_run(tmp_path: Path):
     assert "Script example !" in out
 
 def test_prod_test(tmp_path: Path):
-    """
-# TODO: update docstring
-    Args:
-        tmp_path:
-    """
-
     """Test prod test."""
 
     ensure_project_init(tmp_path)
@@ -51,12 +33,6 @@ def test_prod_test(tmp_path: Path):
 
 
 def test_prod_deploy(tmp_path: Path):
-    """
-# TODO: update docstring
-    Args:
-        tmp_path:
-    """
-
     """Test prod deploy."""
 
     ensure_project_init(tmp_path)

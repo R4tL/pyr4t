@@ -1,58 +1,37 @@
-"""# TODO: add description"""
+"""Testing users CLI."""
 
-from .utils import run_cli
+from pathlib import Path
 
+from .utils import run_cli, check_in_file
 
-def test_user_add(tmp_path):
+def test_proj_manage(tmp_path: Path):
     """
-    # TODO: add description
-    Args:
-        tmp_path:
-    """
-
-    out = run_cli("user", "add", "alice", "Alice", "alice@example.com", tmp_home=tmp_path)
-    assert "added" in out.lower()
-
-
-def test_user_list(tmp_path):
-    """
-    # TODO: add description
-    Args:
-        tmp_path:
+    Test proj add.
     """
 
-    out = run_cli("user", "list", tmp_home=tmp_path)
-    assert "alice" in out or "user" in out.lower()
-
-
-def test_user_modify(tmp_path):
-    """
-    # TODO: add description
-    Args:
-        tmp_path:
-    """
-
-    out = run_cli("user", "modify", "alice", "--email", "new@example.com", tmp_home=tmp_path)
-    assert "modified" in out.lower() or "updated" in out.lower()
-
-
-def test_user_switch(tmp_path):
-    """
-    # TODO: add description
-    Args:
-        tmp_path:
-    """
-
-    out = run_cli("user", "switch", "alice", tmp_home=tmp_path)
-    assert "active" in out.lower() or "switched" in out.lower()
-
-
-def test_user_rm(tmp_path):
-    """
-    # TODO: add description
-    Args:
-        tmp_path:
-    """
-
-    out = run_cli("user", "rm", "alice", tmp_home=tmp_path)
-    assert "removed" in out.lower()
+    path_db_file = tmp_path / ".pyr4t" / "users.json"
+    expected_snippet = (
+    '"TST1": {\n'
+    '            "name": "tester1",\n'
+    '            "email": "tester1@mail.com"\n'
+    '        },'
+    )
+    run_cli(
+        "user", "add", "TST1", "tester1", "tester1@mail.com",
+        tmp_home=tmp_path
+    )
+    run_cli(
+        "user", "add", "TST2", "tester2", "tester2@mail.com",
+        tmp_home=tmp_path
+    )
+    assert check_in_file(path_db_file, expected_snippet, True)
+    out_list = run_cli("user", "list", tmp_home=tmp_path)
+    assert "TST1" in out_list and "TST2" in out_list
+    run_cli(
+        "user", "switch", "TST2", tmp_home=tmp_path
+    )
+    assert check_in_file(path_db_file, '"current": "TST2"', True)
+    out_who = run_cli("user", "whoami", tmp_home=tmp_path)
+    assert "TST2" in out_who
+    run_cli("user", "rm", "TST1", tmp_home=tmp_path)
+    assert check_in_file(path_db_file, "TST1", False)

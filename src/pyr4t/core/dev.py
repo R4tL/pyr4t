@@ -12,7 +12,7 @@ from .project import ProjectDBM4nager, ProjectArchM4nager
 
 pdb = ProjectDBM4nager()
 proj_path = Path(pdb.listd.get(pdb.current, {"": ""}).get("path", ""))
-print("DEBOOOOOOOOOG", proj_path)
+
 BECON = "# TOD" + "O:"  # Dont interpret as T0-D0
 SINGLE_LINE_DOC = f"{BECON} add description"
 GOOGLE_DOC_TEMPLATE = """

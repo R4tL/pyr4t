@@ -6,12 +6,6 @@ from .utils import run_cli, make_tmp_venv, ensure_project_init
 
 
 def test_dev_init(tmp_path: Path):
-    """
-# TODO: update docstring
-    Args:
-        tmp_path:
-    """
-
     """Test dev init."""
 
     ensure_project_init(tmp_path)
@@ -20,12 +14,6 @@ def test_dev_init(tmp_path: Path):
 
 
 def test_dstr(tmp_path: Path):
-    """
-# TODO: update docstring
-    Args:
-        tmp_path:
-    """
-
     """Test dev dstr."""
 
     ensure_project_init(tmp_path)
@@ -34,12 +22,6 @@ def test_dstr(tmp_path: Path):
 
 
 def test_dev_fmt(tmp_path: Path):
-    """
-# TODO: update docstring
-    Args:
-        tmp_path:
-    """
-
     """Test dev fmt."""
 
     ensure_project_init(tmp_path)
@@ -49,12 +31,6 @@ def test_dev_fmt(tmp_path: Path):
 
 
 def test_dev_cls(tmp_path: Path):
-    """
-# TODO: update docstring
-    Args:
-        tmp_path:
-    """
-
     """Test dev cls."""
 
     ensure_project_init(tmp_path, dev=True)
@@ -68,12 +44,6 @@ def test_dev_cls(tmp_path: Path):
 
 
 def test_dev_deploy(tmp_path: Path):
-    """
-# TODO: update docstring
-    Args:
-        tmp_path:
-    """
-
     """Test dev deploy."""
 
     ensure_project_init(tmp_path)
@@ -85,12 +55,6 @@ def test_dev_deploy(tmp_path: Path):
 
 
 def test_dev_venv(tmp_path: Path):
-    """
-# TODO: update docstring
-    Args:
-        tmp_path:
-    """
-
     """Test dev venv."""
 
     ensure_project_init(tmp_path)

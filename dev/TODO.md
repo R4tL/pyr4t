@@ -194,27 +194,27 @@ ENFAITE AVEC --upgrade ou --change apres le pyr4t package install --upgrade
 NEW : (d'aboord sortir la release 0.1.0 avec m'ancienne methode)
 ```
 pyr4t
-├── add <proj-title> <path> <version>
 ├── init (--app | --cli | --lib) [--authors ...] [--version ...]
 ├── build
 ├── deploy [--dev]
-├── run <script> [--dev]
+├── run [--dev] <script>
 ├── test
 ├── fmt
 ├── cls [--cache] [--log] [--tmp]
 ├── venv
-├── info
-├── switch <proj-title>
-├── list
-├── mv <proj-title> [--path ...] [--version ...]
-├── rm <proj-title>
-├── install <package-name>
+├── info # info proj actuel
+├── install <package-name> [--info] # print les packages dispo avec petite desc et si besoin de token ou non
+├── project
+│   ├── add <title> <path> <version>
+│   ├── list
+│   ├── mv <title> [--path ...] [--version ...]
+│   ├── rm <title>
+│   └── switch <title>
 └── user
     ├── add <alias> <name> <email>
     ├── list
     ├── mv <alias> [--email ...] [--name ...]
     ├── rm <alias>
-    ├── switch <alias>
-    └── whoami
+    └── switch <alias>
 
 ```
