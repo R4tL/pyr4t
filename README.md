@@ -84,92 +84,57 @@ pip install -e .[dev]
 
 ---
 
-## Requirements
-
-### Install `make` (*optional*)
-
-If you want to have acces to the `make` commands.
-
-* **Linux/macOS**
-```bash
-sudo apt install make # (or brew / xbps-install)
-```
-
-* **Windows (with Chocolatey)**
-
-```bash
-choco install make
-```
-
----
-
 ## Usage
 
 ### CLI
 
-* **Create a pyr4t profilep**
-```bash
-pyr4t profile
 ```
-
-| Subcommand | Arguments                          | Description                               |
-|------------|-----------------------------------|--------------------------------------------|
-| list       |                                   | List all profiles                          |
-| add        | -a, --alias (required)            | Profile alias                              |
-|            | -n, --name (required)             | Profile name                               |
-|            | -e, --email (required)            | Profile email                              |
-| select     | -a, --alias (required)            | Select a profile as the default            |
-| remove     | -a, --alias (required)            | Remove a profile                           |
-| update     | -a, --alias (required)            | Alias of the profile to update             |
-|            | -n, --name (optional)             | New profile name                           |
-|            | -e, --email (optional)            | New profile email                          |
-| whoami     |                                   | Show the currently selected profile        |
-
-NB: It's necessary to create profile in a first after installation.
-
-* **Generate a python project achitecture**
-```bash
-pyr4t init project-name
-```
-
-| Arguments       | Description                                                                  |
-| ----------------|------------------------------------------------------------------------------|
-| -p, --base_path | Base path where the project will be created (default: current directory)     |
-| -v, --version   | Indicate the version of the project (default `"0.1.0"`)                      |
-| -a, --authors   | List of authors as `"alias"`, e.g. `--authors "me you bro"` (default `"me"`) |
-
-* **Install a `pyr4t` package**
-```bash
-pyr4t install pack-name
-```
-
-| Arguments       | Description                                                                  |
-| ----------------|------------------------------------------------------------------------------|
-| -p, --protocol  | Protocol to use for installation (https or ssh) (default `"https"`).         |
-| -v, --version   | Indicate the version of the package on github (default `"main"`)             |
-
-
-### Make commands
-
-Go to the root project folder and use the following commands:
-
-* **Build the project for prod**
-```bash
-make build
-```
-
-* **Run test scripts**
-```bash
-make test
-```
-
-### Scripts
-
-Go to the root project folder and use the following commands:
-
-* **Run test scripts**
-```bash
-python -m scripts.manage -t
+└── pyr4t [(--help | -h) | (--version | -V)]                      # Pyr4t CLI
+    ├── dev [(--title | -t) <title>]                              # Dev commands
+    │   ├── deploy                                                # Deploy project in editable mode with `pip
+    │   │                                                           install -e .[dev]`
+    │   ├── cls [--cache] [--log] [--tmp]                         # Clean cache, logs and tmp files (choose
+    │   │                                                           specific type or all)
+    │   ├── dstr                                                  # Check doctring and create/update template
+    │   │                                                           if necessary
+    │   ├── fmt                                                   # Format scripts in ./src using black and
+    │   │                                                           isort
+    │   ├── init                                                  # Generate a dev environment in ./dev
+    │   └── venv                                                  # Generate a python venv in ./.venv
+    ├── package                                                   # Pyr4t package manager
+    │   ├── install <package-name>                                # Install a pyr4t package from `R4tL` GitHub
+    │   │           [(--version | -V) <package-version>]            repo
+    │   └── uninstall <package-name>                              # Uninstall a pyr4t package from local
+    │                                                               device
+    ├── prod [(--title | -t) <title>]                             # Prod commands
+    │   ├── build                                                 # Build production-ready binary
+    │   ├── deploy                                                # Deploy project in permanent mode with `pip
+    │   │                                                           install .`
+    │   ├── run [<script>]                                        # Run a script file from /scripts
+    │   └── test                                                  # Run tests
+    ├── proj                                                      # Python project manager
+    │   ├── add <title> <path> <version>                          # Add a local project to the pyr4t project
+    │   │                                                           DB
+    │   ├── init (--app | --cli | --lib) <title>                  # Generate a new python project architecture
+    │   │        [(--authors | -a) <list-alias>]                    default switch as current
+    │   │        [(--path | -p) <path>]
+    │   │        [(--version | -V) <proj-version>]
+    │   ├── list                                                  # List projects from the pyr4t project DB
+    │   ├── modify <title> [(--path | -p) <new-path>]             # Modify project information in the pyr4t
+    │   │          [(--version | -V) <new-version>]                 project DB
+    │   ├── rm <title>                                            # Remove a project from the pyr4t project DB
+    │   ├── whoami                                                # Print the active project in console
+    │   └── switch <title>                                        # Switch to another active project from the
+    │                                                               pyr4t project DB
+    └── user                                                      # User manager
+        ├── add <alias> <name> <email>                            # Add a user to the pyr4t user DB
+        ├── list                                                  # List users from the pyr4t user DB
+        ├── modify <alias> [(--email | -e) <new-email>]           # Modify user information in the pyr4t user
+        │          [(--name | -n) <new-name>]                       DB
+        ├── rm <alias>                                            # Remove a user from the pyr4t user DB
+        ├── switch <alias>                                        # Switch to another active user from the
+        │                                                           pyr4t user DB
+        └── whoami                                                # Print  the active user in console
 ```
 
 ### Example of usage
@@ -192,118 +157,11 @@ pyr4t init project -p ./doc/py_projects -v 0.1.0 -a me bro
 
 4. You can also install a pyr4t package
 ```bash
-pyr4t install logger -v v0.1.0 -p https
+pyr4t install pyr4tlogger -V 0.1.0
 ```
 
-NB: all pyr4t package start with `"pyr4t"`. It's not necessary to specify ("pyr4t install pyr4tlogger" works to).
+NB: all pyr4t package start with `"pyr4t"`.
 
-
----
-
-## Development
-
-### Tests
-
-* **Run tests**
-```bash
-pytest
-```
-
-### Make commands
-
-Go to the root project folder and use the following commands:
-
-* **Create a py venv in .venv**
-```bash
-make -C dev venv
-```
-
-* **Build the project in dev mode**
-```bash
-make -C dev build
-```
-
-* **Run the main project**
-
-- Without args
-```bash
-make -C dev run
-```
-- With args
-```bash
-make -C dev run ARGS="arg1 arg2"
-```
-
-* **Format the codebase and manage docstrings**
-
-```bash
-make -C dev fmt
-```
-
-* **Clean files**
-
-- All
-```bash
-make -C dev clean
-```
-```bash
-make -C dev clean all
-```
-- Cache only
-```bash
-make -C dev clean cache
-```
-- Logs only
-```bash
-make -C dev clean log
-```
-- Files in /dev/tmp only
-```bash
-make -C dev clean tmp
-```
-
-### Scripts
-
-Go to the root project folder and use the following commands:
-
-* **Run the main project**
-
-- Without args
-```bash
-python -m dev.scripts.manage -r
-```
-- With args
-```bash
-python -m dev.scripts.manage -r arg1 arg2
-```
-
-* **Format the codebase and manage docstrings**
-
-```bash
-python -m dev.scripts.manage -f
-```
-
-* **Clean files**
-
-- All
-```bash
-python -m dev.scripts.manage -c
-```
-```bash
-python -m dev.scripts.manage -c all
-```
-- Cache only
-```bash
-python -m dev.scripts.manage -c cache
-```
-- Logs only
-```bash
-python -m dev.scripts.manage -c log
-```
-- Files in /dev/tmp only
-```bash
-python -m dev.scripts.manage -c tmp
-```
 
 ---
 
