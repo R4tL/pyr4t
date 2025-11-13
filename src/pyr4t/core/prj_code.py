@@ -127,7 +127,21 @@ class ProjectCodeM4nager:
 
         if "tmp" in files:
             for path in self.proj_path.rglob("*"):
-                shutil.rmtree(path, ignore_errors=True)
+                if path.is_dir() and path.name.lower() == "tmp":
+                    file_count = 0
+                    dir_count = 0
+                    for item in path.iterdir():
+                        try:
+                            if item.is_dir():
+                                shutil.rmtree(item, ignore_errors=True)
+                                dir_count += 1
+                            else:
+                                item.unlink(missing_ok=True)
+                        except (PermissionError, OSError) as e:
+                            print(f"[warning] Could not remove '{item}': {e}")
+                            continue
+                    print(f"[info] Cleaned tmp '{path}': removed {file_count} "
+                          f"files and {dir_count} directories.")
 
         print("[info] Cleaning complete!")
 
