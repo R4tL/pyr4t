@@ -204,13 +204,13 @@ pyr4t
 ├── venv
 ├── info # info proj actuel
 ├── install <package-name> [--info] # print les packages dispo avec petite desc et si besoin de token ou non
-├── project
+├── prj
 │   ├── add <title> <path> <version>
 │   ├── list
 │   ├── mv <title> [--path ...] [--version ...]
 │   ├── rm <title>
 │   └── switch <title>
-└── user
+└── usr
     ├── add <alias> <name> <email>
     ├── list
     ├── mv <alias> [--email ...] [--name ...]
@@ -220,4 +220,12 @@ pyr4t
 ```
 
 avoir un publish pour publier sur pypi ou github
-build nécessite de le pip intsalle ?? mettre en dépendance
+build nécessite de le pip intsalle ?? mettre en dépendance dans pyproj
+
+pour la dbp remettre le path d'avant comme ça proj title n'est pas obligatoirement le nom du dossier
+
+CHANGER TOTALEMENT LA LOGIQUE DE PDB :
+{ALIAS: {title: ..., path: ..., version: ...}}
+{PATH: {title: ..., version: ...}} -> chiant pour switch
+Numéroter auto ? trouver la bonne solution mais en gros je veux pas empecher de creer deux projet avec le même titre si le path est different
+faire un rm *

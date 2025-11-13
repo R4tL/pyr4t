@@ -1,16 +1,95 @@
-"""
-# TODO
-"""
+"""Module for managing a python project architecture."""
 
 import sys
 import time
 from pathlib import Path
 
-from pyr4t.models import Project
-from pyr4t.utils import PATH_JSON_PROJECTS, _JSONDBM4nager
+from .prj_db import ProjectDBM4nager
+from .usr_db import UserDBM4nager
 
-from .user import UserDBM4nager
 
+class ProjectArchM4nager:
+    """
+    A utility class for managing architecrure for pyr4t projects.
+    Args:
+        proj_title (str, optional): Title of the project to manage.
+            If None, uses the current default project.
+        proj_base_path (str, optional): Base path where the project
+            is located. If None, uses the path from the projects database.
+        authors (list[str], optional): List of authors names.
+            If None, uses "current" user.
+        proj_version (str, optional): Version of the project.
+            If None, uses the version from the projects database.
+    """
+
+    def __init__(
+        self,
+        proj_title: str = None,
+        proj_base_path: str = None,
+        authors: list[str] = None,
+        proj_version: str = None,
+    ):
+
+        self.pdb = ProjectDBM4nager()
+
+        if proj_title is None:
+            self.proj_title = self.pdb.current
+        else:
+            self.proj_title = proj_title
+        if proj_base_path is None:
+            self.proj_path = Path(self.pdb.listd.get(
+                self.proj_title, {"": ""}
+                ).get("path", ""))
+            self.proj_base_path = Path(self.proj_path).parent
+        else:
+            self.proj_base_path = Path(proj_base_path)
+            self.proj_path = self.proj_base_path / self.proj_title
+        if proj_version is None:
+            self.proj_version = self.pdb.listd.get(
+                self.proj_title, {"": ""}
+                ).get("version", "")
+        else:
+            self.proj_version = proj_version
+        if authors is None:
+            self.authors = ["current"]
+        else:
+            self.authors = authors
+
+        self._pg = _ProjectGenerator(
+            self.proj_title, self.proj_base_path,
+            self.authors, self.proj_version
+        )
+
+
+    def generate_app_project(self):
+        """Generate a python app architecture."""
+
+        self._pg.generate_project("app")
+
+
+    def generate_cli_project(self):
+        """Generate a python CLI architecture."""
+
+        self._pg.generate_project("cli")
+
+
+    def generate_lib_project(self):
+        """Generate a python lib architecture."""
+
+        self._pg.generate_project("lib")
+
+
+    def genretate_dev_env(self):
+        """Generate a dev env in /dev"""
+
+        print("[info] Generating a dev environment...")
+        (self._pg.proj_path / "dev").mkdir()
+        print("[info] Cretation of dir: dev")
+        (self._pg.proj_path / "dev" / "scripts").mkdir()
+        print("[info] Cretation of dir: scripts")
+        (self._pg.proj_path / "dev" / "tmp").mkdir()
+        print("[info] Cretation of dir: tmp")
+        self._pg.generate_scripts(proj_path=self.proj_path / "dev")
 
 
 class _ProjectGenerator:
@@ -22,16 +101,18 @@ class _ProjectGenerator:
     def __init__(
         self,
         proj_title: str,
-        base_path: str,
+        base_path: Path,
         authors: list[str],
         proj_version: str,
     ):
 
         self.proj_title = proj_title.replace(" ", "-")
         self.package_name = self.proj_title.lower().replace("-", "_")
-        self.proj_path = Path(base_path) / self.proj_title
+        self.base_path = base_path.resolve()
+        self.proj_path = (base_path / self.proj_title).resolve()
         self.authors = self._get_authors(authors)
         self.proj_version = proj_version
+
 
     def generate_project(self, project_type: str):
         """
@@ -44,15 +125,16 @@ class _ProjectGenerator:
 
         print("[info] Generating a project architecture...")
 
-        # Create main project directory
-        self.proj_path.mkdir(parents=True, exist_ok=False)
-        print(f"[info] Created project directory: {self.proj_path}")
-
         pdb = ProjectDBM4nager()
         if self.proj_title in pdb.listd:
             raise ValueError(
                 f"A project named {self.proj_title} already exixsts."
             )
+
+        # Create main project directory
+        self.proj_path.mkdir(parents=True, exist_ok=False)
+        print(f"[info] Created project directory: {self.proj_path}")
+
 
         # Create dirs
         self._generate_dirs(project_type)
@@ -64,7 +146,7 @@ class _ProjectGenerator:
         self._generate_license()
         self._generate_readme(project_type)
         self._generate_pyproject(project_type)
-        self.generate_scripts(self.proj_path, project_type)
+        self.generate_scripts(project_type=project_type)
         self._generate_tests(project_type)
         models = '''"""Typing variables."""\n'''
         self._create_file(
@@ -81,25 +163,23 @@ class _ProjectGenerator:
 
         # Add to DB and current
         pdb.add(
-            self.proj_title, str(self.proj_path.resolve()), self.proj_version
+            self.proj_title, str(self.proj_path), self.proj_version
         )
         pdb.switch(self.proj_title)
 
         print("[info] Project architecture created with success.")
 
-    def generate_scripts(self, parent_path: Path, project_type: str = ""):
+
+    def generate_scripts(self, proj_path: Path = None, project_type: str = ""):
         """
-# TODO: update docstring
+        Generate 'scripts' directory with example scripts.
         Args:
             parent_path:
             project_type:
         """
 
-        """
-        Create utility scripts for project management.
-                Args:
-                    parent_path: # TODO
-        """
+        if proj_path is None:
+            proj_path = self.proj_path
 
         if project_type in ["app", "cli"]:
             name = "main.py"
@@ -121,12 +201,14 @@ def main():
 
     print("Script example !")
 
-if __name__ == __main__:
+if __name__ == "__main__":
     main()
 '''
         self._create_file(
-            parent_path / "scripts" / name, content
+            proj_path / "scripts" / name, content
         )
+        self._create_file(proj_path / "scripts" / "__init__.py")
+
 
     def _generate_dirs(self, project_type: str):
 
@@ -159,6 +241,7 @@ if __name__ == __main__:
                 / subdir_core
             ).mkdir()
             print(f"[info] Cretation of dir: {subdir_core}")
+
 
     def _generate_init_files(self, project_type: str):
 
@@ -196,6 +279,7 @@ __all__ = ["build_parser"]
 
                 self._create_file(proj_dir / "__init__.py", content)
 
+
     def _generate_py_doc_link(self):
         """
         Create a docs/python_doc.md file with a link to the official
@@ -209,6 +293,7 @@ Official Python documentation: [https://docs.python.org/3/](https://docs.python.
 
 """
         self._create_file(docs_path, content)
+
 
     def _generate_gitignore(self):
         """
@@ -251,6 +336,7 @@ dev
 Thumbs.db
 """
         self._create_file(self.proj_path / ".gitignore", content)
+
 
     def _generate_readme(self, project_type: str):
         """
@@ -413,6 +499,7 @@ MIT License. See [LICENSE](LICENSE) for details.
         # pylint: enable=line-too-long
         self._create_file(self.proj_path / "README.md", content)
 
+
     def _generate_license(self):
         """
         Create a LICENSE file with the MIT license
@@ -444,6 +531,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
         self._create_file(self.proj_path / "LICENSE", content)
+
 
     def _generate_pyproject(self, project_type: str):
         """
@@ -484,6 +572,7 @@ build-backend = "setuptools.build_meta"
 where = ["src"]
 """
         self._create_file(self.proj_path / "pyproject.toml", content)
+
 
     def _generate_tests(self, project_type: str):
 
@@ -533,6 +622,7 @@ def test_cli_{self.package_name}(monkeypatch, capsys):
 '''
 
         self._create_file(self.proj_path / "tests" / "test_example.py", test)
+
 
     def _generate_cli(self):
 
@@ -762,7 +852,7 @@ def cmd_base(args: argparse.Namespace):
         print("[error] No command was entered. Use `-h` or `--help` for help.")
     sys.exit(0)
 
-def build_parser():
+def build_parser() -> argparse.ArgumentParser:
     """Creates and configures the main argument parser for the CLI.
     Returns:
         argparse.ArgumentParser: The configured argument parser for the CLI.
@@ -875,6 +965,7 @@ def main():
             luncher,
         )
 
+
     def _generate_app(self):
 
         # Need same script like CLI (APP is CLI ++)
@@ -934,6 +1025,7 @@ def main():
             schemas,
         )
 
+
     def _generate_lib(self):
 
         example = '''\
@@ -952,6 +1044,7 @@ class Example:
             example,
         )
 
+
     def _create_file(self, file_path: Path, content: str = ""):
         try:
             file_path.parent.mkdir(parents=True, exist_ok=True)
@@ -960,6 +1053,7 @@ class Example:
             print(f"[info] Created file: {file_path}")
         except OSError as e:
             print(f"[error] An error occurred while creating {file_path}: {e}")
+
 
     def _get_dev_dependencies(self):
         major, minor = sys.version_info[:2]
@@ -985,6 +1079,7 @@ class Example:
         # Return TOML-style list
         return f'["{pytest}", "{black}", "{isort}"]'
 
+
     def _get_authors(self, authors: list[str]) -> list[dict]:
         udb = UserDBM4nager()
         authors_list = []
@@ -1009,156 +1104,3 @@ class Example:
                 )
                 authors_list.append({"name": author, "email": ""})
         return authors_list
-
-
-class ProjectDBM4nager(_JSONDBM4nager[Project]):
-    """
-    Manages projects: add, list, update, select, and remove projects
-    stored in a JSON file.
-    """
-
-    def __init__(self):
-        super().__init__(PATH_JSON_PROJECTS)
-
-    def add(self, title: str, path: str, version: str):
-        """
-# TODO: update docstring
-        Args:
-            title:
-            path:
-            version:
-        """
-
-        """
-        Adds a new project.
-        Args:
-            title (str): Unique identifier for the project.
-            path (str): Name of the user.
-        """
-
-        project: Project = {"path": path, "versison": version}
-        self.update_data(title, "add", project)
-
-    def list(self) -> dict[str, Project]:
-        """
-        Lists all projects.
-        Returns:
-            dict[str, Project]: Dictionary of project titles
-            to Project objects.
-        """
-
-        return self.listd
-
-    def remove(self, title: str):
-        """
-        Removes a user project by title.
-        Args:
-            title (str): The title of the project to remove.
-        """
-
-        self.update_data(title, "rm")
-
-    def modify(self, title: str, path: str = None, version: str = None):
-        """
-# TODO: update docstring
-        Args:
-            title:
-            path:
-            version:
-        """
-
-        """
-        Updates an existing user project.
-        Args:
-            title (str): The title of the project to update.
-            path (str, optional): New path for the project.
-        """
-
-        project = self.listd.get(title)
-        if path:
-            project["path"] = path
-        if version:
-            project["version"] = version
-        self.update_data(title, "updt", project)
-
-    def switch(self, title: str):
-        """
-        Selects a project as the default project ('me').
-        Args:
-            title (str): The title of the project to set as default.
-        Raises:
-            ValueError: If title is 'me' or if the project does not exist.
-        """
-
-        self.update_data(title, "slct")
-
-    def whoami(self) -> tuple[str, Project]:
-        """
-        Returns the title and project information ofthe current project.
-        Returns:
-            tuple[str, Project]: Alias and project data of the default project.
-        """
-
-        return self.get_current()
-
-
-
-class ProjectArchM4nager:
-    """# TODO: add description"""
-
-    def __init__(
-        self,
-        proj_title: str,
-        proj_path: str = None,
-        authors: list[str] = None,
-        proj_version: str = None,
-    ):
-
-        self.pdb = ProjectDBM4nager()
-        if proj_title == "current":
-            self.proj_title = self.pdb.current
-            self.proj_path = self.pdb.listd.get(
-                self.proj_title, {"": ""}
-                ).get("path", "")
-            self.proj_version = self.pdb.listd.get(
-                self.proj_title, {"": ""}
-                ).get("version", "")
-        else:
-            self.proj_title = proj_title
-            self.proj_path = proj_path
-            self.proj_version = proj_version
-        if authors is None:
-            self.authors = ["current"]
-        else:
-            self.authors = authors
-
-        self._pg = _ProjectGenerator(
-            self.proj_title, self.proj_path, self.authors, self.proj_version
-        )
-
-    def generate_app_project(self):
-        """Generate a python app architecture."""
-
-        self._pg.generate_project("app")
-
-    def generate_cli_project(self):
-        """Generate a python CLI architecture."""
-
-        self._pg.generate_project("cli")
-
-    def generate_lib_project(self):
-        """Generate a python lib architecture."""
-
-        self._pg.generate_project("lib")
-
-    def genretate_dev_env(self):
-        """Generate a dev env in /dev"""
-
-        print("[info] Generating a dev environment...")
-        (self._pg.proj_path / "dev").mkdir()
-        print("[info] Cretation of dir: dev")
-        (self._pg.proj_path / "dev" / "scripts").mkdir()
-        print("[info] Cretation of dir: scripts")
-        (self._pg.proj_path / "dev" / "tmp").mkdir()
-        print("[info] Cretation of dir: tmp")
-        self._pg.generate_scripts((self._pg.proj_path / "dev"))

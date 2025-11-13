@@ -1,12 +1,13 @@
-"""Fuctions to manage pyr4t packges."""
+"""Functions to manage pyr4t packges."""
 
 import platform
 import subprocess
 import sys
 import tempfile
-from pathlib import Path
 import os
 import shutil
+from pathlib import Path
+
 import requests
 
 
@@ -118,7 +119,9 @@ def install_pyr4tpackage(package: str, version: str = None):
     # DL tmp file
     with tempfile.TemporaryDirectory() as tmp_dir:
         tmp_file = Path(tmp_dir) / str(asset['name'])
-        with requests.get(download_url, headers=headers, stream=True, timeout=10) as r:
+        with requests.get(
+            download_url, headers=headers, stream=True, timeout=10
+        ) as r:
             r.raise_for_status()
             with open(tmp_file, "wb") as f:
                 shutil.copyfileobj(r.raw, f)
@@ -130,17 +133,5 @@ def install_pyr4tpackage(package: str, version: str = None):
 
     print(f"[info] Installation of {package} finished")
 
-
-
-def uninstall_pyr4tpackage(package: str):
-    """
-    Uninstall a pyr4t package.
-    Args:
-        package (str): Name of the package to uninstall.
-    """
-
-    print(f"[info] Uninstalling {package} with pip ...")
-    subprocess.check_call(
-        [sys.executable, "-m", "pip", "uninstall", "-y", package]
-    )
-    print(f"[info] Uninstallation of {package} finished")
+def install_info(): # TODO
+    """Print information about avalible pyr4t packages."""
