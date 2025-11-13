@@ -65,7 +65,7 @@ def build_parser() -> argparse.ArgumentParser:
     subparsers = parser.add_subparsers(dest="command")
 
     add_build_parser(subparsers)
-    #add_cls_parser(subparsers)
+    add_cls_parser(subparsers)
     add_deploy_parser(subparsers)
     add_dev_parser(subparsers)
     add_dstr_parser(subparsers)
