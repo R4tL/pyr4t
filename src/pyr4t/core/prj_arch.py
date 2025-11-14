@@ -125,16 +125,9 @@ class _ProjectGenerator:
 
         print("[info] Generating a project architecture...")
 
-        pdb = ProjectDBM4nager()
-        if self.proj_title in pdb.listd:
-            raise ValueError(
-                f"A project named {self.proj_title} already exixsts."
-            )
-
         # Create main project directory
         self.proj_path.mkdir(parents=True, exist_ok=False)
         print(f"[info] Created project directory: {self.proj_path}")
-
 
         # Create dirs
         self._generate_dirs(project_type)
@@ -162,6 +155,7 @@ class _ProjectGenerator:
             self._generate_lib()
 
         # Add to DB and current
+        pdb = ProjectDBM4nager()
         pdb.add(
             self.proj_title, str(self.proj_path), self.proj_version
         )

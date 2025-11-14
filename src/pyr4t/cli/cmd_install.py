@@ -38,6 +38,6 @@ def add_install_parser(subparsers: argparse._SubParsersAction):
     )
     parser.add_argument("package", nargs="?", help="Pyr4t package name")
     parser.add_argument(
-        "-v", "--version", help="Specify the version of the package to install"
+        "-V", "--version", help="Specify the version of the package to install"
     )
     parser.set_defaults(func=cmd_install)

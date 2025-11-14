@@ -51,7 +51,10 @@ class UserDBM4nager(_JSONDBM4nager[User]):
         """
 
         self.update_data(alias.upper(), "rm")
-        print(f"[info] User removed: {alias}")
+        if alias == "*":
+            print("[info] All users removed")
+        else:
+            print(f"[info] User removed: {alias}")
 
 
     def modify(self, alias: str, name: str = None, email: str = None):

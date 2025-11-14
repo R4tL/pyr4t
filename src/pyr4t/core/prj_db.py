@@ -51,7 +51,10 @@ class ProjectDBM4nager(_JSONDBM4nager[Project]):
         """
 
         self.update_data(title, "rm")
-        print(f"[info] Project removed: {title}")
+        if title == "*":
+            print("[info] All projects removed")
+        else:
+            print(f"[info] Project removed: {title}")
 
     def modify(self, title: str, path: str = None, version: str = None):
         """
