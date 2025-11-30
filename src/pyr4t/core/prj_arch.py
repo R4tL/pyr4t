@@ -578,7 +578,7 @@ import pytest
         if project_type == "lib":
             test += f'''\
             
-from {self.package_name}.core.example import Example
+from {self.package_name}.example import Example
 
 
 def test_example(capsys):

@@ -229,3 +229,10 @@ CHANGER TOTALEMENT LA LOGIQUE DE PDB :
 {PATH: {title: ..., version: ...}} -> chiant pour switch
 Numéroter auto ? trouver la bonne solution mais en gros je veux pas empecher de creer deux projet avec le même titre si le path est different
 faire un rm *
+
+
+Corriger dstr (pas urgent, a faire peutetre en v0.2.1)
+tester pyr4t test
+creer pyr4t install --info
+
+1.1 : pyr4t django, pyr4t docker
