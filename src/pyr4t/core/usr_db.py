@@ -16,6 +16,7 @@ class UserDBM4nager(_JSONDBM4nager[User]):
     def __init__(self):
         super().__init__(PATH_JSON_PROFILES)
 
+
     def add(self, alias: str, name: str, email: str):
         """
         Adds a new user user.
@@ -28,6 +29,8 @@ class UserDBM4nager(_JSONDBM4nager[User]):
         self._validate_email(email)
         user: User = {"name": name, "email": email}
         self.update_data(alias.upper(), "add", user)
+        print(f"[info] User added: {alias}: {name} <{email}>")
+
 
     def list(self) -> dict[str, User]:
         """
@@ -39,6 +42,7 @@ class UserDBM4nager(_JSONDBM4nager[User]):
 
         return self.listd
 
+
     def remove(self, alias: str):
         """
         Removes a user user by alias.
@@ -47,6 +51,11 @@ class UserDBM4nager(_JSONDBM4nager[User]):
         """
 
         self.update_data(alias.upper(), "rm")
+        if alias == "*":
+            print("[info] All users removed")
+        else:
+            print(f"[info] User removed: {alias}")
+
 
     def modify(self, alias: str, name: str = None, email: str = None):
         """
@@ -64,6 +73,8 @@ class UserDBM4nager(_JSONDBM4nager[User]):
             self._validate_email(email)
             user["email"] = email
         self.update_data(alias.upper(), "updt", user)
+        print(f"[info] User updated: {alias}: {name} <{email}>")
+
 
     def switch(self, alias: str):
         """
@@ -75,6 +86,8 @@ class UserDBM4nager(_JSONDBM4nager[User]):
         """
 
         self.update_data(alias.upper(), "slct")
+        print(f"[info] Current user selected: {alias}")
+
 
     def whoami(self) -> tuple[str, User]:
         """
@@ -84,6 +97,7 @@ class UserDBM4nager(_JSONDBM4nager[User]):
         """
 
         return self.get_current()
+
 
     def _validate_email(self, email: str):
         if "@" not in email or email.count("@") != 1:

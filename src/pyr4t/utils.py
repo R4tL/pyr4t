@@ -49,11 +49,14 @@ class _JSONDBM4nager(Generic[EntryType]):
             duplicate_key = self._find_duplicate(entry)
             if duplicate_key:
                 raise ValueError(
-                    f"Entry: {entry}"
+                    f"Entry: {entry} "
                     f"already exists with key '{duplicate_key}'."
                 )
+            key = self._increment_key(key)
+
         elif not key in self.listd:
-            raise ValueError(f"No entry found with key: {key}")
+            if key != "*" and action != "rm":
+                raise ValueError(f"No entry found with key: {key}")
 
         if action in ["updt", "add"] and entry:
             self.listd[key] = entry
@@ -65,8 +68,13 @@ class _JSONDBM4nager(Generic[EntryType]):
         elif action == "rm":
             if key == self.current:
                 raise ValueError(f"Can't delete current: {key}")
-            self.listd.pop(key)
-            self.data["list"] = self.listd
+            if key == "*":
+                self.listd = {}
+                self.current = ""
+                self.data = {}
+            else:
+                self.listd.pop(key)
+                self.data["list"] = self.listd
         elif action == "slct":
             self.current = key
             self.data["current"] = self.current
@@ -94,3 +102,18 @@ class _JSONDBM4nager(Generic[EntryType]):
             if value == entry:
                 return key
         return ""
+
+    def _increment_key(self, key: str) -> str:
+        if key not in self.listd:
+            return key
+        base_key = key
+        suffix = 1
+        if "_" in key and key.rsplit("_", 1)[-1].isdigit():
+            base_key = key.rsplit("_", 1)[0]
+            suffix = int(key.rsplit("_", 1)[-1]) + 1
+        new_key = f"{base_key}_{suffix}"
+        while new_key in self.listd:
+            suffix += 1
+            new_key = f"{base_key}_{suffix}"
+        print(f"[warning] Key already exists: {key}. Incremented to: {new_key}")
+        return new_key

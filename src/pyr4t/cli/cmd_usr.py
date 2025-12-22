@@ -5,11 +5,12 @@ import argparse
 from pyr4t.core import UserDBM4nager
 
 
-def cmd_user(args: argparse.Namespace):
+def cmd_usr(args: argparse.Namespace):
     """
     Handle user-related CLI actions.
     Args:
-        args: Parsed command-line arguments.
+        args (argparse.pathspace): Parsed command-line arguments containing
+        project details.
     """
 
     dbu = UserDBM4nager()
@@ -18,53 +19,48 @@ def cmd_user(args: argparse.Namespace):
 
         case "add":
             dbu.add(args.alias, name=args.name, email=args.email)
-            print(
-                f"[info] User added: {args.alias}: {args.name}"
-                f" <{args.email}>"
-            )
 
-        case "list":
+        case "ls":
             users = dbu.list()
             if not users:
                 print("[warning] No users found.")
             else:
                 for alias, user in users.items():
-                    print(
-                        f"[info] {alias}: {user.get("name", "")} "
-                        f"<{user.get("email", "")}>"
-                    )
+                    if alias == dbu.current:
+                        print(
+                            f"* {alias}: {user.get("name", "")} "
+                            f"<{user.get("email", "")}>"
+                        )
+                    else:
+                        print(
+                            f"  {alias}: {user.get("name", "")} "
+                            f"<{user.get("email", "")}>"
+                        )
 
-        case "modify":
+        case "mv":
+            if not args.name and not args.email:
+                raise ValueError(
+                    "Either --name or --email must be specified."
+                )
             dbu.modify(args.alias, name=args.name, email=args.email)
-            if args.name or args.email:
-                print(f"User updated: {args.alias}")
 
         case "rm":
             dbu.remove(args.alias)
-            print(f"[info] User removed: {args.alias}")
 
         case "swicth":
             dbu.switch(args.alias)
-            print(f"[info] Default user selected: {args.alias}")
-
-        case "whoami":
-            alias, user = dbu.whoami()
-            print(
-                f"[info] {alias}: {user.get("name", "")} "
-                f"<{user.get("email", "")}>"
-            )
 
 
-def add_user_parser(subparsers: argparse._SubParsersAction):
+def add_usr_parser(subparsers: argparse._SubParsersAction):
     """
     Add the 'user' command and its subcommands to the CLI parser.
     Args:
         subparsers: The argparse subparsers object to add commands to.
     """
 
-    # Main "user" parser
+    # Main "usr" parser
     parser: argparse.ArgumentParser = subparsers.add_parser(
-        "user", help="Manage Pyr4t users"
+        "usr", help="Manage Pyr4t users"
     )
     user_subparsers = parser.add_subparsers(dest="action", required=True)
 
@@ -73,33 +69,27 @@ def add_user_parser(subparsers: argparse._SubParsersAction):
     add_parser.add_argument("alias",  help="User alias")
     add_parser.add_argument("name",  help="User name")
     add_parser.add_argument("email",  help="User email")
-    add_parser.set_defaults(func=cmd_user)
+    add_parser.set_defaults(func=cmd_usr)
 
-    # ----- list -----
-    list_parser = user_subparsers.add_parser("list", help="List users")
-    list_parser.set_defaults(func=cmd_user)
+    # ----- ls -----
+    list_parser = user_subparsers.add_parser("ls", help="List users")
+    list_parser.set_defaults(func=cmd_usr)
 
-    # ----- modify -----
-    modify_parser = user_subparsers.add_parser("modify", help="Modify a user")
+    # ----- mv -----
+    modify_parser = user_subparsers.add_parser("mv", help="Modify a user")
     modify_parser.add_argument("alias",  help="User alias")
     modify_parser.add_argument("-n", "--name", help="New user name")
     modify_parser.add_argument("-e", "--email", help="New user email")
-    modify_parser.set_defaults(func=cmd_user)
+    modify_parser.set_defaults(func=cmd_usr)
 
     # ----- switch -----
     select_parser = user_subparsers.add_parser(
         "switch", help="Switch current user"
     )
     select_parser.add_argument("alias",  help="User alias")
-    select_parser.set_defaults(func=cmd_user)
+    select_parser.set_defaults(func=cmd_usr)
 
-    # ----- remove -----
+    # ----- rm -----
     remove_parser = user_subparsers.add_parser("rm", help="Remove an user")
     remove_parser.add_argument("alias",  help="User alias")
-    remove_parser.set_defaults(func=cmd_user)
-
-    # ----- whoami -----
-    whoami_parser = user_subparsers.add_parser(
-        "whoami", help="Show the current user"
-    )
-    whoami_parser.set_defaults(func=cmd_user)
+    remove_parser.set_defaults(func=cmd_usr)

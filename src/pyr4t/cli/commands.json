@@ -1,106 +1,94 @@
 {
     "pyr4t": {
         "__desc__": "Pyr4t CLI",
-        "__seq__":["[(--help | -h) | (--version | -V)"],
+        "__seq__":["[(-h | --help) | (-V | --version)]"],
+        "install": {
+            "__desc__": "Install a pyr4t package from R4tL's github repo (use '--info' to show all available package)",
+            "__seq__": ["(--info [p] | <package> [(-V | --version) <version>])"]
+        },
+        "init": {
+            "__desc__": "Generate a new python project architecture, default switch as current",
+            "__seq__": [
+                "(--app | --cli | --lib)", "<title>", "[(-a | --authors) <alias1> <alias2> ...]",
+                "[(-p | --path) <path>]", "[(-V | --version) <version>]"
+            ]
+        },
+        "build": {
+            "__desc__": "Build binary files in ./dist (.tar.gz, .whl)",
+            "__seq__":["[--prj <title>]"]
+        },
+        "deploy": {
+            "__desc__": "Deploy project using pip (--dev for editable mode)",
+            "__seq__":["[--prj <title>]", "[--dev]"]
+        },
+        "run": {
+            "__desc__": "Run a script file from ./scripts (default main.py)",
+            "__seq__": ["[--prj <title>]", "[--dev]", "[<script>]"]
+        },
+        "test": {
+            "__desc__": "Run tests in /tests (default all)",
+            "__seq__": ["[--prj <title>]", "[<specific>]"]
+        },
+        "cls": {
+            "__desc__": "Clean cache, logs and tmp files",
+            "__seq__": ["[--prj <title>]", "[--cache]", "[--log]", "[--tmp]"]
+        },
+        "dstr": {
+            "__desc__": "Check doctring and create/update template if necessary",
+            "__seq__": ["[--prj <title>]"]
+        },
+        "fmt": {
+            "__desc__": "Format scripts in ./src using black and isort",
+            "__seq__": ["[--prj <title>]"]
+        },
+        "venv": {
+            "__desc__": "Generate a python venv in ./.venv",
+            "__seq__": ["[--prj <title>]"]
+        },
         "dev": {
-            "__desc__": "Dev commands",
-            "__seq__": ["[(--title | -t) <title>]"],
-            "deploy": {
-                "__desc__": "Deploy project in editable mode with `pip install -e .[dev]`"
-            },
-            "cls": {
-                "__desc__": "Clean cache, logs and tmp files (choose specific type or all)",
-                "__seq__": ["[--cache]", "[--log]", "[--tmp]"]
-            },
-            "dstr": {
-                "__desc__": "Check doctring and create/update template if necessary"
-            },
-            "fmt": {
-                "__desc__": "Format scripts in ./src using black and isort"
-            },
-            "init": {
-                "__desc__": "Generate a dev environment in ./dev"
-            },
-            "venv": {
-                "__desc__": "Generate a python venv in ./.venv"
-            }
+            "__desc__": "Generate dev env in ./dev",
+            "__seq__": ["[--prj <title>]"] 
         },
-
-        "package": {
-            "__desc__": "Pyr4t package manager",
-            "install": {
-                "__desc__": "Install a pyr4t package from `R4tL` GitHub repo",
-                "__seq__": ["<package-name>", "[(--version | -V) <package-version>]"]
-            },
-            "uninstall": {
-                "__desc__": "Uninstall a pyr4t package from local device",
-                "__seq__": ["<package-name>"]
-            }
+        "info": {
+            "__desc__": "Print current project informations"
         },
-
-        "prod": {
-            "__desc__": "Prod commands",
-            "__seq__": ["[(--title | -t) <title>]"],
-            "build": {
-                "__desc__": "Build production-ready binary"
-            },
-            "deploy": {
-                "__desc__": "Deploy project in permanent mode with `pip install .`"
-            },
-            "run": {
-                "__desc__": "Run a script file from /scripts",
-                "__seq__": ["[<script>]"]
-            },
-            "test": {
-                "__desc__": "Run tests"
-            }
+        "whoami": {
+            "__desc__": "Print current user informations"
         },
-
-        "proj": {
-            "__desc__": "Python project manager",
+        "prj": {
+            "__desc__": "Manage project DB",
             "add": {
                 "__desc__": "Add a local project to the pyr4t project DB",
                 "__seq__": ["<title>", "<path>", "<version>"]
             },
-            "init": {
-                "__desc__": "Generate a new python project architecture default switch as current",
-                "__seq__": [
-                    "(--app | --cli | --lib)", "<title>", "[(--authors | -a) <list-alias>]",
-                    "[(--path | -p) <path>]", "[(--version | -V) <proj-version>]"
-                ]
-            },
-            "list": {
+            "ls": {
                 "__desc__": "List projects from the pyr4t project DB"
             },
-            "modify": {
+            "mv": {
                 "__desc__": "Modify project information in the pyr4t project DB",
-                "__seq__": ["<title>", "[(--path | -p) <new-path>]", "[(--version | -V) <new-version>]"]
+                "__seq__": ["<title>", "[(-p | --path) <path>]", "[(-V | --version) <version>]"]
             },
             "rm": {
                 "__desc__": "Remove a project from the pyr4t project DB",
                 "__seq__": ["<title>"]
-            },
-            "whoami": {
-                "__desc__": "Print the active project in console"
             },
             "switch": {
                 "__desc__": "Switch to another active project from the pyr4t project DB",
                 "__seq__": ["<title>"]
             }
         },
-
-        "user": {
-            "__desc__": "User manager",
+        "usr": {
+            "__desc__": "Manage user DB",
             "add": {
                 "__desc__": "Add a user to the pyr4t user DB",
                 "__seq__": ["<alias>", "<name>", "<email>"]
             },
-            "list": {
+            "ls": {
                 "__desc__": "List users from the pyr4t user DB"
             },
-            "modify": {
+            "mv": {
                 "__desc__": "Modify user information in the pyr4t user DB",
-                "__seq__": ["<alias>", "[(--email | -e) <new-email>]", "[(--name | -n) <new-name>]"]
+                "__seq__": ["<alias>", "[(-e | --email) <email>]", "[(-n | --name) <name>]"]
             },
             "rm": {
                 "__desc__": "Remove a user from the pyr4t user DB",
@@ -109,9 +97,6 @@
             "switch": {
                 "__desc__": "Switch to another active user from the pyr4t user DB",
                 "__seq__": ["<alias>"]
-            },
-            "whoami": {
-                "__desc__": "Print  the active user in console"
             }
         }
     }

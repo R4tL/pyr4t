@@ -5,22 +5,29 @@ import sys
 
 from pyr4t import __version__
 from .command_tree import get_tree
+from .cmd_build import add_build_parser
+from .cmd_cls import add_cls_parser
+from .cmd_deploy import add_deploy_parser
 from .cmd_dev import add_dev_parser
-from .cmd_package import add_package_parser
-from .cmd_prod import add_prod_parser
-from .cmd_proj import add_proj_parser
-from .cmd_user import add_user_parser
+from .cmd_dstr import add_dstr_parser
+from .cmd_fmt import add_fmt_parser
+from .cmd_info import add_info_parser
+from .cmd_init import add_init_parser
+from .cmd_install import add_install_parser
+from .cmd_prj import add_prj_parser
+from .cmd_run import add_run_parser
+from .cmd_test import add_test_parser
+from .cmd_usr import add_usr_parser
+from .cmd_venv import add_venv_parser
+from .cmd_whoami import add_whoami_parser
+
 
 def cmd_base(args: argparse.Namespace):
     """
-# TODO: update docstring
+    Handle base CLI actions.
     Args:
-        args:
-    """
-
-    """
-    Base commands in the root of CLI.
-
+        args (argparse.pathspace): Parsed command-line arguments containing
+        project details.
     """
 
     if args.help_requested:
@@ -35,7 +42,7 @@ def cmd_base(args: argparse.Namespace):
 
 
 
-def build_parser():
+def build_parser() -> argparse.ArgumentParser:
     """
     Creates and configures the main argument parser for the Pyr4t CLI.
     Returns:
@@ -52,15 +59,25 @@ def build_parser():
     )
     parser.add_argument(
         "-h", "--help", action="store_true",
-        dest="help_requested", help="Show help"
+        dest="help_requested", help="Show help and exit"
     )
     parser.set_defaults(func=cmd_base)
     subparsers = parser.add_subparsers(dest="command")
 
+    add_build_parser(subparsers)
+    add_cls_parser(subparsers)
+    add_deploy_parser(subparsers)
     add_dev_parser(subparsers)
-    add_package_parser(subparsers)
-    add_prod_parser(subparsers)
-    add_proj_parser(subparsers)
-    add_user_parser(subparsers)
+    add_dstr_parser(subparsers)
+    add_fmt_parser(subparsers)
+    add_info_parser(subparsers)
+    add_init_parser(subparsers)
+    add_install_parser(subparsers)
+    add_prj_parser(subparsers)
+    add_run_parser(subparsers)
+    add_test_parser(subparsers)
+    add_usr_parser(subparsers)
+    add_venv_parser(subparsers)
+    add_whoami_parser(subparsers)
 
     return parser
