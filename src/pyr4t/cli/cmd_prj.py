@@ -49,7 +49,7 @@ def cmd_prj(args: argparse.Namespace):
         case "rm":
             dbp.remove(args.title)
 
-        case "swicth":
+        case "switch":
             dbp.switch(args.title)
 
 

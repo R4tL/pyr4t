@@ -47,7 +47,7 @@ def cmd_usr(args: argparse.Namespace):
         case "rm":
             dbu.remove(args.alias)
 
-        case "swicth":
+        case "switch":
             dbu.switch(args.alias)
 
 
