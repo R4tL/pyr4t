@@ -133,5 +133,101 @@ def install_pyr4tpackage(package: str, version: str = None):
 
     print(f"[info] Installation of {package} finished")
 
-def install_info(): # TODO
-    """Print information about avalible pyr4t packages."""
+# TODO :
+# - prendre que ceux qui commencent par pyr4t-
+# - afficher tout d'uncoup (car ya un chargement avec les requetes)
+def install_info(show_private: bool = False):
+    """
+    Print information about avalible pyr4t packages.
+    Args:
+        show_private (bool, optional): Show private repositories.
+    """
+
+    print("[info] Fetching pyr4t package list from"
+          " GitHub (can take a while)...")
+
+    headers = {}
+
+    # URL depending on mode
+    if show_private:
+        url = "https://api.github.com/user/repos"
+    else:
+        url = "https://api.github.com/users/R4tL/repos"
+
+    # First attempt (no token)
+    r = requests.get(url, headers=headers, timeout=10)
+
+    # Token management
+    if show_private and r.status_code in (401, 403, 404):
+        need_token = False
+        github_token = os.getenv("GITHUB_TOKEN")
+
+        if github_token:
+            headers["Authorization"] = f"token {github_token}"
+            r = requests.get(url, headers=headers, timeout=10)
+            if r.status_code in (401, 403, 404):
+                need_token = True
+        else:
+            need_token = True
+
+        if need_token:
+            need_input_tok = False
+            token_file = Path.home() / ".pyr4t" / "token"
+
+            if token_file.exists():
+                token = token_file.read_text(encoding="utf-8").strip()
+                headers["Authorization"] = f"token {token}"
+                r = requests.get(url, headers=headers, timeout=10)
+                if r.status_code in (401, 403, 404):
+                    need_input_tok = True
+            else:
+                need_input_tok = True
+
+            if need_input_tok:
+                token = input("Token: ").strip()
+                headers["Authorization"] = f"token {token}"
+                r = requests.get(url, headers=headers, timeout=10)
+
+                if r.status_code in (401, 403, 404):
+                    raise RuntimeError(
+                        f"[{r.status_code}] Invalid token: {r.text}"
+                    )
+
+                token_file.parent.mkdir(parents=True, exist_ok=True)
+                token_file.write_text(token, encoding="utf-8")
+                print(f"[info] Token added in {token_file}")
+
+    if r.status_code != 200:
+        raise RuntimeError(f"[{r.status_code}] GitHub API: {r.text}")
+
+    r.raise_for_status()
+    repos = r.json()
+
+    print_console = []
+    for repo in repos:
+        name = repo["name"]
+        if name.startswith("pyr4t"):
+            private = repo["private"]
+            visibility = "PRIVATE" if private else "PUBLIC"
+
+            print_console.append(f"{name} ({visibility})")
+
+            rel_url = f"https://api.github.com/repos/R4tL/{name}/releases"
+            rr = requests.get(rel_url, headers=headers, timeout=10)
+
+            if rr.status_code != 200:
+                print_console.append("  └─ No releases or access denied")
+                print("  └─ No releases or access denied")
+                continue
+
+            releases = rr.json()
+            if not releases:
+                print_console.append("  └─ No releases")
+                continue
+
+            for rel in releases:
+                tag = rel["tag_name"]
+                title = rel["name"] or tag
+                print_console.append(f"  └─ {title}")
+
+    print("\n".join(print_console))

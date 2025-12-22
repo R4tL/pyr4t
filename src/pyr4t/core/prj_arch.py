@@ -552,7 +552,7 @@ description = ""
 authors = [{authors_toml}]
 requires-python = ">={f"{sys.version_info.major}.{sys.version_info.minor}"}"
 readme = "README.md"
-license = {{ file = "LISENSE" }}
+license = {{ file = "LICENSE" }}
 dependencies = []
 
 [project.optional-dependencies]

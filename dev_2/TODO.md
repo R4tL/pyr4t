@@ -232,7 +232,6 @@ faire un rm *
 
 
 Corriger dstr (pas urgent, a faire peutetre en v0.2.1)
-tester pyr4t test
-creer pyr4t install --info
+creer pyr4t install --info -> A FINIR ET SORTIR UNE VERSION (voir le todo)
 
 1.1 : pyr4t django, pyr4t docker

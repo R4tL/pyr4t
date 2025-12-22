@@ -14,7 +14,8 @@ def cmd_install(args: argparse.Namespace) :
     if args.info and args.package:
         raise ValueError("Cannot specify both --info and a package name.")
     if args.info:
-        install_info()
+        show_private = args.info == "p"
+        install_info(show_private)
     elif args.package:
         install_pyr4tpackage(args.package, args.version)
     else:
@@ -33,8 +34,12 @@ def add_install_parser(subparsers: argparse._SubParsersAction):
     )
     parser.add_argument(
         "--info",
-        action="store_true",
-        help="Display information about the package without installing it",
+        nargs="?",
+        const=None,
+        choices=["p"],
+        metavar="[p]",
+        help="Display package info "
+        "(add 'p' to include private repos using token)",
     )
     parser.add_argument("package", nargs="?", help="Pyr4t package name")
     parser.add_argument(
