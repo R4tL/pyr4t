@@ -59,12 +59,6 @@ pip install git+https://github.com/R4tL/pyr4t.git@v0.2.0
 pip install git+ssh://github.com/R4tL/pyr4t.git@v0.2.0
 ```
 
-* **Install directly from Pypi**
-
-```bash
-pip install pyr4t==0.2.0
-```
-
 * **Cloning the repository**
 
 - Classic mode
