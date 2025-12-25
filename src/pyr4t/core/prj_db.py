@@ -25,7 +25,7 @@ class ProjectDBM4nager(_JSONDBM4nager[Project]):
         """
 
         path = str(Path(path).resolve())
-        project: Project = {"path": path, "versison": version}
+        project: Project = {"path": path, "version": version}
         self.update_data(title, "add", project)
         if not (Path(path)).exists():
             print(f"[warning] Path does not exist: {path}")

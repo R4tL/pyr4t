@@ -30,12 +30,12 @@ def cmd_prj(args: argparse.Namespace):
                     if title == dbp.current:
                         print(
                             f"* {title}: {project.get("path", "")} "
-                            f"<v{project.get("versison", "")}>"
+                            f"<v{project.get("version", "")}>"
                         )
                     else:
                         print(
                             f"  {title}: {project.get("path", "")} "
-                            f"<v{project.get("versison", "")}>"
+                            f"<v{project.get("version", "")}>"
                         )
 
         case "mv":

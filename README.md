@@ -84,7 +84,7 @@ pip install -e .[dev]
 
 ```
 └── pyr4t [(-h | --help) | (-V | --version)]                                  # Pyr4t CLI
-    ├── install (--info [p] | <package> [(-V | --version) <version>])             # Install a pyr4t package from R4tL's github repo
+    ├── install (--info [p] | <package> [(-V | --version) <version>])         # Install a pyr4t package from R4tL's github repo
     │                                                                           (use '--info' to show all available package)
     ├── init (--app | --cli | --lib) <title>                                  # Generate a new python project architecture,
     │        [(-a | --authors) <alias1> <alias2> ...] [(-p | --path) <path>]    default switch as current
