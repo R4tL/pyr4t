@@ -26,6 +26,8 @@ Look [example](#example-of-usage) to use it.
 
 ## Python best practices reminder
 
+### Use a Python virtual environment
+
 * **Create a virtual environment**
 
 ```bash
@@ -43,9 +45,17 @@ source .venv/bin/activate
 .venv\Scripts\\activate
 ```
 
+### Use `pipx`to install the package globally
+
+```bash
+pip install pipx
+```
+```bash
+pipx ensurepath
+```
 ---
 
-## Installation
+## Installation using pip or pipx
 
 * **Install directly from GitHub**
 
@@ -53,10 +63,16 @@ source .venv/bin/activate
 ```bash
 pip install git+https://github.com/R4tL/pyr4t.git@v0.2.0
 ```
+```bash
+pipx install git+https://github.com/R4tL/pyr4t.git@v0.2.0
+```
 
 - SSH
 ```bash
 pip install git+ssh://github.com/R4tL/pyr4t.git@v0.2.0
+```
+```bash
+pipx install git+ssh://github.com/R4tL/pyr4t.git@v0.2.0
 ```
 
 * **Cloning the repository**
@@ -65,15 +81,8 @@ pip install git+ssh://github.com/R4tL/pyr4t.git@v0.2.0
 ```bash
 pip install .
 ```
-
-- Editable mode
 ```bash
-pip install -e .
-```
-
-- Developpement mode
-```bash
-pip install -e .[dev]
+pipx install .
 ```
 
 ---

@@ -399,6 +399,8 @@ Short description of the project.
 
 ## Python best practices reminder
 
+### Use a python virtual environment
+
 * **Create a virtual environment**
 
 ```bash
@@ -416,9 +418,18 @@ source .venv/bin/activate
 .venv\\Scripts\\activate
 ```
 
+### Use `pipx`to install the package globally
+
+```bash
+pip install pipx
+```
+```bash
+pipx ensurepath
+```
+
 ---
 
-## Installation
+## Installation using pip or pipx
 
 * **Install directly from GitHub**
 
@@ -426,10 +437,16 @@ source .venv/bin/activate
 ```bash
 pip install git+https://github.com/{author_names[0]}/{self.proj_title}.git@v{self.proj_version}
 ```
+```bash
+pipx install git+https://github.com/{author_names[0]}/{self.proj_title}.git@v{self.proj_version}
+```
 
 - SSH
 ```bash
 pip install git+ssh://github.com/{author_names[0]}/{self.proj_title}.git@v{self.proj_version}
+```
+```bash
+pipx install git+ssh://github.com/{author_names[0]}/{self.proj_title}.git@v{self.proj_version}
 ```
 
 * **Install directly from Pypi**
@@ -437,12 +454,18 @@ pip install git+ssh://github.com/{author_names[0]}/{self.proj_title}.git@v{self.
 ```bash
 pip install {self.proj_title.lower()}=={self.proj_version}
 ```
+```bash
+pipx install {self.proj_title.lower()}=={self.proj_version}
+```
 
 * **Cloning the repository**
 
 - Classic mode
 ```bash
 pip install .
+```
+```bash
+pipx install .
 ```
 
 - Editable mode
