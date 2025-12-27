@@ -108,7 +108,6 @@ def install_pyr4tpackage(package: str, version: str = None):
 
     print(f"[info] Installation of {package} finished")
 
-# TODO : crypter le token
 def install_info(show_private: bool = False):
     """
     Print information about available pyr4t packages.
