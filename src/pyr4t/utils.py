@@ -115,5 +115,7 @@ class _JSONDBM4nager(Generic[EntryType]):
         while new_key in self.listd:
             suffix += 1
             new_key = f"{base_key}_{suffix}"
-        print(f"[warning] Key already exists: {key}. Incremented to: {new_key}")
+        print(
+            f"[warning] Key already exists: {key}. Incremented to: {new_key}"
+        )
         return new_key

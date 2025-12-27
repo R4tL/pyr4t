@@ -31,15 +31,24 @@ def add_cls_parser(subparsers: argparse._SubParsersAction):
         "--prj", "-p", default=None, help="Project title (default: current)"
     )
     parser.add_argument(
-        "--cache", action="store_const", const="cache",
-        default=None, help="Clean cache"
+        "--cache",
+        action="store_const",
+        const="cache",
+        default=None,
+        help="Clean cache",
     )
     parser.add_argument(
-        "--log", action="store_const", const="log",
-        default=None, help="Clean logs"
+        "--log",
+        action="store_const",
+        const="log",
+        default=None,
+        help="Clean logs",
     )
     parser.add_argument(
-        "--tmp", action="store_const", const="tmp",
-        default=None, help="Clean tmp"
+        "--tmp",
+        action="store_const",
+        const="tmp",
+        default=None,
+        help="Clean tmp",
     )
     parser.set_defaults(func=cmd_cls)

@@ -1,10 +1,10 @@
 """Functions to manage pyr4t packges."""
 
 import platform
+import shutil
 import subprocess
 import sys
 import tempfile
-import shutil
 from pathlib import Path
 
 import keyring
@@ -43,9 +43,7 @@ def install_pyr4tpackage(package: str, version: str = None):
             "using `pyr4t install --token <token>`."
         )
     elif r.status_code != 200:
-        raise RuntimeError(
-            f"[{r.status_code}] GitHub API: {r.text}"
-        )
+        raise RuntimeError(f"[{r.status_code}] GitHub API: {r.text}")
 
     release: dict = r.json()
     assets: list[dict] = release.get("assets", [])
@@ -93,7 +91,7 @@ def install_pyr4tpackage(package: str, version: str = None):
 
     # DL tmp file
     with tempfile.TemporaryDirectory() as tmp_dir:
-        tmp_file = Path(tmp_dir) / str(asset['name'])
+        tmp_file = Path(tmp_dir) / str(asset["name"])
         with requests.get(
             download_url, headers=headers, stream=True, timeout=10
         ) as r:
@@ -108,6 +106,7 @@ def install_pyr4tpackage(package: str, version: str = None):
 
     print(f"[info] Installation of {package} finished")
 
+
 def install_info(show_private: bool = False):
     """
     Print information about available pyr4t packages.
@@ -115,8 +114,10 @@ def install_info(show_private: bool = False):
         show_private (bool, optional): Show private repositories.
     """
 
-    print("[info] Fetching pyr4t package list from"
-          " GitHub (can take a while)...")
+    print(
+        "[info] Fetching pyr4t package list from"
+        " GitHub (can take a while)..."
+    )
 
     headers = {}
     token = load_token()
@@ -138,9 +139,7 @@ def install_info(show_private: bool = False):
             "using `pyr4t install --token <token>`."
         )
     elif r.status_code != 200:
-        raise RuntimeError(
-            f"[{r.status_code}] GitHub API error: {r.text}"
-        )
+        raise RuntimeError(f"[{r.status_code}] GitHub API error: {r.text}")
 
     r.raise_for_status()
     repos = r.json()
@@ -200,6 +199,7 @@ def maj_token(token: str):
             raise RuntimeError("[error] Failed to save token securely.")
         print("[info] Token saved securely in system keyring.")
 
+
 def save_token(token: str):
     """
     Save GitHub token securely in system keyring.
@@ -207,6 +207,7 @@ def save_token(token: str):
         token (str): GitHub token
     """
     keyring.set_password("pyr4t", "github_token", token)
+
 
 def load_token() -> str | None:
     """

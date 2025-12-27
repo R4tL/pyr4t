@@ -68,9 +68,9 @@ def add_prj_parser(subparsers: argparse._SubParsersAction):
 
     # ----- add -----
     add_parser = proj_subparsers.add_parser("add", help="Add a new project")
-    add_parser.add_argument("title",  help="Project title")
-    add_parser.add_argument("path",  help="Project path")
-    add_parser.add_argument("version",  help="Project version")
+    add_parser.add_argument("title", help="Project title")
+    add_parser.add_argument("path", help="Project path")
+    add_parser.add_argument("version", help="Project version")
     add_parser.set_defaults(func=cmd_prj)
 
     # ----- ls -----
@@ -78,10 +78,8 @@ def add_prj_parser(subparsers: argparse._SubParsersAction):
     list_parser.set_defaults(func=cmd_prj)
 
     # ----- mv -----
-    modify_parser = proj_subparsers.add_parser(
-        "mv", help="Modify a project"
-    )
-    modify_parser.add_argument("title",  help="Project title")
+    modify_parser = proj_subparsers.add_parser("mv", help="Modify a project")
+    modify_parser.add_argument("title", help="Project title")
     modify_parser.add_argument("-p", "--path", help="New project path")
     modify_parser.add_argument("-V", "--version", help="New project verrsion")
     modify_parser.set_defaults(func=cmd_prj)
@@ -90,10 +88,10 @@ def add_prj_parser(subparsers: argparse._SubParsersAction):
     select_parser = proj_subparsers.add_parser(
         "switch", help="Switch current project"
     )
-    select_parser.add_argument("title",  help="Project title")
+    select_parser.add_argument("title", help="Project title")
     select_parser.set_defaults(func=cmd_prj)
 
     # ----- rm -----
     remove_parser = proj_subparsers.add_parser("rm", help="Remove a project")
-    remove_parser.add_argument("title",  help="Project title")
+    remove_parser.add_argument("title", help="Project title")
     remove_parser.set_defaults(func=cmd_prj)

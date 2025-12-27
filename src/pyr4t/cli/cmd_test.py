@@ -31,7 +31,9 @@ def add_test_parser(subparsers: argparse._SubParsersAction):
         "--prj", "-p", default=None, help="Project title (default: current)"
     )
     parser.add_argument(
-        "specific", nargs="?", default="",
-        help="Run specific test (dir or file or file::function)"
+        "specific",
+        nargs="?",
+        default="",
+        help="Run specific test (dir or file or file::function)",
     )
     parser.set_defaults(func=cmd_test)

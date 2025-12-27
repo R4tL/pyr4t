@@ -15,9 +15,7 @@ def cmd_info(_: argparse.Namespace):
 
     dbp = ProjectDBM4nager()
     title, prj = dbp.info()
-    print(
-        f"  {title}: {prj.get('path', '')} <{prj.get('version', '')}>"
-    )
+    print(f"  {title}: {prj.get('path', '')} <{prj.get('version', '')}>")
 
 
 def add_info_parser(subparsers: argparse._SubParsersAction):

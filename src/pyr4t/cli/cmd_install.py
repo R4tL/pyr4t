@@ -2,10 +2,10 @@
 
 import argparse
 
-from pyr4t.core import install_pyr4tpackage, install_info, maj_token
+from pyr4t.core import install_info, install_pyr4tpackage, maj_token
 
 
-def cmd_install(args: argparse.Namespace) :
+def cmd_install(args: argparse.Namespace):
     """Install a pyr4t package.
     Args:
         args (argparse.pathspace): Parsed command-line arguments containing
@@ -35,14 +35,12 @@ def add_install_parser(subparsers: argparse._SubParsersAction):
         "install", help="Install a pyr4t package"
     )
     parser.add_argument(
-        "--info",
-        action="store_true",
-        help="Display package info"
+        "--info", action="store_true", help="Display package info"
     )
     parser.add_argument(
         "--info-private",
         action="store_true",
-        help="Display package info including private packages"
+        help="Display package info including private packages",
     )
     parser.add_argument(
         "--token", help="Update the GitHub token for private pyr4t packages"

@@ -4,7 +4,7 @@ import argparse
 import sys
 
 from pyr4t import __version__
-from .command_tree import get_tree
+
 from .cmd_build import add_build_parser
 from .cmd_cls import add_cls_parser
 from .cmd_deploy import add_deploy_parser
@@ -20,6 +20,7 @@ from .cmd_test import add_test_parser
 from .cmd_usr import add_usr_parser
 from .cmd_venv import add_venv_parser
 from .cmd_whoami import add_whoami_parser
+from .command_tree import get_tree
 
 
 def cmd_base(args: argparse.Namespace):
@@ -41,7 +42,6 @@ def cmd_base(args: argparse.Namespace):
     sys.exit(0)
 
 
-
 def build_parser() -> argparse.ArgumentParser:
     """
     Creates and configures the main argument parser for the Pyr4t CLI.
@@ -52,14 +52,18 @@ def build_parser() -> argparse.ArgumentParser:
 
     parser = argparse.ArgumentParser(
         prog="pyr4t",
-        description="CLI of the python manager pyr4t.", add_help=False
+        description="CLI of the python manager pyr4t.",
+        add_help=False,
     )
     parser.add_argument(
-    "-V", "--version", action = "store_true", help="Show version and exit"
+        "-V", "--version", action="store_true", help="Show version and exit"
     )
     parser.add_argument(
-        "-h", "--help", action="store_true",
-        dest="help_requested", help="Show help and exit"
+        "-h",
+        "--help",
+        action="store_true",
+        dest="help_requested",
+        help="Show help and exit",
     )
     parser.set_defaults(func=cmd_base)
     subparsers = parser.add_subparsers(dest="command")

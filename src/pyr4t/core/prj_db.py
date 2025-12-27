@@ -31,7 +31,6 @@ class ProjectDBM4nager(_JSONDBM4nager[Project]):
             print(f"[warning] Path does not exist: {path}")
         print(f"[info] Project added: {title}: {path} <v{version}>")
 
-
     def list(self) -> dict[str, Project]:
         """
         Lists all projects.
@@ -41,7 +40,6 @@ class ProjectDBM4nager(_JSONDBM4nager[Project]):
         """
 
         return self.listd
-
 
     def remove(self, title: str):
         """
@@ -76,7 +74,6 @@ class ProjectDBM4nager(_JSONDBM4nager[Project]):
             f"<v{project.get("version", "")}>"
         )
 
-
     def switch(self, title: str):
         """
         Selects a project as the default project ('me').
@@ -88,7 +85,6 @@ class ProjectDBM4nager(_JSONDBM4nager[Project]):
 
         self.update_data(title, "slct")
         print(f"[info] Default project selected: {title}")
-
 
     def info(self) -> tuple[str, Project]:
         """

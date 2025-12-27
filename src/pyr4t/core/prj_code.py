@@ -1,11 +1,11 @@
 """Module for managing pyr4t project code."""
 
-import subprocess
+import ast
 import platform
 import shutil
+import subprocess
 import sys
 from pathlib import Path
-import ast
 
 from .prj_db import ProjectDBM4nager
 
@@ -28,7 +28,6 @@ class ProjectCodeM4nager:
         self.proj_title = proj_title
         self.proj_path = Path(self.dbp.listd[proj_title]["path"])
 
-
     def build(self):
         """Build a binary package of the project."""
 
@@ -44,13 +43,13 @@ class ProjectCodeM4nager:
             print("[info] Deploy package in editable mode ...")
             subprocess.check_call(
                 [sys.executable, "-m", "pip", "install", "-e", ".[dev]"],
-                cwd=str(self.proj_path)
+                cwd=str(self.proj_path),
             )
         else:
             print("[info] Deploy permanant package ...")
             subprocess.check_call(
                 [sys.executable, "-m", "pip", "install", "."],
-                cwd=str(self.proj_path)
+                cwd=str(self.proj_path),
             )
 
     def test(self, specific: str = ""):
@@ -62,8 +61,8 @@ class ProjectCodeM4nager:
 
         print(f"[info] Run {Path(self.proj_path).name} tests ...")
         subprocess.check_call(
-        [sys.executable, "-m", "pytest", specific],
-        cwd=str(self.proj_path / "tests")
+            [sys.executable, "-m", "pytest", specific],
+            cwd=str(self.proj_path / "tests"),
         )
 
     def run(self, script: str = "main", dev_mode: bool = False):
@@ -77,15 +76,14 @@ class ProjectCodeM4nager:
             print(f"[info] Run dev script: {script} ...")
             subprocess.check_call(
                 [sys.executable, "-m", script],
-                cwd=str(self.proj_path / "dev" / "scripts")
+                cwd=str(self.proj_path / "dev" / "scripts"),
             )
         else:
             print(f"[info] Run script: {script} ...")
             subprocess.check_call(
                 [sys.executable, "-m", script],
-                cwd=str(self.proj_path / "scripts")
+                cwd=str(self.proj_path / "scripts"),
             )
-
 
     def cls(self, files: list[str] = None):
         """
@@ -140,8 +138,10 @@ class ProjectCodeM4nager:
                         except (PermissionError, OSError) as e:
                             print(f"[warning] Could not remove '{item}': {e}")
                             continue
-                    print(f"[info] Cleaned tmp '{path}': removed {file_count} "
-                          f"files and {dir_count} directories.")
+                    print(
+                        f"[info] Cleaned tmp '{path}': removed {file_count} "
+                        f"files and {dir_count} directories."
+                    )
 
         print("[info] Cleaning complete!")
 
@@ -149,7 +149,7 @@ class ProjectCodeM4nager:
         """
         Manage doscstrings in a folder or file.
         Args:
-            specific: specific script in 
+            specific: specific script in
         """
 
         # pylint: disable=C0103
@@ -228,7 +228,9 @@ class ProjectCodeM4nager:
             if docstring is None:
                 return True
             filtered_args = [
-                arg.arg for arg in node.args.args if arg.arg not in ("self", "cls")
+                arg.arg
+                for arg in node.args.args
+                if arg.arg not in ("self", "cls")
             ]
             if (
                 node.returns is None
@@ -346,9 +348,8 @@ class ProjectCodeM4nager:
             process_file(specific_path)
         if specific_path.is_dir():
             for py_file in specific_path.rglob("*.py"):
-                if (
-                    "Lib" not  in str(py_file) and
-                    "site-packages" not in str(py_file)
+                if "Lib" not in str(py_file) and "site-packages" not in str(
+                    py_file
                 ):
                     print(f"[info] Processing {py_file}")
                     process_file(py_file)
@@ -365,13 +366,18 @@ class ProjectCodeM4nager:
             raise FileNotFoundError(f"Path not found: {specific_path}")
         print("[info] Formatting code...")
         subprocess.check_call(
-            [sys.executable, "-m", "black", "--line-length", "79",
-            str(specific_path)]
+            [
+                sys.executable,
+                "-m",
+                "black",
+                "--line-length",
+                "79",
+                str(specific_path),
+            ]
         )
         subprocess.check_call(
             [sys.executable, "-m", "isort", str(specific_path)]
         )
-
 
     def venv(self):
         """Generate a python venv in ./.venv."""
@@ -381,9 +387,9 @@ class ProjectCodeM4nager:
             [sys.executable, "-m", "venv", str(self.proj_path / ".venv")]
         )
         if platform.system().lower() == "windows":
-            activate = str(self.proj_path / ".venv" / "Scripts" /"activate")
+            activate = str(self.proj_path / ".venv" / "Scripts" / "activate")
         else:
-            activate = (
-                "source" + str(self.proj_path / ".venv" / "bin" /"activate")
+            activate = "source" + str(
+                self.proj_path / ".venv" / "bin" / "activate"
             )
         print(f"[info] Activate venv with: {activate}")

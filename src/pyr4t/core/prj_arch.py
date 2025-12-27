@@ -37,9 +37,9 @@ class ProjectArchM4nager:
         else:
             self.proj_title = proj_title
         if proj_base_path is None:
-            self.proj_path = Path(self.pdb.listd.get(
-                self.proj_title, {"": ""}
-                ).get("path", ""))
+            self.proj_path = Path(
+                self.pdb.listd.get(self.proj_title, {"": ""}).get("path", "")
+            )
             self.proj_base_path = Path(self.proj_path).parent
         else:
             self.proj_base_path = Path(proj_base_path)
@@ -47,7 +47,7 @@ class ProjectArchM4nager:
         if proj_version is None:
             self.proj_version = self.pdb.listd.get(
                 self.proj_title, {"": ""}
-                ).get("version", "")
+            ).get("version", "")
         else:
             self.proj_version = proj_version
         if authors is None:
@@ -56,28 +56,26 @@ class ProjectArchM4nager:
             self.authors = authors
 
         self._pg = _ProjectGenerator(
-            self.proj_title, self.proj_base_path,
-            self.authors, self.proj_version
+            self.proj_title,
+            self.proj_base_path,
+            self.authors,
+            self.proj_version,
         )
-
 
     def generate_app_project(self):
         """Generate a python app architecture."""
 
         self._pg.generate_project("app")
 
-
     def generate_cli_project(self):
         """Generate a python CLI architecture."""
 
         self._pg.generate_project("cli")
 
-
     def generate_lib_project(self):
         """Generate a python lib architecture."""
 
         self._pg.generate_project("lib")
-
 
     def genretate_dev_env(self):
         """Generate a dev env in /dev"""
@@ -112,7 +110,6 @@ class _ProjectGenerator:
         self.proj_path = (base_path / self.proj_title).resolve()
         self.authors = self._get_authors(authors)
         self.proj_version = proj_version
-
 
     def generate_project(self, project_type: str):
         """
@@ -156,13 +153,10 @@ class _ProjectGenerator:
 
         # Add to DB and current
         pdb = ProjectDBM4nager()
-        pdb.add(
-            self.proj_title, str(self.proj_path), self.proj_version
-        )
+        pdb.add(self.proj_title, str(self.proj_path), self.proj_version)
         pdb.switch(self.proj_title)
 
         print("[info] Project architecture created with success.")
-
 
     def generate_scripts(self, proj_path: Path = None, project_type: str = ""):
         """
@@ -198,11 +192,8 @@ def main():
 if __name__ == "__main__":
     main()
 '''
-        self._create_file(
-            proj_path / "scripts" / name, content
-        )
+        self._create_file(proj_path / "scripts" / name, content)
         self._create_file(proj_path / "scripts" / "__init__.py")
-
 
     def _generate_dirs(self, project_type: str):
 
@@ -236,12 +227,9 @@ if __name__ == "__main__":
             ).mkdir()
             print(f"[info] Cretation of dir: {subdir_core}")
 
-
     def _generate_init_files(self, project_type: str):
 
-        for proj_dir in (self.proj_path / "src").rglob(
-            "*"
-        ):
+        for proj_dir in (self.proj_path / "src").rglob("*"):
             if proj_dir.is_dir():
                 content = ""
                 if proj_dir.name == self.package_name:
@@ -273,7 +261,6 @@ __all__ = ["build_parser"]
 
                 self._create_file(proj_dir / "__init__.py", content)
 
-
     def _generate_py_doc_link(self):
         """
         Create a docs/python_doc.md file with a link to the official
@@ -287,7 +274,6 @@ Official Python documentation: [https://docs.python.org/3/](https://docs.python.
 
 """
         self._create_file(docs_path, content)
-
 
     def _generate_gitignore(self):
         """
@@ -330,7 +316,6 @@ dev
 Thumbs.db
 """
         self._create_file(self.proj_path / ".gitignore", content)
-
 
     def _generate_readme(self, project_type: str):
         """
@@ -516,7 +501,6 @@ MIT License. See [LICENSE](LICENSE) for details.
         # pylint: enable=line-too-long
         self._create_file(self.proj_path / "README.md", content)
 
-
     def _generate_license(self):
         """
         Create a LICENSE file with the MIT license
@@ -548,7 +532,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
         self._create_file(self.proj_path / "LICENSE", content)
-
 
     def _generate_pyproject(self, project_type: str):
         """
@@ -589,7 +572,6 @@ build-backend = "setuptools.build_meta"
 where = ["src"]
 """
         self._create_file(self.proj_path / "pyproject.toml", content)
-
 
     def _generate_tests(self, project_type: str):
 
@@ -639,7 +621,6 @@ def test_cli_{self.package_name}(monkeypatch, capsys):
 '''
 
         self._create_file(self.proj_path / "tests" / "test_example.py", test)
-
 
     def _generate_cli(self):
 
@@ -982,7 +963,6 @@ def main():
             luncher,
         )
 
-
     def _generate_app(self):
 
         # Need same script like CLI (APP is CLI ++)
@@ -1042,7 +1022,6 @@ def main():
             schemas,
         )
 
-
     def _generate_lib(self):
 
         example = '''\
@@ -1061,7 +1040,6 @@ class Example:
             example,
         )
 
-
     def _create_file(self, file_path: Path, content: str = ""):
         try:
             file_path.parent.mkdir(parents=True, exist_ok=True)
@@ -1070,7 +1048,6 @@ class Example:
             print(f"[info] Created file: {file_path}")
         except OSError as e:
             print(f"[error] An error occurred while creating {file_path}: {e}")
-
 
     def _get_dev_dependencies(self):
         major, minor = sys.version_info[:2]
@@ -1095,7 +1072,6 @@ class Example:
 
         # Return TOML-style list
         return f'["{pytest}", "{black}", "{isort}"]'
-
 
     def _get_authors(self, authors: list[str]) -> list[dict]:
         udb = UserDBM4nager()

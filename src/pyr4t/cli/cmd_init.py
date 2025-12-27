@@ -17,7 +17,7 @@ def cmd_init(args: argparse.Namespace):
         proj_title=args.title,
         proj_base_path=args.path,
         authors=args.authors,
-        proj_version=args.version
+        proj_version=args.version,
     )
     if args.app:
         pam.generate_app_project()
@@ -52,7 +52,7 @@ def add_init_parser(subparsers: argparse._SubParsersAction):
     group_init.add_argument(
         "--lib", action="store_true", help="Librairie architecture"
     )
-    parser.add_argument("title",  help="Project title")
+    parser.add_argument("title", help="Project title")
     parser.add_argument(
         "-a",
         "--authors",

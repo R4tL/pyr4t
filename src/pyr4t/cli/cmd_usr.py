@@ -39,9 +39,7 @@ def cmd_usr(args: argparse.Namespace):
 
         case "mv":
             if not args.name and not args.email:
-                raise ValueError(
-                    "Either --name or --email must be specified."
-                )
+                raise ValueError("Either --name or --email must be specified.")
             dbu.modify(args.alias, name=args.name, email=args.email)
 
         case "rm":
@@ -66,9 +64,9 @@ def add_usr_parser(subparsers: argparse._SubParsersAction):
 
     # ----- add -----
     add_parser = user_subparsers.add_parser("add", help="Add a new user")
-    add_parser.add_argument("alias",  help="User alias")
-    add_parser.add_argument("name",  help="User name")
-    add_parser.add_argument("email",  help="User email")
+    add_parser.add_argument("alias", help="User alias")
+    add_parser.add_argument("name", help="User name")
+    add_parser.add_argument("email", help="User email")
     add_parser.set_defaults(func=cmd_usr)
 
     # ----- ls -----
@@ -77,7 +75,7 @@ def add_usr_parser(subparsers: argparse._SubParsersAction):
 
     # ----- mv -----
     modify_parser = user_subparsers.add_parser("mv", help="Modify a user")
-    modify_parser.add_argument("alias",  help="User alias")
+    modify_parser.add_argument("alias", help="User alias")
     modify_parser.add_argument("-n", "--name", help="New user name")
     modify_parser.add_argument("-e", "--email", help="New user email")
     modify_parser.set_defaults(func=cmd_usr)
@@ -86,10 +84,10 @@ def add_usr_parser(subparsers: argparse._SubParsersAction):
     select_parser = user_subparsers.add_parser(
         "switch", help="Switch current user"
     )
-    select_parser.add_argument("alias",  help="User alias")
+    select_parser.add_argument("alias", help="User alias")
     select_parser.set_defaults(func=cmd_usr)
 
     # ----- rm -----
     remove_parser = user_subparsers.add_parser("rm", help="Remove an user")
-    remove_parser.add_argument("alias",  help="User alias")
+    remove_parser.add_argument("alias", help="User alias")
     remove_parser.set_defaults(func=cmd_usr)

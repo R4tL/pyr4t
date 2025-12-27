@@ -24,7 +24,7 @@ def add_venv_parser(subparsers: argparse._SubParsersAction):
     """
 
     parser: argparse.ArgumentParser = subparsers.add_parser(
-        "venv",help="Create a Python virtual environment in ./.venv"
+        "venv", help="Create a Python virtual environment in ./.venv"
     )
     parser.add_argument(
         "--prj", "-p", default=None, help="Project title (default: current)"
