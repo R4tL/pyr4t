@@ -2,7 +2,7 @@
 
 import argparse
 
-from pyr4t.core import install_pyr4tpackage, install_info
+from pyr4t.core import install_pyr4tpackage, install_info, maj_token
 
 
 def cmd_install(args: argparse.Namespace) :
@@ -11,15 +11,17 @@ def cmd_install(args: argparse.Namespace) :
         args (argparse.pathspace): Parsed command-line arguments containing
         project details.
     """
-    if args.info and args.package:
-        raise ValueError("Cannot specify both --info and a package name.")
-    if args.info:
-        show_private = args.info == "p"
-        install_info(show_private)
-    elif args.package:
+
+    if args.token:
+        maj_token(args.token)
+    if args.package:
         install_pyr4tpackage(args.package, args.version)
-    else:
-        raise ValueError("Either --info or a package name must be specified.")
+    if args.info:
+        install_info(show_private=False)
+    if args.info_private:
+        install_info(show_private=True)
+    if not (args.package or args.info or args.info_private or args.token):
+        print("[error] No action specified. Use `-h` or `--help` for help.")
 
 
 def add_install_parser(subparsers: argparse._SubParsersAction):
@@ -34,12 +36,16 @@ def add_install_parser(subparsers: argparse._SubParsersAction):
     )
     parser.add_argument(
         "--info",
-        nargs="?",
-        const=None,
-        choices=["p"],
-        metavar="[p]",
-        help="Display package info "
-        "(add 'p' to include private repos using token)",
+        action="store_true",
+        help="Display package info"
+    )
+    parser.add_argument(
+        "--info-private",
+        action="store_true",
+        help="Display package info including private packages"
+    )
+    parser.add_argument(
+        "--token", help="Update the GitHub token for private pyr4t packages"
     )
     parser.add_argument("package", nargs="?", help="Pyr4t package name")
     parser.add_argument(
