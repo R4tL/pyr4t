@@ -313,6 +313,9 @@ Thumbs.db
     def _generate_readme(self, project_type: str):
 
         author_names = ", ".join(a.get("name", "") for a in self.authors)
+        author_links = ", ".join(
+            f"[{a.get('name','')}](https://github.com/{a.get('name','')})" for a in self.authors
+        )
         cli = f"""\
         
 ### CLI
@@ -366,7 +369,7 @@ Short description of the project.
 ## About
 
 * **Version ->** {self.proj_version}
-* **{"Authors" if "," in author_names else "Author"} ->** {author_names}
+* **{"Authors" if "," in author_names else "Author"} ->** {author_links}
 * **License ->** MIT
 
 ---
