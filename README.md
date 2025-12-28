@@ -134,7 +134,7 @@ pipx install .
         ├── ls                                                                # List users from the pyr4t user DB
         ├── mv <alias> [(-e | --email) <email>] [(-n | --name) <name>]        # Modify user information in the pyr4t user DB
         ├── rm <alias>                                                        # Remove a user from the pyr4t user DB
-        └── switch <alias>                                                    # Switch to another active user from the pyr4t user DB
+        └── switch <alias>                                                    # Switch to another default user from the pyr4t user DB
 ```
 
 NB: all pyr4t package start with `pyr4t`.

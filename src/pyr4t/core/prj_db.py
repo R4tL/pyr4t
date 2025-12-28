@@ -82,7 +82,7 @@ class ProjectDBM4nager(_JSONDBM4nager[Project]):
         """
 
         self.update_data(title, "slct")
-        print(f"[info] Default project selected: {title}")
+        print(f"[info] Active project selected: {title}")
 
     def info(self) -> tuple[str, Project]:
         """

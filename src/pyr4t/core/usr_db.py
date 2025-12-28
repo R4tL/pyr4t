@@ -80,7 +80,7 @@ class UserDBM4nager(_JSONDBM4nager[User]):
         """
 
         self.update_data(alias.upper(), "slct")
-        print(f"[info] Current user selected: {alias}")
+        print(f"[info] Default user selected: {alias}")
 
     def whoami(self) -> tuple[str, User]:
         """

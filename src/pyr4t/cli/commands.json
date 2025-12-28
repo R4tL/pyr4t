@@ -95,7 +95,7 @@
                 "__seq__": ["<alias>"]
             },
             "switch": {
-                "__desc__": "Switch to another active user from the pyr4t user DB",
+                "__desc__": "Switch to another default user from the pyr4t user DB",
                 "__seq__": ["<alias>"]
             }
         }
