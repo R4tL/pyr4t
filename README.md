@@ -69,10 +69,10 @@ pipx install git+https://github.com/R4tL/pyr4t.git@v0.2.1
 
 - SSH
 ```bash
-pip install git+ssh://github.com/R4tL/pyr4t.git@v0.2.1
+pip install git+ssh://git@github.com/R4tL/pyr4t.git@v0.2.1
 ```
 ```bash
-pipx install git+ssh://github.com/R4tL/pyr4t.git@v0.2.1
+pipx install git+ssh://git@github.com/R4tL/pyr4t.git@v0.2.1
 ```
 
 * **Cloning the repository**
@@ -85,7 +85,7 @@ git clone https://github.com/R4tL/pyr4t.git@v0.2.1
 ```
 - SSH
 ```bash
-git clone ssh://github.com/R4tL/pyr4t.git@v0.2.1
+git clone ssh://git@github.com/R4tL/pyr4t.git@v0.2.1
 ```
 
 Then install the package using pip or pipx:

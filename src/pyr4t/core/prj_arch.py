@@ -424,10 +424,10 @@ pipx install git+https://github.com/{self.authors[0].get("name", "")}/{self.proj
 
 - SSH
 ```bash
-pip install git+ssh://github.com/{self.authors[0].get("name", "")}/{self.proj_title}.git@v{self.proj_version}
+pip install git+ssh://git@github.com/{self.authors[0].get("name", "")}/{self.proj_title}.git@v{self.proj_version}
 ```
 ```bash
-pipx install git+ssh://github.com/{self.authors[0].get("name", "")}/{self.proj_title}.git@v{self.proj_version}
+pipx install git+ssh://git@github.com/{self.authors[0].get("name", "")}/{self.proj_title}.git@v{self.proj_version}
 ```
 
 * **Install directly from Pypi**
@@ -448,7 +448,7 @@ git clone https://github.com/{self.authors[0].get("name", "")}/{self.proj_title}
 ```
 - SSH
 ```bash
-git clone ssh://github.com/{self.authors[0].get("name", "")}/{self.proj_title}.git@v{self.proj_version}
+git clone ssh://git@github.com/{self.authors[0].get("name", "")}/{self.proj_title}.git@v{self.proj_version}
 ```
 
 Then install the package using pip or pipx:
