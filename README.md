@@ -106,10 +106,10 @@ pipx install .
 
 ```
 └── pyr4t [(-h | --help) | (-V | --version)]                                  # Pyr4t CLI
-    ├── install (--info [p] | <package> [(-V | --version) <version>])         # Install a pyr4t package from R4tL's github repo
-    │                                                                           (use '--info' to show all available package)
+    ├── install [<package> [(-V | --version) <version>]] [--info]             # Install a pyr4t package from R4tL's github repo
+    │           [--info-private] [--token <token>]                              (use '--info(-private)' to show all available package)
     ├── init (--app | --cli | --lib) <title>                                  # Generate a new python project architecture,
-    │        [(-a | --authors) <alias1> <alias2> ...] [(-p | --path) <path>]    default switch as current
+    │        [(-a | --authors) <alias1> <alias2> ...] [(-p | --path) <path>]    default switched as active project
     │        [(-V | --version) <version>]
     ├── build [--prj <title>]                                                 # Build binary files in ./dist (.tar.gz, .whl)
     ├── deploy [--prj <title>] [--dev]                                        # Deploy project using pip (--dev for editable mode)
@@ -138,9 +138,7 @@ pipx install .
         └── switch <alias>                                                    # Switch to another active user from the pyr4t user DB
 ```
 
-
-NB: all pyr4t package start with `"pyr4t"`.
-
+NB: all pyr4t package start with `pyr4t`.
 
 ---
 

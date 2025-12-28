@@ -3,11 +3,11 @@
         "__desc__": "Pyr4t CLI",
         "__seq__":["[(-h | --help) | (-V | --version)]"],
         "install": {
-            "__desc__": "Install a pyr4t package from R4tL's github repo (use '--info' to show all available package)",
+            "__desc__": "Install a pyr4t package from R4tL's github repo (use '--info(-private)' to show all available package)",
             "__seq__": ["[<package> [(-V | --version) <version>]]", "[--info]", "[--info-private]", "[--token <token>]"]
         },
         "init": {
-            "__desc__": "Generate a new python project architecture, default switch as current",
+            "__desc__": "Generate a new python project architecture, default switched as active project",
             "__seq__": [
                 "(--app | --cli | --lib)", "<title>", "[(-a | --authors) <alias1> <alias2> ...]",
                 "[(-p | --path) <path>]", "[(-V | --version) <version>]"
