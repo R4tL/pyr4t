@@ -10,16 +10,16 @@ from .usr_db import UserDBM4nager
 
 class ProjectArchM4nager:
     """
-    A utility class for managing architecrure for pyr4t projects.
+    A utility class for managing architecture for pyr4t projects.
     Args:
-        proj_title (str, optional): Title of the project to manage.
-            If None, uses the current default project.
-        proj_base_path (str, optional): Base path where the project
-            is located. If None, uses the path from the projects database.
-        authors (list[str], optional): List of authors names.
-            If None, uses "current" user.
-        proj_version (str, optional): Version of the project.
-            If None, uses the version from the projects database.
+        proj_title (str, optional): title of the project to manage
+            (None -> uses the current default project)
+        proj_base_path (str, optional): base path where the project
+            is located (None -> uses the path from the projects database)
+        authors (list[str], optional): List of authors names
+            (None -> uses "current" user)
+        proj_version (str, optional): version of the project
+            (None -> uses the version from the projects database)
     """
 
     def __init__(
@@ -115,9 +115,9 @@ class _ProjectGenerator:
         """
         Create the main project directory and subdirectories.
         Args:
-            project_type: Type of project (app, cli, lib)
+            project_type (str): type of project (app, cli, lib)
         Returns:
-            bool: True if successful, False otherwise.
+            bool: True if successful, False otherwise
         """
 
         print("[info] Generating a project architecture...")
@@ -162,9 +162,10 @@ class _ProjectGenerator:
         """
         Generate 'scripts' directory with example scripts.
         Args:
-            parent_path:
-            project_type:
+            proj_path (Path, optional): path where to create the scripts
+            project_type (str, optional): type of project (app, cli, lib)
         """
+
 
         if proj_path is None:
             proj_path = self.proj_path
@@ -262,10 +263,6 @@ __all__ = ["build_parser"]
                 self._create_file(proj_dir / "__init__.py", content)
 
     def _generate_py_doc_link(self):
-        """
-        Create a docs/python_doc.md file with a link to the official
-        Python docs.
-        """
 
         docs_path = self.proj_path / "docs" / "python_doc.md"
         content = """\
@@ -276,10 +273,6 @@ Official Python documentation: [https://docs.python.org/3/](https://docs.python.
         self._create_file(docs_path, content)
 
     def _generate_gitignore(self):
-        """
-        Create a .gitignore file with standard Python, IDE,
-        and OS exclusions.
-        """
 
         content = """\
 # Python bytecode
@@ -318,10 +311,6 @@ Thumbs.db
         self._create_file(self.proj_path / ".gitignore", content)
 
     def _generate_readme(self, project_type: str):
-        """
-        Create a README.md file with project information, installation, usage,
-        development, and license sections.
-        """
 
         author_names = ", ".join(a.get("name", "") for a in self.authors)
         cli = f"""\
@@ -366,7 +355,7 @@ Short description of the project.
 
 - [About](#about)
 - [Python best practices reminder](#python-best-practices-reminder)
-- [Installation](#installation)
+- [Installation](#Installation using pip or pipx)
 - [Requirements](#requirements)
 - [Usage](#usage)
 - [Development](#development)
@@ -445,22 +434,23 @@ pipx install {self.proj_title.lower()}=={self.proj_version}
 
 * **Cloning the repository**
 
-- Classic mode
+- HTTPS
+```bash
+git clone https://github.com/{author_names[0]}/{self.proj_title}.git
+```
+- SSH
+```bash
+git clone ssh://github.com/{author_names[0]}/{self.proj_title}.git
+```
+
+Clone repository and use the following command:
+
 ```bash
 pip install .
 ```
+```
 ```bash
 pipx install .
-```
-
-- Editable mode
-```bash
-pip install -e .
-```
-
-- Developpement mode
-```bash
-pip install -e .[dev]
 ```
 
 ---
@@ -471,7 +461,27 @@ pip install -e .[dev]
 
 ## Usage
 
-Go to the root project folder and use the following commands:
+
+{cli if project_type in {"cli", "app"} else lib}
+
+---
+
+## Tests
+
+Clone repository and use the following command:
+
+```bash
+pytest
+```
+
+## Development
+
+Clone the repository and install the project in developpement and editable mode: 
+
+```bash
+pip install -e .[dev]
+```
+And go to the root project folder and use the following commands:
 
 ### Tests
 
@@ -479,17 +489,12 @@ Go to the root project folder and use the following commands:
 ```bash
 pytest
 ```
-{cli if project_type in {"cli", "app"} else lib}
-
----
 
 ### Scripts
 
-Go to the root project folder and use the following commands:
-
 * **Run example scripts**
 ```bash
-python -m scripts.manage example
+python -m scripts.main
 ```
 
 ---
@@ -502,10 +507,6 @@ MIT License. See [LICENSE](LICENSE) for details.
         self._create_file(self.proj_path / "README.md", content)
 
     def _generate_license(self):
-        """
-        Create a LICENSE file with the MIT license
-        and author information.
-        """
 
         author_names = ", ".join(a.get("name", "") for a in self.authors)
         content = f"""\
@@ -534,10 +535,6 @@ SOFTWARE.
         self._create_file(self.proj_path / "LICENSE", content)
 
     def _generate_pyproject(self, project_type: str):
-        """
-        Create a pyproject.toml file with project metadata,
-        dependencies, and build configuration.
-        """
 
         authors_toml = ", ".join(
             [
@@ -547,7 +544,7 @@ SOFTWARE.
         )
         scripts = f"""\
 [project.scripts]
-{self.proj_title.lower()} = "{self.package_name}.luncher:core_main"
+{self.proj_title.lower()} = "{self.package_name}.luncher:main"
 """
 
         content = f"""\
@@ -578,11 +575,9 @@ where = ["src"]
         test = '''\
 """Test package example."""
 
-import pytest
 '''
         if project_type == "lib":
             test += f'''\
-            
 from {self.package_name}.example import Example
 
 
@@ -593,7 +588,6 @@ def test_example(capsys):
     ex.example()
     captured = capsys.readouterr()
     assert captured.out.strip() == "Hello World"
-
 '''
         elif project_type in ["app", "cli"]:
             test += f'''\
@@ -601,23 +595,25 @@ import subprocess
 import sys
 
 
-def test_cli_{self.package_name}(monkeypatch, capsys):
+def test_cli_{self.package_name}():
     """Test that running the CLI command prints 'Hello World'."""
 
     result = subprocess.run(
-        [sys.executable, "-m", "{self.package_name}"],
+        [sys.executable, "-m", "{self.package_name}",
+            "example", "print", "Hello", "-u"],
         capture_output=True,
-        text=True
+        text=True,
+        check=True,
     )
-    assert result.stdout.strip() == "Hello World !"
+    assert result.stdout.strip() == "HELLO"
 
     result2 = subprocess.run(
-        ["{self.proj_title.lower()}"],
+        ["{self.proj_title.lower()}", "example", "print", "Hello", "-u"],
         capture_output=True,
-        text=True
+        text=True,
+        check=True,
     )
-    assert result2.stdout.strip() == "Hello World"
-
+    assert result2.stdout.strip() == "HELLO"
 '''
 
         self._create_file(self.proj_path / "tests" / "test_example.py", test)
@@ -637,14 +633,15 @@ def cmd_example(args: argparse.Namespace):
     if args.action == "print":
         a = args.string
         if args.upper:
-            a.upper()
+            a = a.upper()
         print(a)
 
 def add_example_parser(subparsers: argparse._SubParsersAction):
     """
-    Add the --version command to the CLI parser.
+    Adds the 'example' subcommand parser to the CLI.
     Args:
-        subparsers: The subparsers object from the main parser.
+        subparsers (argparse._SubParsersAction): the subparsers object
+            from the main parser
     """
 
     parser: argparse.ArgumentParser = subparsers.add_parser(
@@ -663,11 +660,10 @@ def add_example_parser(subparsers: argparse._SubParsersAction):
     print_parser.set_defaults(func=cmd_example)
 '''
         tree = '''\
-"""Functions to print a cmd tree."""
+"""Functions to print a better --help."""
 
-import shutil
 import json
-
+import shutil
 from pathlib import Path
 
 
@@ -679,22 +675,23 @@ def wrap_sequence(
     have_children: bool,
     desc="",
 ):
-    """Builds wrapped text lines for a tree node with optional
-    sequence and description.
+    """
+    Builds wrapped text lines for a tree node with optional sequence
+    and description.
     Args:
-        prefix (str): The prefix for the current tree level 
-        (indentation + connectors).
-        connector (str): The connector symbol linking the node to
-        its parent (e.g., "├──" or "└──").
-        key (str): The name of the current node.
-        seq_list (list[str]): A list of elements to display on the
-        same line as the key.
-        have_children (bool): Whether the node has child elements.
-        desc (str, optional): Description text to display on the
-        right side of the node.
+        prefix (str): prefix for the current tree level
+            (indentation + connectors)
+        connector (str): the connector symbol linking the node to its parent
+            (e.g., "├──" or "└──")
+        key (str): name of the current node
+        seq_list (list[str]): list of elements to display on the same
+            line as the key
+        have_children (bool): whether the node has child elements
+        desc (str, optional): description text to display on the right
+            side of the node
     Returns:
-        list[str]: A list of formatted strings representing this
-        node and its wrapped lines.
+        list[str]: list of formatted strings representing this node and its
+            wrapped lines
     """
 
     # Init term dimentions
@@ -739,15 +736,16 @@ def wrap_sequence(
 
     return lines
 
+
 def wrap_desc(desc: str, desc_width: int) -> list[str]:
     """
     Wraps a description string to fit within a given width.
     Args:
-        desc: The description text to wrap.
-        desc_width: The maximum width for each wrapped line.
+        desc (str): description text to wrap
+        desc_width (int): maximum width for each wrapped line
     Returns:
-        list[str]: A list of formatted strings representing
-        this node and its wrapped lines.
+        list[str]: list of formatted strings representing this node and
+            its wrapped lines
     """
 
     words = desc.split(" ")
@@ -771,14 +769,15 @@ def wrap_desc(desc: str, desc_width: int) -> list[str]:
         lines.append(current_line)
     return lines
 
+
 def build_lines(dict_cmd: dict, prefix="") -> list[str]:
     """
     Build wraped lines to print dinamicaly.
     Args:
-        dict_cmd: dict of commands.
-        prefix:
+        dict_cmd (dict): dict of commands.
+        prefix (str): prefix for the current tree level.
     Returns:
-        list[str]: A list of formatted strings.
+        list[str]: list of formatted strings
     """
 
     lines = []
@@ -804,11 +803,11 @@ def build_lines(dict_cmd: dict, prefix="") -> list[str]:
     return lines
 
 
-def get_tree():
+def get_tree() -> str:
     """
     Prints a formatted tree representation commands using commands.json.
     Returns:
-        str: The string to print in the terminal.
+        str: The string to print in the terminal
     """
 
     with open(
@@ -816,13 +815,10 @@ def get_tree():
     ) as file:
         data_cmd = json.load(file)
     lines = build_lines(data_cmd)
-    return "\\n".join(lines)
+    return "\n".join(lines)
 '''
         parser = f'''\
-"""
-Parser module for the CLI.
-Creates the main argument parser and registers subcommands.
-"""
+"""Parser module for the CLI."""
 
 import argparse
 import sys
@@ -836,8 +832,8 @@ def cmd_base(args: argparse.Namespace):
     """
     Base commands in the root of CLI.
     Args:
-        args (argparse.pathspace): Parsed command-line arguments containing
-        project details.
+        args (argparse.Namespace): parsed command-line arguments containing
+            project details
     """
     
     if args.help_requested:
@@ -851,14 +847,15 @@ def cmd_base(args: argparse.Namespace):
     sys.exit(0)
 
 def build_parser() -> argparse.ArgumentParser:
-    """Creates and configures the main argument parser for the CLI.
+    """
+    Creates and configures the main argument parser for the CLI.
     Returns:
-        argparse.ArgumentParser: The configured argument parser for the CLI.
+        argparse.ArgumentParser: the configured argument parser for the CLI
     """
     
     parser = argparse.ArgumentParser(
         prog="{self.proj_title.lower()}",
-        description="CLI of {self.proj_title}.",
+        description="CLI of {self.proj_title}",
         add_help=False
     )
     parser.add_argument(
@@ -869,7 +866,6 @@ def build_parser() -> argparse.ArgumentParser:
         dest="help_requested", help="Show help"
     )
     parser.set_defaults(func=cmd_base)
-    subparsers = parser.add_subparsers(dest="command")
     subparsers = parser.add_subparsers(dest="command")
 
     add_example_parser(subparsers)
@@ -882,8 +878,11 @@ def build_parser() -> argparse.ArgumentParser:
         "__desc__": "{self.proj_title} CLI",
         "__seq__":["[(--help | -h) | (--version | -V)]"],
         "example": {{
-        "__desc__": "Example of command",
-        "__seq__": ["<script>", "[(--uper | -u)]"]
+            "__desc__": "Example of command",
+            print": {{
+                "__desc__": "Print user input",
+                "__seq__": ["<string>", "[(--upper | -u)]"]
+            }},
         }}
     }}
 }}
@@ -891,10 +890,7 @@ def build_parser() -> argparse.ArgumentParser:
 
         # Scripts requiered
         main = f'''\
-"""
-Main module for the project.
-Provides the entry point for command-line interface operation.
-"""
+"""Main module for the project."""
 
 from .cli import build_parser
 
@@ -912,10 +908,7 @@ if __name__ == "__main__":
     main()
 '''
         luncher = f'''\
-"""
-Launcher module for the CLI.
-Provides the entry point for running the application from the command line.
-"""
+"""Launcher module for the CLI."""
 
 from {self.package_name}.__main__ import main as core_main
 
@@ -1051,7 +1044,6 @@ class Example:
 
     def _get_dev_dependencies(self):
         major, minor = sys.version_info[:2]
-
         # Define recommended versions per Python release
         if major == 3 and minor >= 12:
             pytest = "pytest>=8.3.2"
@@ -1069,7 +1061,6 @@ class Example:
             pytest = "pytest>=7.0.0"
             black = "black>=22.0.0"
             isort = "isort>=5.10.0"
-
         # Return TOML-style list
         return f'["{pytest}", "{black}", "{isort}"]'
 

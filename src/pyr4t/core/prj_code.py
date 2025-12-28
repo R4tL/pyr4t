@@ -14,8 +14,8 @@ class ProjectCodeM4nager:
     """
     A utility class for managing code for pyr4t projects.
     Args:
-        proj_title (str, optional): Title of the project to manage.
-            If None, uses the current default project.
+        proj_title (str, optional): title of the project to manage
+            (None -> uses the current default project)
     """
 
     def __init__(self, proj_title: str = None):
@@ -37,7 +37,11 @@ class ProjectCodeM4nager:
         )
 
     def deploy(self, dev_mode: bool = False):
-        """Deploy the package using pip."""
+        """
+        Deploy the package using pip.
+            Args:
+                dev_mode (bool, optional): if True, deploy in editable mode.
+        """
 
         if dev_mode:
             print("[info] Deploy package in editable mode ...")
@@ -69,7 +73,8 @@ class ProjectCodeM4nager:
         """
         Run a script in the `script` dir.
         Args:
-            script (str): name of the script
+            script (str, optional): name of the script
+            dev_mode (bool, optional): if true run dev script
         """
 
         if dev_mode:
@@ -89,7 +94,7 @@ class ProjectCodeM4nager:
         """
         Clean cache, logs, or all temporary files.
         Args:
-            mode (str): Files to clean.
+            files (list[str], optional): files to clean
         """
 
         if files is None or all(v is None for v in files):
@@ -149,7 +154,8 @@ class ProjectCodeM4nager:
         """
         Manage doscstrings in a folder or file.
         Args:
-            specific: specific script in
+            specific (str, optional): specific script to process
+                (dir, file, file::fuction)
         """
 
         # pylint: disable=C0103
@@ -167,9 +173,9 @@ class ProjectCodeM4nager:
             """
             Generate a Google-style docstring with proper indentation.
             Args:
-                node: node
-                indent: indentation
-                update: if needs update
+                node (ast.FunctionDef): the function node
+                indent (str): indentation
+                update (bool): if needs update
             Returns:
                 str: new docstring
             """
@@ -217,10 +223,11 @@ class ProjectCodeM4nager:
             node: ast.FunctionDef, docstring: str
         ) -> bool:
             """
-            Check if the docstring is missing any arguments or the return value.
+            Check if the docstring is missing any arguments or
+            the return value.
             Args:
-                node: node
-                docstring: actual doctring
+                node (ast.FunctionDef): the function node
+                docstring (str): actual doctring
             Returns:
                 bool: if needs update
             """
@@ -255,7 +262,7 @@ class ProjectCodeM4nager:
             """
             Return the whitespace at the start of a line for indentation.
             Args:
-                line: line to get indent
+                line (str): line to get indent
             Returns:
                 str: indentation
             """
@@ -269,7 +276,7 @@ class ProjectCodeM4nager:
             """
             Manage docstrings in a file.
             Args:
-                path: file path.
+                path (Path): file path
             """
 
             with open(path, "r", encoding="utf-8") as f:
@@ -313,8 +320,8 @@ class ProjectCodeM4nager:
             """
             Return the index where the function signature ends.
             Args:
-                lines: lines
-                start_line: start line
+                lines (list[str]): lines
+                start_line (int): start line
             Returns:
                 int: last line
             """
@@ -331,7 +338,7 @@ class ProjectCodeM4nager:
             """
             Return True if the function has at least one 'return' with a value.
             Args:
-                node: node
+                node (ast.FunctionDef): the function node
             Returns:
                 bool: if has return
             """

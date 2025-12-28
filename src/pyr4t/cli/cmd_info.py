@@ -9,8 +9,8 @@ def cmd_info(_: argparse.Namespace):
     """
     Initializes a new Python project using the provided arguments.
     Args:
-        args (argparse.pathspace): Parsed command-line arguments containing
-        project details.
+        args (argparse.Namespace): parsed command-line arguments containing
+           project details
     """
 
     dbp = ProjectDBM4nager()
@@ -20,9 +20,10 @@ def cmd_info(_: argparse.Namespace):
 
 def add_info_parser(subparsers: argparse._SubParsersAction):
     """
-    Adds the 'whoami' subcommand parser to the CLI.
+    Adds the 'info' subcommand parser to the CLI.
     Args:
-        subparsers: The subparsers object from the main parser.
+        subparsers (argparse._SubParsersAction): the subparsers object
+            from the main parser
     """
 
     parser: argparse.ArgumentParser = subparsers.add_parser(

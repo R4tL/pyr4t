@@ -9,8 +9,8 @@ def cmd_cls(args: argparse.Namespace):
     """
     Clear temporary and build files for the specified project.
     Args:
-        args (argparse.pathspace): Parsed command-line arguments containing
-        project details.
+        args (argparse.Namespace): parsed command-line arguments containing
+            project details
     """
 
     pcm = ProjectCodeM4nager(proj_title=args.prj)
@@ -21,7 +21,8 @@ def add_cls_parser(subparsers: argparse._SubParsersAction):
     """
     Adds the 'cls' subcommand parser to the CLI.
     Args:
-        subparsers: The subparsers object from the main parser.
+        subparsers (argparse._SubParsersAction): the subparsers object from
+            the main parser
     """
 
     parser: argparse.ArgumentParser = subparsers.add_parser(

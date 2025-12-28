@@ -9,8 +9,8 @@ def cmd_init(args: argparse.Namespace):
     """
     Initialize project architecture.
     Args:
-        args (argparse.pathspace): Parsed command-line arguments containing
-        project details.
+        args (argparse.Namespace): parsed command-line arguments containing
+            project details
     """
 
     pam = ProjectArchM4nager(
@@ -31,8 +31,8 @@ def add_init_parser(subparsers: argparse._SubParsersAction):
     """
     Adds the 'init' subcommand parser to the CLI.
     Args:
-        subparsers (argparse._SubParsersAction): The subparsers action to add
-        the 'init' parser to.
+        subparsers (argparse._SubParsersAction): the subparsers object
+            from the main parser
     """
 
     parser: argparse.ArgumentParser = subparsers.add_parser(

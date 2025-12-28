@@ -1,7 +1,4 @@
-"""
-Main module for the Pyr4t CLI.
-Provides the entry point for command-line interface operations.
-"""
+"""Main module for the Pyr4t CLI."""
 
 from .cli import build_parser
 

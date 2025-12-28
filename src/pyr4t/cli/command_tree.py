@@ -13,22 +13,23 @@ def wrap_sequence(
     have_children: bool,
     desc="",
 ):
-    """Builds wrapped text lines for a tree node with optional sequence
-     and description.
+    """
+    Builds wrapped text lines for a tree node with optional sequence
+    and description.
     Args:
-        prefix (str): The prefix for the current tree level
-        (indentation + connectors).
-        connector (str): The connector symbol linking the node to its parent
-        (e.g., "├──" or "└──").
-        key (str): The name of the current node.
-        seq_list (list[str]): A list of elements to display on the same
-        line as the key.
-        have_children (bool): Whether the node has child elements.
-        desc (str, optional): Description text to display on the right
-        side of the node.
+        prefix (str): prefix for the current tree level
+            (indentation + connectors)
+        connector (str): the connector symbol linking the node to its parent
+            (e.g., "├──" or "└──")
+        key (str): name of the current node
+        seq_list (list[str]): list of elements to display on the same
+            line as the key
+        have_children (bool): whether the node has child elements
+        desc (str, optional): description text to display on the right
+            side of the node
     Returns:
-        list[str]: A list of formatted strings representing this node and its
-        wrapped lines.
+        list[str]: list of formatted strings representing this node and its
+            wrapped lines
     """
 
     # Init term dimentions
@@ -78,11 +79,11 @@ def wrap_desc(desc: str, desc_width: int) -> list[str]:
     """
     Wraps a description string to fit within a given width.
     Args:
-        desc: The description text to wrap.
-        desc_width: The maximum width for each wrapped line.
+        desc (str): description text to wrap
+        desc_width (int): maximum width for each wrapped line
     Returns:
-        list[str]: A list of formatted strings representing this node and
-        its wrapped lines.
+        list[str]: list of formatted strings representing this node and
+            its wrapped lines
     """
 
     words = desc.split(" ")
@@ -111,37 +112,36 @@ def build_lines(dict_cmd: dict, prefix="") -> list[str]:
     """
     Build wraped lines to print dinamicaly.
     Args:
-        dict_cmd: dict of commands.
-        prefix:
+        dict_cmd (dict): dict of commands.
+        prefix (str): prefix for the current tree level.
     Returns:
-        list[str]: A list of formatted strings.
+        list[str]: list of formatted strings
     """
 
     lines = []
     items = list(dict_cmd.items())
     for i, (key, value) in enumerate(items):
-        if not key == "__info__":
-            connector = "└──" if i == len(items) - 1 else "├──"
-            seq_list = value.get("__seq__", [])
-            desc = value.get("__desc__", "")
-            children = {
-                k: v
-                for k, v in value.items()
-                if isinstance(v, dict) and k not in ("__seq__", "__desc__")
-            }
-            if desc:
-                desc = "# " + desc
-            wrapped_lines = wrap_sequence(
-                prefix, connector, key, seq_list, children != {}, desc
-            )
-            lines.extend(wrapped_lines)
-            if children:
-                extension = "    " if i == len(items) - 1 else "│   "
-                lines.extend(build_lines(children, prefix + extension))
+        connector = "└──" if i == len(items) - 1 else "├──"
+        seq_list = value.get("__seq__", [])
+        desc = value.get("__desc__", "")
+        children = {
+            k: v
+            for k, v in value.items()
+            if isinstance(v, dict) and k not in ("__seq__", "__desc__")
+        }
+        if desc:
+            desc = "# " + desc
+        wrapped_lines = wrap_sequence(
+            prefix, connector, key, seq_list, children != {}, desc
+        )
+        lines.extend(wrapped_lines)
+        if children:
+            extension = "    " if i == len(items) - 1 else "│   "
+            lines.extend(build_lines(children, prefix + extension))
     return lines
 
 
-def get_tree():
+def get_tree() -> str:
     """
     Prints a formatted tree representation commands using commands.json.
     Returns:

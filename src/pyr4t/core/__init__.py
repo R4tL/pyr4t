@@ -9,6 +9,7 @@ from .usr_db import UserDBM4nager
 __all__ = [
     "install_pyr4tpackage",
     "install_info",
+    "maj_token",
     "ProjectArchM4nager",
     "ProjectCodeM4nager",
     "ProjectDBM4nager",

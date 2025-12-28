@@ -6,9 +6,6 @@ from typing import Generic
 
 from .models import EntryType, JSOND4ta
 
-PATH_JSON_PROFILES = Path.home() / ".pyr4t" / "users.json"
-PATH_JSON_PROJECTS = Path.home() / ".pyr4t" / "projects.json"
-
 
 class _JSONDBM4nager(Generic[EntryType]):
     """
@@ -28,7 +25,7 @@ class _JSONDBM4nager(Generic[EntryType]):
         """
         Returns the key and entry information ofthe current entry.
         Returns:
-            tuple[str, EntryType]: key and entry data of the default entry.
+            tuple[str, EntryType]: key and entry data of the default entry
         """
 
         if not self.current:
@@ -41,8 +38,8 @@ class _JSONDBM4nager(Generic[EntryType]):
         Update DB.
         Args:
             key (str): Data key.
-            action (str): Type (add, rm, updt)
-            entry (EntryType): Data
+            action (str): type (add, rm, updt)
+            entry (EntryType): data
         """
 
         if action == "add":

@@ -27,8 +27,8 @@ def cmd_base(args: argparse.Namespace):
     """
     Handle base CLI actions.
     Args:
-        args (argparse.pathspace): Parsed command-line arguments containing
-        project details.
+        args (argparse.pathspace): parsed command-line arguments containing
+            project details
     """
 
     if args.help_requested:
@@ -46,8 +46,8 @@ def build_parser() -> argparse.ArgumentParser:
     """
     Creates and configures the main argument parser for the Pyr4t CLI.
     Returns:
-        argparse.ArgumentParser: The configured argument parser for
-        the Pyr4t CLI.
+        argparse.ArgumentParser: configured argument parser for
+            the Pyr4t CLI
     """
 
     parser = argparse.ArgumentParser(

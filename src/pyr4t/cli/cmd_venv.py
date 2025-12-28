@@ -9,7 +9,8 @@ def cmd_venv(args: argparse.Namespace):
     """
     Create a Python virtual environment.
     Args:
-        args: Parsed command-line arguments.
+        args (argparse.pathspace): parsed command-line arguments containing
+           project details
     """
 
     pcm = ProjectCodeM4nager(proj_title=args.prj)
@@ -20,7 +21,8 @@ def add_venv_parser(subparsers: argparse._SubParsersAction):
     """
     Adds the 'venv' subcommand parser to the CLI.
     Args:
-        subparsers: The subparsers object from the main parser.
+        subparsers (argparse._SubParsersAction): the subparsers object
+            from the main parser
     """
 
     parser: argparse.ArgumentParser = subparsers.add_parser(

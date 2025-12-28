@@ -9,8 +9,8 @@ def cmd_usr(args: argparse.Namespace):
     """
     Handle user-related CLI actions.
     Args:
-        args (argparse.pathspace): Parsed command-line arguments containing
-        project details.
+        args (argparse.pathspace): parsed command-line arguments containing
+           project details
     """
 
     dbu = UserDBM4nager()
@@ -51,9 +51,10 @@ def cmd_usr(args: argparse.Namespace):
 
 def add_usr_parser(subparsers: argparse._SubParsersAction):
     """
-    Add the 'user' command and its subcommands to the CLI parser.
+    Add the 'usr' command and its subcommands to the CLI parser.
     Args:
-        subparsers: The argparse subparsers object to add commands to.
+        subparsers (argparse._SubParsersAction): the subparsers object to
+            from the main parser
     """
 
     # Main "usr" parser

@@ -17,7 +17,7 @@ def install_pyr4tpackage(package: str, version: str = None):
     without relying on Git.
     Args:
         package (str): package name
-        version (str, optional): version to install. If "": latest release.
+        version (str, optional): version to install (None -> latest release)
     """
 
     # URL GitHub API
@@ -84,7 +84,7 @@ def install_pyr4tpackage(package: str, version: str = None):
             " your system and Python."
         )
 
-    # download_url = asset["browser_download_url"]
+    #download_url = asset["browser_download_url"] # old way
     download_url = asset["url"]
     headers["Accept"] = "application/octet-stream"
     print(f"[info] Downloading {asset['name']} from {download_url} ...")
@@ -111,7 +111,7 @@ def install_info(show_private: bool = False):
     """
     Print information about available pyr4t packages.
     Args:
-        show_private (bool, optional): Show private repositories.
+        show_private (bool, optional): show private repositories
     """
 
     print(
