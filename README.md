@@ -1,4 +1,4 @@
-# pyr4t v0.2.0
+# pyr4t v0.2.1
 
 A python manager to generate python project architectures and install pyr4t package based on github: [R4tL repo](https://github.com/R4tL?tab=repositories).
 Look [example](#example-of-usage) to use it.
@@ -18,7 +18,7 @@ Look [example](#example-of-usage) to use it.
 
 ## About
 
-* **Version ->** 0.2.0
+* **Version ->** 0.2.1
 * **Author ->** R4tL
 * **License ->** MIT
 
@@ -61,18 +61,18 @@ pipx ensurepath
 
 - HTTPS
 ```bash
-pip install git+https://github.com/R4tL/pyr4t.git@v0.2.0
+pip install git+https://github.com/R4tL/pyr4t.git@v0.2.1
 ```
 ```bash
-pipx install git+https://github.com/R4tL/pyr4t.git@v0.2.0
+pipx install git+https://github.com/R4tL/pyr4t.git@v0.2.1
 ```
 
 - SSH
 ```bash
-pip install git+ssh://github.com/R4tL/pyr4t.git@v0.2.0
+pip install git+ssh://github.com/R4tL/pyr4t.git@v0.2.1
 ```
 ```bash
-pipx install git+ssh://github.com/R4tL/pyr4t.git@v0.2.0
+pipx install git+ssh://github.com/R4tL/pyr4t.git@v0.2.1
 ```
 
 * **Cloning the repository**
