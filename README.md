@@ -78,7 +78,6 @@ pipx install git+ssh://github.com/R4tL/pyr4t.git@v0.2.1
 
 * **Cloning the repository**
 
-* **Cloning the repository**
 
 Clone the repository on your local machine:
 - HTTPS
@@ -94,7 +93,6 @@ Then install the package using pip or pipx:
 
 ```bash
 pip install .
-```
 ```
 ```bash
 pipx install .
