@@ -314,7 +314,8 @@ Thumbs.db
 
         author_names = ", ".join(a.get("name", "") for a in self.authors)
         author_links = ", ".join(
-            f"[{a.get('name','')}](https://github.com/{a.get('name','')})" for a in self.authors
+            f"[{a.get('name','')}](https://github.com/{a.get('name','')})"
+            for a in self.authors
         )
         cli = f"""\
         
@@ -415,18 +416,18 @@ Use pipx to install the package globally in an isolated environment.
 
 - HTTPS
 ```bash
-pip install git+https://github.com/{author_names[0]}/{self.proj_title}.git@v{self.proj_version}
+pip install git+https://github.com/{self.authors[0].get("name", "")}/{self.proj_title}.git@v{self.proj_version}
 ```
 ```bash
-pipx install git+https://github.com/{author_names[0]}/{self.proj_title}.git@v{self.proj_version}
+pipx install git+https://github.com/{self.authors[0].get("name", "")}/{self.proj_title}.git@v{self.proj_version}
 ```
 
 - SSH
 ```bash
-pip install git+ssh://github.com/{author_names[0]}/{self.proj_title}.git@v{self.proj_version}
+pip install git+ssh://github.com/{self.authors[0].get("name", "")}/{self.proj_title}.git@v{self.proj_version}
 ```
 ```bash
-pipx install git+ssh://github.com/{author_names[0]}/{self.proj_title}.git@v{self.proj_version}
+pipx install git+ssh://github.com/{self.authors[0].get("name", "")}/{self.proj_title}.git@v{self.proj_version}
 ```
 
 * **Install directly from Pypi**
@@ -443,11 +444,11 @@ pipx install {self.proj_title.lower()}=={self.proj_version}
 Clone the repository on your local machine:
 - HTTPS
 ```bash
-git clone https://github.com/{author_names[0]}/{self.proj_title}.git@v{self.proj_version}
+git clone https://github.com/{self.authors[0].get("name", "")}/{self.proj_title}.git@v{self.proj_version}
 ```
 - SSH
 ```bash
-git clone ssh://github.com/{author_names[0]}/{self.proj_title}.git@v{self.proj_version}
+git clone ssh://github.com/{self.authors[0].get("name", "")}/{self.proj_title}.git@v{self.proj_version}
 ```
 
 Then install the package using pip or pipx:
@@ -553,6 +554,11 @@ SOFTWARE.
 [project.scripts]
 {self.proj_title.lower()} = "{self.package_name}.luncher:main"
 """
+        setup_data = f"""\
+
+[tool.setuptools.package-data]
+"{self.package_name}.cli" = ["commands.json"]
+"""
 
         content = f"""\
 [project]
@@ -577,9 +583,7 @@ package-dir = {{"" = "src"}}
 
 [tool.setuptools.packages.find]
 where = ["src"]
-
-[tool.setuptools.package-data]
-"{self.package_name}.cli" = ["commands.json"]
+{setup_data if project_type in ["cli", "app"] else ""}
 """
         self._create_file(self.proj_path / "pyproject.toml", content)
 
