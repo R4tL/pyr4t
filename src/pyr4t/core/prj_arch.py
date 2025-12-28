@@ -355,7 +355,7 @@ Short description of the project.
 
 - [About](#about)
 - [Python best practices reminder](#python-best-practices-reminder)
-- [Installation](#Installation using pip or pipx)
+- [Installation](#Installation)
 - [Requirements](#requirements)
 - [Usage](#usage)
 - [Development](#development)
@@ -392,7 +392,7 @@ source .venv/bin/activate
 .venv\\Scripts\\activate
 ```
 
-### Use `pipx`to install the package globally
+### Use `pipx` to install the package globally
 
 ```bash
 pip install pipx
@@ -403,7 +403,10 @@ pipx ensurepath
 
 ---
 
-## Installation using pip or pipx
+## Installation
+
+Use pip for classic installation.
+Use pipx to install the package globally in an isolated environment.
 
 * **Install directly from GitHub**
 
@@ -434,16 +437,17 @@ pipx install {self.proj_title.lower()}=={self.proj_version}
 
 * **Cloning the repository**
 
+Clone the repository on your local machine:
 - HTTPS
 ```bash
-git clone https://github.com/{author_names[0]}/{self.proj_title}.git
+git clone https://github.com/{author_names[0]}/{self.proj_title}.git@v{self.proj_version}
 ```
 - SSH
 ```bash
-git clone ssh://github.com/{author_names[0]}/{self.proj_title}.git
+git clone ssh://github.com/{author_names[0]}/{self.proj_title}.git@v{self.proj_version}
 ```
 
-Clone repository and use the following command:
+Then install the package using pip or pipx:
 
 ```bash
 pip install .
