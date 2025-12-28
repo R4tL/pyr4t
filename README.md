@@ -9,9 +9,7 @@ Look [example](#example-of-usage) to use it.
 - [About](#about)
 - [Python best practices reminder](#python-best-practices-reminder)
 - [Installation](#installation)
-- [Requirements](#requirements)
 - [Usage](#usage)
-- [Development](#development)
 - [License](#license)
 
 ---
@@ -45,7 +43,7 @@ source .venv/bin/activate
 .venv\Scripts\\activate
 ```
 
-### Use `pipx`to install the package globally
+### Use `pipx` to install the package globally
 
 ```bash
 pip install pipx
@@ -55,7 +53,10 @@ pipx ensurepath
 ```
 ---
 
-## Installation using pip or pipx
+## Installation
+
+Use pip for classic installation.
+Use pipx to install the package globally in an isolated environment.
 
 * **Install directly from GitHub**
 
@@ -77,9 +78,23 @@ pipx install git+ssh://github.com/R4tL/pyr4t.git@v0.2.1
 
 * **Cloning the repository**
 
-- Classic mode
+* **Cloning the repository**
+
+Clone the repository on your local machine:
+- HTTPS
+```bash
+git clone https://github.com/R4tL/pyr4t.git@v0.2.1
+```
+- SSH
+```bash
+git clone ssh://github.com/R4tL/pyr4t.git@v0.2.1
+```
+
+Then install the package using pip or pipx:
+
 ```bash
 pip install .
+```
 ```
 ```bash
 pipx install .
