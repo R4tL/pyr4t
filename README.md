@@ -112,7 +112,7 @@ pipx install .
     │        [(-V | --version) <version>]
     ├── build [--prj <title>]                                                 # Build binary files in ./dist (.tar.gz, .whl)
     ├── deploy [--prj <title>] [--dev]                                        # Deploy project using pip (--dev for editable mode)
-    ├── run [--prj <title>] [--dev] [<script>]                                # Run a script file from ./scripts (default main.py)
+    ├── run [--prj <title>] [--dev] <script> [<script_args>]                  # Run a script file from ./scripts
     ├── test [--prj <title>] [<specific>]                                     # Run tests in /tests (default all)
     ├── cls [--prj <title>] [--cache] [--log] [--tmp]                         # Clean cache, logs and tmp files
     ├── dstr [--prj <title>]                                                  # Check doctring and create/update template if

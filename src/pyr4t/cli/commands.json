@@ -22,8 +22,8 @@
             "__seq__":["[--prj <title>]", "[--dev]"]
         },
         "run": {
-            "__desc__": "Run a script file from ./scripts (default main.py)",
-            "__seq__": ["[--prj <title>]", "[--dev]", "[<script>]"]
+            "__desc__": "Run a script file from ./scripts",
+            "__seq__": ["[--prj <title>]", "[--dev]", "<script>", "[<script_args>]"]
         },
         "test": {
             "__desc__": "Run tests in /tests (default all)",

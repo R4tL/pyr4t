@@ -56,24 +56,29 @@ class ProjectCodeM4nager:
                 cwd=str(self.proj_path),
             )
 
-    def run(self, script: str = "main", dev_mode: bool = False):
+    def run(self, script: str,
+            dev_mode: bool = False, args: list[str] = None):
         """
         Run a script in the `script` dir.
         Args:
-            script (str, optional): name of the script
+            script (str): name of the script
             dev_mode (bool, optional): if true run dev script
+            args (list[str], optional): arguments to pass to the script
         """
+
+        if args is None:
+            args = []
 
         if dev_mode:
             print(f"[info] Run dev script: {script} ...")
             subprocess.check_call(
-                [sys.executable, "-m", script],
+                [sys.executable, "-m", script, *args],
                 cwd=str(self.proj_path / "dev" / "scripts"),
             )
         else:
             print(f"[info] Run script: {script} ...")
             subprocess.check_call(
-                [sys.executable, "-m", script],
+                [sys.executable, "-m", script, *args],
                 cwd=str(self.proj_path / "scripts"),
             )
 
@@ -84,7 +89,7 @@ class ProjectCodeM4nager:
             files (list[str], optional): files to clean
         """
 
-        if files is None or all(v is None for v in files):
+        if files is None or all(v is None for v in files) or not files:
             files = ["cache", "log", "tmp"]
 
         print(f"[info] Cleaning files {", ".join(v for v in files)} ...")

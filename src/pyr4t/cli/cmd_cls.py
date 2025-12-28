@@ -14,7 +14,8 @@ def cmd_cls(args: argparse.Namespace):
     """
 
     pcm = ProjectCodeM4nager(proj_title=args.prj)
-    pcm.cls()
+    files = [f for f in [args.cache, args.log, args.tmp] if f is not None]
+    pcm.cls(files)
 
 
 def add_cls_parser(subparsers: argparse._SubParsersAction):
@@ -43,13 +44,13 @@ def add_cls_parser(subparsers: argparse._SubParsersAction):
         action="store_const",
         const="log",
         default=None,
-        help="Clean logs",
+        help="Clean log files",
     )
     parser.add_argument(
         "--tmp",
         action="store_const",
         const="tmp",
         default=None,
-        help="Clean tmp",
+        help="Clean tmp files",
     )
     parser.set_defaults(func=cmd_cls)

@@ -572,8 +572,14 @@ dev = {self._get_dev_dependencies()}
 requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
 
+[tool.setuptools]
+package-dir = {{"" = "src"}}
+
 [tool.setuptools.packages.find]
 where = ["src"]
+
+[tool.setuptools.package-data]
+"{self.package_name}.cli" = ["commands.json"]
 """
         self._create_file(self.proj_path / "pyproject.toml", content)
 
@@ -822,7 +828,7 @@ def get_tree() -> str:
     ) as file:
         data_cmd = json.load(file)
     lines = build_lines(data_cmd)
-    return "\n".join(lines)
+    return "\\n".join(lines)
 '''
         parser = f'''\
 """Parser module for the CLI."""
@@ -886,10 +892,10 @@ def build_parser() -> argparse.ArgumentParser:
         "__seq__":["[(--help | -h) | (--version | -V)]"],
         "example": {{
             "__desc__": "Example of command",
-            print": {{
+            "print": {{
                 "__desc__": "Print user input",
                 "__seq__": ["<string>", "[(--upper | -u)]"]
-            }},
+            }}
         }}
     }}
 }}

@@ -2,7 +2,7 @@
 name = "pyr4t"
 version = "0.2.1"
 description = ""
-authors = [{ name = "R4tL", email = "simon33910.lambert@gmail.com" }]
+authors = [{ name = "R4tL", email = "r4tl.dev@gmail.com" }]
 requires-python = ">=3.13"
 readme = "README.md"
 license = { file = "LICENSE" }
@@ -24,5 +24,11 @@ pyr4t = "pyr4t.luncher:main"
 requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
 
+[tool.setuptools]
+package-dir = {"" = "src"}
+
 [tool.setuptools.packages.find]
 where = ["src"]
+
+[tool.setuptools.package-data]
+"pyr4t.cli" = ["commands.json"]
