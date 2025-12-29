@@ -464,7 +464,7 @@ class ProjectCodeM4nager:
         if platform.system().lower() == "windows":
             activate = str(self.proj_path / ".venv" / "Scripts" / "activate")
         else:
-            activate = "source" + str(
+            activate = "source " + str(
                 self.proj_path / ".venv" / "bin" / "activate"
             )
         print(f"[info] Activate venv with: {activate}")
