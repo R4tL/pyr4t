@@ -71,7 +71,7 @@ class ProjectDBM4nager(_JSONDBM4nager[Project]):
         self.update_data(title, "updt", project)
         print(
             f"[info] Project updated: {title}: {project.get("path", "")} "
-            f"<v{project.get("version", "")}>"
+            f"<{project.get("version", "")}>"
         )
 
     def switch(self, title: str):
