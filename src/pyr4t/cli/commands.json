@@ -31,15 +31,15 @@
         },
         "cls": {
             "__desc__": "Clean cache, logs and tmp files",
-            "__seq__": ["[--prj <title>]", "[--cache]", "[--log]", "[--tmp]"]
+            "__seq__": ["[--prj <title>]", "[--cache]", "[--log]", "[--tmp]", "[<specific>]"]
         },
         "dstr": {
             "__desc__": "Check doctring and create/update template if necessary",
-            "__seq__": ["[--prj <title>]"]
+            "__seq__": ["[--prj <title>]", "[<specific>]"]
         },
         "fmt": {
             "__desc__": "Format scripts in ./src using black and isort",
-            "__seq__": ["[--prj <title>]"]
+            "__seq__": ["[--prj <title>]", "[<specific>]"]
         },
         "venv": {
             "__desc__": "Generate a python venv in ./.venv",
