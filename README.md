@@ -1,6 +1,6 @@
-# pyr4t v1.0.0
+# pyr4t v1.0.1
 
-A python manager to generate and python project architectures and install pyr4t package based on github: [R4tL repo](https://github.com/R4tL?tab=repositories).
+A python manager to generate python project architectures, manage them and install pyr4t package based on github: [R4tL repo](https://github.com/R4tL?tab=repositories).
 ---
 
 ## Table of Contents
@@ -15,7 +15,7 @@ A python manager to generate and python project architectures and install pyr4t 
 
 ## About
 
-* **Version ->** 1.0.0
+* **Version ->** 1.0.1
 * **Author ->** [R4tL](https://github.com/R4tL)
 * **License ->** MIT
 
@@ -61,18 +61,18 @@ Use pipx to install the package globally in an isolated environment.
 
 - HTTPS
 ```bash
-pip install git+https://github.com/R4tL/pyr4t.git@v1.0.0
+pip install git+https://github.com/R4tL/pyr4t.git@v1.0.1
 ```
 ```bash
-pipx install git+https://github.com/R4tL/pyr4t.git@v1.0.0
+pipx install git+https://github.com/R4tL/pyr4t.git@v1.0.1
 ```
 
 - SSH
 ```bash
-pip install git+ssh://git@github.com/R4tL/pyr4t.git@v1.0.0
+pip install git+ssh://git@github.com/R4tL/pyr4t.git@v1.0.1
 ```
 ```bash
-pipx install git+ssh://git@github.com/R4tL/pyr4t.git@v1.0.0
+pipx install git+ssh://git@github.com/R4tL/pyr4t.git@v1.0.1
 ```
 
 * **Cloning the repository**
@@ -81,11 +81,11 @@ pipx install git+ssh://git@github.com/R4tL/pyr4t.git@v1.0.0
 Clone the repository on your local machine:
 - HTTPS
 ```bash
-git clone https://github.com/R4tL/pyr4t.git@v1.0.0
+git clone https://github.com/R4tL/pyr4t.git@v1.0.1
 ```
 - SSH
 ```bash
-git clone ssh://git@github.com/R4tL/pyr4t.git@v1.0.0
+git clone ssh://git@github.com/R4tL/pyr4t.git@v1.0.1
 ```
 
 Then install the package using pip or pipx:
