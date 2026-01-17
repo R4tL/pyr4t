@@ -552,7 +552,7 @@ SOFTWARE.
         )
         scripts = f"""\
 [project.scripts]
-{self.proj_title.lower()} = "{self.package_name}.luncher:main"
+{self.proj_title.lower()} = "{self.package_name}.launcher:main"
 """
         setup_data = f"""\
 
@@ -924,7 +924,7 @@ def main():
 if __name__ == "__main__":
     main()
 '''
-        luncher = f'''\
+        launcher = f'''\
 """Launcher module for the CLI."""
 
 from {self.package_name}.__main__ import main as core_main
@@ -969,8 +969,8 @@ def main():
             self.proj_path / "src" / self.package_name / "__main__.py", main
         )
         self._create_file(
-            self.proj_path / "src" / self.package_name / "luncher.py",
-            luncher,
+            self.proj_path / "src" / self.package_name / "launcher.py",
+            launcher,
         )
 
     def _generate_app(self):

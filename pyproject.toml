@@ -1,6 +1,6 @@
 [project]
 name = "pyr4t"
-version = "1.0.0"
+version = "1.0.1"
 description = "A CLI app for generating and managing python projects."
 authors = [{ name = "R4tL", email = "r4tl.dev@gmail.com" }]
 requires-python = ">=3.13"
@@ -22,7 +22,7 @@ dependencies = [
 dev = ["pytest>=8.3.2", "black>=24.3.0", "isort>=5.13.2"]
 
 [project.scripts]
-pyr4t = "pyr4t.luncher:main"
+pyr4t = "pyr4t.launcher:main"
 
 [build-system]
 requires = ["setuptools>=61.0"]
