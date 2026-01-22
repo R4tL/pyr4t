@@ -266,8 +266,8 @@ __all__ = ["build_parser"]
 
         docs_path = self.proj_path / "docs" / "python_doc.md"
         content = """\
-# Python Documentation
-Official Python documentation: [https://docs.python.org/3/](https://docs.python.org/3/)
+# Official Python Documentation 
+[![Python](https://www.python.org/static/img/python-logo.png)](https://docs.python.org/3/)
 
 """
         self._create_file(docs_path, content)
