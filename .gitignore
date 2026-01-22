@@ -16,7 +16,8 @@ dist/
 *.egg
 
 # Development
-dev/tmp/
+dev/
+tmp/
 
 # Logs
 *.log
