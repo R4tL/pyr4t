@@ -1089,9 +1089,7 @@ class Example:
                 profile = udb.listd.get(udb.current, {})
             else:
                 profile = udb.listd.get(author, {})
-            if profile:
-                authors_list.append(profile)
-            else:
+            if not profile:
                 print(
                     f"[warning] No user found for alias '{author}'."
                     " Add new user data:"
@@ -1103,5 +1101,6 @@ class Example:
                     input(f"`{author}` name: "),
                     input(f"`{author}` email: "),
                 )
-                authors_list.append({"name": author, "email": ""})
+                profile = udb.listd.get(author, {})
+            authors_list.append(profile)
         return authors_list
