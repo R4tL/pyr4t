@@ -46,8 +46,8 @@ class ProjectCodeM4nager:
                 python (str, optional): python interpreter to use
         """
 
-        print("[info] Generating a python venv ...")
         python_interpreter = self._select_python_interpreter(python)
+        print(f"[info] Using python interpreter: {python_interpreter}")
         if dev_mode:
             print("[info] Deploy package in editable mode ...")
             subprocess.check_call(
