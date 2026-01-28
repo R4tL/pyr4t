@@ -104,37 +104,41 @@ pipx install .
 ### CLI
 
 ```
-└── pyr4t [(-h | --help) | (-V | --version)]                                  # Pyr4t CLI
-    ├── install [<package> [(-V | --version) <version>]] [--info]             # Install a pyr4t package from R4tL's github repo
-    │           [--info-private] [--token <token>]                              (use '--info(-private)' to show all available package)
-    ├── init (--app | --cli | --lib) <title>                                  # Generate a new python project architecture,
-    │        [(-a | --authors) <alias1> <alias2> ...] [(-p | --path) <path>]    default switched as active project
+└── pyr4t [(-h | --help) | (-V | --version)]                                    # Pyr4t CLI
+    ├── install [<package> [(-V | --version) <version>]] [--info]               # Install a pyr4t package from R4tL's github repo
+    │           [--info-private] [--token <token>]                                (use '--info(-private)' to show all available
+    │                                                                             package)
+    ├── init (--app | --cli | --lib) <title>                                    # Generate a new python project architecture, default
+    │        [(-a | --authors) <alias1> <alias2> ...] [(-p | --path) <path>]      switched as active project
     │        [(-V | --version) <version>]
-    ├── build [--prj <title>]                                                 # Build binary files in ./dist (.tar.gz, .whl)
-    ├── deploy [--prj <title>] [--dev]                                        # Deploy project using pip (--dev for editable mode)
-    ├── run [--prj <title>] [--dev] <script> [<script_args>]                  # Run a script file from ./scripts
-    ├── test [--prj <title>] [<specific>]                                     # Run tests in /tests (default all)
-    ├── cls [--prj <title>] [--cache] [--log] [--tmp]                         # Clean cache, logs and tmp files
-    ├── dstr [--prj <title>]                                                  # Check doctring and create/update template if
-    │                                                                           necessary
-    ├── fmt [--prj <title>]                                                   # Format scripts in ./src using black and isort
-    ├── venv [--prj <title>]                                                  # Generate a python venv in ./.venv
-    ├── dev [--prj <title>]                                                   # Generate dev env in ./dev
-    ├── info                                                                  # Print current project informations
-    ├── whoami                                                                # Print current user informations
-    ├── prj                                                                   # Manage project DB
-    │   ├── add <title> <path> <version>                                      # Add a local project to the pyr4t project DB
-    │   ├── ls                                                                # List projects from the pyr4t project DB
-    │   ├── mv <title> [(-p | --path) <path>] [(-V | --version) <version>]    # Modify project information in the pyr4t project DB
-    │   ├── rm <title>                                                        # Remove a project from the pyr4t project DB
-    │   └── switch <title>                                                    # Switch to another active project from the pyr4t
-    │                                                                           project DB
-    └── usr                                                                   # Manage user DB
-        ├── add <alias> <name> <email>                                        # Add a user to the pyr4t user DB
-        ├── ls                                                                # List users from the pyr4t user DB
-        ├── mv <alias> [(-e | --email) <email>] [(-n | --name) <name>]        # Modify user information in the pyr4t user DB
-        ├── rm <alias>                                                        # Remove a user from the pyr4t user DB
-        └── switch <alias>                                                    # Switch to another default user from the pyr4t user DB
+    ├── build [(-p | --prj) <title>]                                            # Build binary files in ./dist (.tar.gz, .whl)
+    ├── deploy [(-p | --prj) <title>] [(-py | --python) <python-interpreter>]   # Deploy project using pip (--dev for editable mode)
+    │          [--dev]
+    ├── run [(-p | --prj) <title>] [(-py | --python) <python-interpreter>]      # Run a script file from ./scripts
+    │       [--dev] <script> [<script_args>]
+    ├── test [(-p | --prj) <title>] [<specific>]                                # Run tests in /tests (default all)
+    ├── cls [(-p | --prj) <title>] [--cache] [--log] [--tmp] [<specific>]       # Clean cache, logs and tmp files
+    ├── dstr [(-p | --prj) <title>] [<specific>]                                # Check doctring and create/update template if
+    │                                                                             necessary
+    ├── fmt [(-p | --prj) <title>] [<specific>]                                 # Format scripts in ./src using black and isort
+    ├── venv [(-p | --prj) <title>] [(-py | --python) <python-interpreter>]     # Generate a python venv in ./.venv
+    │        [--dev]
+    ├── dev [(-p | --prj) <title>]                                              # Generate dev env in ./dev
+    ├── info                                                                    # Print current project informations
+    ├── whoami                                                                  # Print current user informations
+    ├── prj                                                                     # Manage project DB
+    │   ├── add <title> <path> <version>                                        # Add a local project to the pyr4t project DB
+    │   ├── ls                                                                  # List projects from the pyr4t project DB
+    │   ├── mv <title> [(-p | --path) <path>] [(-V | --version) <version>]      # Modify project information in the pyr4t project DB
+    │   ├── rm <title>                                                          # Remove a project from the pyr4t project DB
+    │   └── switch <title>                                                      # Switch to another active project from the pyr4t
+    │                                                                             project DB
+    └── usr                                                                     # Manage user DB
+        ├── add <alias> <name> <email>                                          # Add a user to the pyr4t user DB
+        ├── ls                                                                  # List users from the pyr4t user DB
+        ├── mv <alias> [(-e | --email) <email>] [(-n | --name) <name>]          # Modify user information in the pyr4t user DB       
+        ├── rm <alias>                                                          # Remove a user from the pyr4t user DB
+        └── switch <alias>                                                      # Switch to another default user from the pyr4t user DB
 ```
 
 NB: all pyr4t package start with `pyr4t`.
