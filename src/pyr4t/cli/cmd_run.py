@@ -14,7 +14,8 @@ def cmd_run(args: argparse.Namespace):
     """
 
     pcm = ProjectCodeM4nager(proj_title=args.prj)
-    pcm.run(script=args.script, dev_mode=args.dev, args=args.script_args)
+    pcm.run(script=args.script, dev_mode=args.dev,
+            python=args.python, args=args.script_args)
 
 
 def add_run_parser(subparsers: argparse._SubParsersAction):
@@ -39,5 +40,9 @@ def add_run_parser(subparsers: argparse._SubParsersAction):
         "script_args",
         nargs=argparse.REMAINDER,
         help="Arguments passed to the script",
+    )
+    parser.add_argument(
+        "--python", "-py", default=None,
+        help="Python interpreter to use (default: active venv/python)"
     )
     parser.set_defaults(func=cmd_run)

@@ -56,9 +56,9 @@ def add_init_parser(subparsers: argparse._SubParsersAction):
     parser.add_argument(
         "-a",
         "--authors",
-        nargs="+",
-        default=["current"],
-        help="List of authors",
+        action="append",
+        default=None,
+        help="Author (repetable)",
     )
     parser.add_argument(
         "-p", "--path", default=".", help="Base path to create project"

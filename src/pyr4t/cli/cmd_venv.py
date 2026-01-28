@@ -14,7 +14,7 @@ def cmd_venv(args: argparse.Namespace):
     """
 
     pcm = ProjectCodeM4nager(proj_title=args.prj)
-    pcm.venv()
+    pcm.venv(python=args.python)
 
 
 def add_venv_parser(subparsers: argparse._SubParsersAction):
@@ -30,5 +30,9 @@ def add_venv_parser(subparsers: argparse._SubParsersAction):
     )
     parser.add_argument(
         "--prj", "-p", default=None, help="Project title (default: current)"
+    )
+    parser.add_argument(
+        "--python", "-py", default=None,
+        help="Python interpreter to use (default: active venv/python)"
     )
     parser.set_defaults(func=cmd_venv)

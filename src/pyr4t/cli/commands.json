@@ -15,39 +15,44 @@
         },
         "build": {
             "__desc__": "Build binary files in ./dist (.tar.gz, .whl)",
-            "__seq__":["[--prj <title>]"]
+            "__seq__":["[(-p | --prj) <title>]"]
         },
         "deploy": {
             "__desc__": "Deploy project using pip (--dev for editable mode)",
-            "__seq__":["[--prj <title>]", "[--dev]"]
+            "__seq__":[
+                "[(-p | --prj) <title>]", "[(-py | --python) <python-interpreter>]",
+                "[--dev]"
+            ]
         },
         "run": {
             "__desc__": "Run a script file from ./scripts",
-            "__seq__": ["[--prj <title>]", "[--dev]", "<script>", "[<script_args>]"]
+            "__seq__": [
+                "[(-p | --prj) <title>]", "[(-py | --python) <python-interpreter>]", 
+                "[--dev]", "<script>", "[<script_args>]"]
         },
         "test": {
             "__desc__": "Run tests in /tests (default all)",
-            "__seq__": ["[--prj <title>]", "[<specific>]"]
+            "__seq__": ["[(-p | --prj) <title>]", "[<specific>]"]
         },
         "cls": {
             "__desc__": "Clean cache, logs and tmp files",
-            "__seq__": ["[--prj <title>]", "[--cache]", "[--log]", "[--tmp]", "[<specific>]"]
+            "__seq__": ["[(-p | --prj) <title>]", "[--cache]", "[--log]", "[--tmp]", "[<specific>]"]
         },
         "dstr": {
             "__desc__": "Check doctring and create/update template if necessary",
-            "__seq__": ["[--prj <title>]", "[<specific>]"]
+            "__seq__": ["[(-p | --prj) <title>]", "[<specific>]"]
         },
         "fmt": {
             "__desc__": "Format scripts in ./src using black and isort",
-            "__seq__": ["[--prj <title>]", "[<specific>]"]
+            "__seq__": ["[(-p | --prj) <title>]", "[<specific>]"]
         },
         "venv": {
             "__desc__": "Generate a python venv in ./.venv",
-            "__seq__": ["[--prj <title>]"]
+            "__seq__": ["[(-p | --prj) <title>]", "[(-py | --python) <python-interpreter>]", "[--dev]"]
         },
         "dev": {
             "__desc__": "Generate dev env in ./dev",
-            "__seq__": ["[--prj <title>]"] 
+            "__seq__": ["[(-p | --prj) <title>]"] 
         },
         "info": {
             "__desc__": "Print current project informations"

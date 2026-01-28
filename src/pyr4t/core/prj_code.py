@@ -1,11 +1,13 @@
 """Module for managing pyr4t project code."""
 
 import ast
+import os
 import platform
 import shutil
 import subprocess
 import sys
 from pathlib import Path
+import shlex
 
 from .prj_db import ProjectDBM4nager
 
@@ -36,49 +38,57 @@ class ProjectCodeM4nager:
             [sys.executable, "-m", "build"], cwd=str(self.proj_path)
         )
 
-    def deploy(self, dev_mode: bool = False):
+    def deploy(self, dev_mode: bool = False, python: str = None):
         """
         Deploy the package using pip.
             Args:
                 dev_mode (bool, optional): if True, deploy in editable mode.
+                python (str, optional): python interpreter to use
         """
 
+        print("[info] Generating a python venv ...")
+        python_interpreter = self._select_python_interpreter(python)
         if dev_mode:
             print("[info] Deploy package in editable mode ...")
             subprocess.check_call(
-                [sys.executable, "-m", "pip", "install", "-e", ".[dev]"],
+                [python_interpreter, "-m", "pip", "install", "-e", ".[dev]"],
                 cwd=str(self.proj_path),
             )
         else:
             print("[info] Deploy permanant package ...")
             subprocess.check_call(
-                [sys.executable, "-m", "pip", "install", "."],
+                [python_interpreter, "-m", "pip", "install", "."],
                 cwd=str(self.proj_path),
             )
 
-    def run(self, script: str,
-            dev_mode: bool = False, args: list[str] = None):
+    def run(
+            self, script: str, dev_mode: bool = False,
+            python: str = None, args: list[str] = None
+    ):
         """
         Run a script in the `script` dir.
         Args:
             script (str): name of the script
             dev_mode (bool, optional): if true run dev script
+            python (str, optional): python interpreter to use
             args (list[str], optional): arguments to pass to the script
         """
 
+        python_interpreter = self._select_python_interpreter(python)
         if args is None:
             args = []
-
         if dev_mode:
             print(f"[info] Run dev script: {script} ...")
+            print(f"[info] Using python interpreter: {python_interpreter}")
             subprocess.check_call(
-                [sys.executable, "-m", script, *args],
+                [python_interpreter, "-m", script, *args],
                 cwd=str(self.proj_path / "dev" / "scripts"),
             )
         else:
             print(f"[info] Run script: {script} ...")
+            print(f"[info] Using python interpreter: {python_interpreter}")
             subprocess.check_call(
-                [sys.executable, "-m", script, *args],
+                [python_interpreter, "-m", script, *args],
                 cwd=str(self.proj_path / "scripts"),
             )
 
@@ -454,12 +464,18 @@ class ProjectCodeM4nager:
             cwd=str(self.proj_path / "tests"),
         )
 
-    def venv(self):
-        """Generate a python venv in ./.venv."""
+    def venv(self, python: str = None):
+        """
+        Generate a python venv in ./.venv.
+        Args:
+            python (str, optional): python interpreter to use
+        """
 
         print("[info] Generating a python venv ...")
+        python_interpreter = self._select_python_interpreter(python)
+        print(f"[info] Using python interpreter: {python_interpreter}")
         subprocess.check_call(
-            [sys.executable, "-m", "venv", str(self.proj_path / ".venv")]
+            [python_interpreter, "-m", "venv", str(self.proj_path / ".venv")]
         )
         if platform.system().lower() == "windows":
             activate = str(self.proj_path / ".venv" / "Scripts" / "activate")
@@ -468,3 +484,30 @@ class ProjectCodeM4nager:
                 self.proj_path / ".venv" / "bin" / "activate"
             )
         print(f"[info] Activate venv with: {activate}")
+
+    def _select_python_interpreter(self, python: str = None) -> str:
+        if not python:
+            venv = os.environ.get("VIRTUAL_ENV", "")
+            if venv:
+                if platform.system().lower() == "windows":
+                    python = str(Path(venv) / "Scripts" / "python.exe")
+                else:
+                    python = str(Path(venv) / "bin" / "python")
+            else:
+                raise RuntimeError(
+                    "No python interpreter specified and no active venv found."
+                )
+        if not Path(python).exists():
+            py_arg = shlex.split(python)
+        elif Path(python).is_file():
+            py_arg = [python]
+        else:
+            raise FileNotFoundError(f"Python interpreter not found: {python}")
+        return self._check_python_works(py_arg)
+
+    def _check_python_works(self, python_cmd: list[str]) -> str:
+        out = subprocess.check_output(
+            [*python_cmd, "-c", "import sys; print(sys.executable)"],
+            text=True
+        ).strip()
+        return out
