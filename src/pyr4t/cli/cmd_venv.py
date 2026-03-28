@@ -32,7 +32,9 @@ def add_venv_parser(subparsers: argparse._SubParsersAction):
         "--prj", "-p", default=None, help="Project title (default: current)"
     )
     parser.add_argument(
-        "--python", "-py", default=None,
-        help="Python interpreter to use (default: active venv/python)"
+        "--python",
+        "-py",
+        default=None,
+        help="Python interpreter to use (default: active venv/python)",
     )
     parser.set_defaults(func=cmd_venv)

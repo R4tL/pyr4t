@@ -166,7 +166,6 @@ class _ProjectGenerator:
             project_type (str, optional): type of project (app, cli, lib)
         """
 
-
         if proj_path is None:
             proj_path = self.proj_path
 

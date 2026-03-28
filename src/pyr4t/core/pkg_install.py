@@ -10,8 +10,12 @@ from pathlib import Path
 import keyring
 import requests
 
+from pyr4t.utils import select_python_interpreter
 
-def install_pyr4tpackage(package: str, version: str = None):
+
+def install_pyr4tpackage(
+    package: str, version: str = None, python: str = None
+):
     """
     Install a pyr4t package from a binary (wheel or tar.gz) GitHub release
     without relying on Git.
@@ -19,7 +23,8 @@ def install_pyr4tpackage(package: str, version: str = None):
         package (str): package name
         version (str, optional): version to install (None -> latest release)
     """
-
+    python_cmd = select_python_interpreter(python)
+    print(f"[info] Using Python interpreter: {python_cmd}")
     # URL GitHub API
     if version:
         url = (
@@ -84,7 +89,7 @@ def install_pyr4tpackage(package: str, version: str = None):
             " your system and Python."
         )
 
-    #download_url = asset["browser_download_url"] # old way
+    # download_url = asset["browser_download_url"] # old way
     download_url = asset["url"]
     headers["Accept"] = "application/octet-stream"
     print(f"[info] Downloading {asset['name']} from {download_url} ...")
@@ -101,7 +106,7 @@ def install_pyr4tpackage(package: str, version: str = None):
         # DL with pip
         print("[info] Installing with pip ...")
         subprocess.check_call(
-            [sys.executable, "-m", "pip", "install", str(tmp_file)]
+            [python_cmd, "-m", "pip", "install", str(tmp_file)]
         )
 
     print(f"[info] Installation of {package} finished")

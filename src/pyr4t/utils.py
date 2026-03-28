@@ -1,6 +1,10 @@
 """Utility module for handling file paths related to pyr4t listd."""
 
 import json
+import os
+import platform
+import shlex
+import subprocess
 from pathlib import Path
 from typing import Generic
 
@@ -116,3 +120,50 @@ class _JSONDBM4nager(Generic[EntryType]):
             f"[warning] Key already exists: {key}. Incremented to: {new_key}"
         )
         return new_key
+
+
+def select_python_interpreter(python: str = None) -> str:
+    """
+    Select a Python interpreter to use for execution.
+    Determines which Python interpreter to use based on the provided argument
+    or the active virtual environment. If no interpreter is specified, attempts
+    to use the Python from the currently active virtual environment
+    (VIRTUAL_ENV).
+    Args:
+        python (str, optional): Path to or name of the Python interpreter.
+            If None, attempts to use the interpreter from the active virtual
+            environment. Defaults to None.
+    Returns:
+        str: The path to a working Python interpreter.
+    Raises:
+        RuntimeError: If no python interpreter is specified and no active
+            virtual environment is found.
+        FileNotFoundError: If the specified python interpreter path does not
+            exist or is not a file.
+    """
+
+    if not python:
+        venv = os.environ.get("VIRTUAL_ENV", "")
+        if venv:
+            if platform.system().lower() == "windows":
+                python = str(Path(venv) / "Scripts" / "python.exe")
+            else:
+                python = str(Path(venv) / "bin" / "python")
+        else:
+            raise RuntimeError(
+                "No python interpreter specified and no active venv found."
+            )
+    if not Path(python).exists():
+        py_arg = shlex.split(python)
+    elif Path(python).is_file():
+        py_arg = [python]
+    else:
+        raise FileNotFoundError(f"Python interpreter not found: {python}")
+    return _check_python_works(py_arg)
+
+
+def _check_python_works(python_cmd: list[str]) -> str:
+    out = subprocess.check_output(
+        [*python_cmd, "-c", "import sys; print(sys.executable)"], text=True
+    ).strip()
+    return out

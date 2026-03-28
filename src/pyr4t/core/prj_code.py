@@ -1,13 +1,13 @@
 """Module for managing pyr4t project code."""
 
 import ast
-import os
 import platform
 import shutil
 import subprocess
 import sys
 from pathlib import Path
-import shlex
+
+from pyr4t.utils import select_python_interpreter
 
 from .prj_db import ProjectDBM4nager
 
@@ -46,7 +46,7 @@ class ProjectCodeM4nager:
                 python (str, optional): python interpreter to use
         """
 
-        python_interpreter = self._select_python_interpreter(python)
+        python_interpreter = select_python_interpreter(python)
         print(f"[info] Using python interpreter: {python_interpreter}")
         if dev_mode:
             print("[info] Deploy package in editable mode ...")
@@ -62,8 +62,11 @@ class ProjectCodeM4nager:
             )
 
     def run(
-            self, script: str, dev_mode: bool = False,
-            python: str = None, args: list[str] = None
+        self,
+        script: str,
+        dev_mode: bool = False,
+        python: str = None,
+        args: list[str] = None,
     ):
         """
         Run a script in the `script` dir.
@@ -74,7 +77,7 @@ class ProjectCodeM4nager:
             args (list[str], optional): arguments to pass to the script
         """
 
-        python_interpreter = self._select_python_interpreter(python)
+        python_interpreter = select_python_interpreter(python)
         if args is None:
             args = []
         if dev_mode:
@@ -236,7 +239,7 @@ class ProjectCodeM4nager:
                 node.returns is None
                 and not has_non_none_return(node)
                 and not filtered_args
-                ):
+            ):
                 return False
             for arg in filtered_args:
                 if arg not in docstring:
@@ -247,10 +250,9 @@ class ProjectCodeM4nager:
                     return True
                 if node.returns is None and DO_RETURN_TYPE not in docstring:
                     return True
-                if (
-                    node.returns is not None
-                    and (ast.unparse(node.returns)
-                    not in docstring.split("Returns:")[1])
+                if node.returns is not None and (
+                    ast.unparse(node.returns)
+                    not in docstring.split("Returns:")[1]
                 ):
                     return True
             return False
@@ -270,7 +272,7 @@ class ProjectCodeM4nager:
             return line[: len(line) - len(line.lstrip())] + base
 
         def find_docstring_bounds(
-                lines: list[str], start: int
+            lines: list[str], start: int
         ) -> tuple[int, int] | None:
             """
             Find the start and end lines of a docstring.
@@ -316,9 +318,7 @@ class ProjectCodeM4nager:
                     line_idx = find_signature_end(lines, node.lineno - 1)
                     indent = get_indent(lines[line_idx])
                     if check_docstring_needs_update(node, docstring):
-                        new_doc = generate_google_docstring(
-                            node, indent
-                        )
+                        new_doc = generate_google_docstring(node, indent)
                         insert_at = line_idx + 1
                         if docstring is not None:
                             bounds = find_docstring_bounds(lines, insert_at)
@@ -472,7 +472,7 @@ class ProjectCodeM4nager:
         """
 
         print("[info] Generating a python venv ...")
-        python_interpreter = self._select_python_interpreter(python)
+        python_interpreter = select_python_interpreter(python)
         print(f"[info] Using python interpreter: {python_interpreter}")
         subprocess.check_call(
             [python_interpreter, "-m", "venv", str(self.proj_path / ".venv")]
@@ -484,30 +484,3 @@ class ProjectCodeM4nager:
                 self.proj_path / ".venv" / "bin" / "activate"
             )
         print(f"[info] Activate venv with: {activate}")
-
-    def _select_python_interpreter(self, python: str = None) -> str:
-        if not python:
-            venv = os.environ.get("VIRTUAL_ENV", "")
-            if venv:
-                if platform.system().lower() == "windows":
-                    python = str(Path(venv) / "Scripts" / "python.exe")
-                else:
-                    python = str(Path(venv) / "bin" / "python")
-            else:
-                raise RuntimeError(
-                    "No python interpreter specified and no active venv found."
-                )
-        if not Path(python).exists():
-            py_arg = shlex.split(python)
-        elif Path(python).is_file():
-            py_arg = [python]
-        else:
-            raise FileNotFoundError(f"Python interpreter not found: {python}")
-        return self._check_python_works(py_arg)
-
-    def _check_python_works(self, python_cmd: list[str]) -> str:
-        out = subprocess.check_output(
-            [*python_cmd, "-c", "import sys; print(sys.executable)"],
-            text=True
-        ).strip()
-        return out

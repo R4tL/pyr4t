@@ -6,7 +6,6 @@ from pyr4t.core import UserDBM4nager
 
 
 def cmd_whoami(_: argparse.Namespace):
-
     """
     Initializes a new Python project using the provided arguments.
     Args:

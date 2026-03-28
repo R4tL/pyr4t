@@ -35,7 +35,9 @@ def add_deploy_parser(subparsers: argparse._SubParsersAction):
         "--dev", action="store_true", help="Deploy in dev and editable mode"
     )
     parser.add_argument(
-        "--python", "-py", default=None,
-        help="Python interpreter to use (default: active venv/python)"
+        "--python",
+        "-py",
+        default=None,
+        help="Python interpreter to use (default: active venv/python)",
     )
     parser.set_defaults(func=cmd_deploy)
