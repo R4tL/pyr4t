@@ -70,7 +70,10 @@ class UserDBM4nager(_JSONDBM4nager[User]):
             self._validate_email(email)
             user["email"] = email
         self.update_data(alias.upper(), "updt", user)
-        print(f"[info] User updated: {alias}: {name} <{email}>")
+        print(
+            f"[info] User updated: {alias}: {user.get("name", "")} "
+            f"<{user.get("email", "")}>"
+        )
 
     def switch(self, alias: str):
         """
