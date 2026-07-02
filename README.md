@@ -1,7 +1,7 @@
 # pyr4t v1.0.1
 
 A python manager to generate python project architectures, manage them and install pyr4t package based on github: [R4tL repo](https://github.com/R4tL?tab=repositories).
----
+----------------------------------------------------------------------------------------------------------------------------
 
 ## Table of Contents
 
@@ -30,14 +30,17 @@ A python manager to generate python project architectures, manage them and insta
 ```bash
 python -m venv .venv
 ```
+
 * **Activate the pyenv**
 
 - Linux/macOS
+
 ```bash
 source .venv/bin/activate
 ```
 
 - Windows
+
 ```bash
 .venv\Scripts\\activate
 ```
@@ -47,9 +50,11 @@ source .venv/bin/activate
 ```bash
 pip install pipx
 ```
+
 ```bash
 pipx ensurepath
 ```
+
 ---
 
 ## Installation
@@ -60,30 +65,37 @@ Use pipx to install the package globally in an isolated environment.
 * **Install directly from GitHub**
 
 - HTTPS
+
 ```bash
 pip install git+https://github.com/R4tL/pyr4t.git@v1.0.1
 ```
+
 ```bash
 pipx install git+https://github.com/R4tL/pyr4t.git@v1.0.1
 ```
 
 - SSH
+
 ```bash
 pip install git+ssh://git@github.com/R4tL/pyr4t.git@v1.0.1
 ```
+
 ```bash
 pipx install git+ssh://git@github.com/R4tL/pyr4t.git@v1.0.1
 ```
 
 * **Cloning the repository**
 
-
 Clone the repository on your local machine:
+
 - HTTPS
+
 ```bash
 git clone https://github.com/R4tL/pyr4t.git@v1.0.1
 ```
+
 - SSH
+
 ```bash
 git clone ssh://git@github.com/R4tL/pyr4t.git@v1.0.1
 ```
@@ -93,6 +105,7 @@ Then install the package using pip or pipx:
 ```bash
 pip install .
 ```
+
 ```bash
 pipx install .
 ```
@@ -130,13 +143,13 @@ pipx install .
     │   ├── add <title> <path> <version>                                        # Add a local project to the pyr4t project DB
     │   ├── ls                                                                  # List projects from the pyr4t project DB
     │   ├── mv <title> [(-p | --path) <path>] [(-V | --version) <version>]      # Modify project information in the pyr4t project DB
-    │   ├── rm <title>                                                          # Remove a project from the pyr4t project DB
+    │   ├── rm <title> [(-f | --files)]                                         # Remove a project from the pyr4t project DB
     │   └── switch <title>                                                      # Switch to another active project from the pyr4t
     │                                                                             project DB
     └── usr                                                                     # Manage user DB
         ├── add <alias> <name> <email>                                          # Add a user to the pyr4t user DB
         ├── ls                                                                  # List users from the pyr4t user DB
-        ├── mv <alias> [(-e | --email) <email>] [(-n | --name) <name>]          # Modify user information in the pyr4t user DB       
+        ├── mv <alias> [(-e | --email) <email>] [(-n | --name) <name>]          # Modify user information in the pyr4t user DB     
         ├── rm <alias>                                                          # Remove a user from the pyr4t user DB
         └── switch <alias>                                                      # Switch to another default user from the pyr4t user DB
 ```

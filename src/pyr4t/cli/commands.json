@@ -75,7 +75,7 @@
             },
             "rm": {
                 "__desc__": "Remove a project from the pyr4t project DB",
-                "__seq__": ["<title>"]
+                "__seq__": ["<title>", "[(-f | --files)]"]
             },
             "switch": {
                 "__desc__": "Switch to another active project from the pyr4t project DB",
