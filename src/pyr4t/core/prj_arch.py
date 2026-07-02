@@ -1085,7 +1085,7 @@ class Example:
         authors_list = []
         for author in authors:
             if author == "current":
-                profile = udb.listd.get(udb.current, {})
+                _, profile = udb.whoami()
             else:
                 profile = udb.listd.get(author, {})
             if not profile:
