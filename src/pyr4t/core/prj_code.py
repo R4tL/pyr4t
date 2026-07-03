@@ -13,8 +13,8 @@ from .prj_db import ProjectDBM4nager
 
 
 class ProjectCodeM4nager:
-    """
-    A utility class for managing code for pyr4t projects.
+    """A utility class for managing code for pyr4t projects.
+
     Args:
         proj_title (str, optional): title of the project to manage
             (None -> uses the current default project)
@@ -39,8 +39,8 @@ class ProjectCodeM4nager:
         )
 
     def deploy(self, dev_mode: bool = False, python: str = None):
-        """
-        Deploy the package using pip.
+        """Deploy the package using pip.
+
             Args:
                 dev_mode (bool, optional): if True, deploy in editable mode.
                 python (str, optional): python interpreter to use
@@ -68,8 +68,8 @@ class ProjectCodeM4nager:
         python: str = None,
         args: list[str] = None,
     ):
-        """
-        Run a script in the `script` dir.
+        """Run a script in the `script` dir.
+
         Args:
             script (str): name of the script
             dev_mode (bool, optional): if true run dev script
@@ -96,8 +96,8 @@ class ProjectCodeM4nager:
             )
 
     def cls(self, files: list[str] = None):
-        """
-        Clean cache, logs, or all temporary files.
+        """Clean cache, logs, or all temporary files.
+
         Args:
             files (list[str], optional): files to clean
         """
@@ -156,8 +156,8 @@ class ProjectCodeM4nager:
         print("[info] Cleaning complete!")
 
     def dstr(self, specific: str = ""):
-        """
-        Manage doscstrings in a folder or file.
+        """Manage doscstrings in a folder or file.
+
         Args:
             specific (str, optional): specific script to process
                 (dir, file, file::fuction)
@@ -165,20 +165,21 @@ class ProjectCodeM4nager:
 
         # pylint: disable=C0103
         BECON = "# TOD" + "O:"  # Dont interpret as T0D0
-        FIRST_LINE_DOC = f"{BECON} update docstring"
-        GOOGLE_DOC_TEMPLATE = """
-{prefix}{args}{returns}
+        FIRST_LINE_DOC = f"{BECON} Update docstring"
+        GOOGLE_DOC_TEMPLATE = """{prefix}{args}{returns}{raises}
 """
-        DO_RETURN_TYPE = f"{BECON} add return type to the fct (-> type)"
+        DO_RETURN_TYPE = f"{BECON} Add return type to the fct (-> type)"
+        DO_RAISE_INFO = f"{BECON} Add raise information"
 
         def generate_google_docstring(
             node: ast.FunctionDef, indent: str
         ) -> str:
-            """
-            Generate a Google-style docstring with proper indentation.
+            """Generate a Google-style docstring with proper indentation.
+
             Args:
                 node (ast.FunctionDef): the function node
                 indent (str): indentation
+
             Returns:
                 str: new docstring
             """
@@ -190,30 +191,37 @@ class ProjectCodeM4nager:
                 node.returns is None
                 and not has_non_none_return(node)
                 and not filtered_args
+                and not has_raise(node)
             ):
                 return f'{indent}"""{prefix}"""'
             inner_indent = indent + "    "
             args_lines = "\n".join(
                 f"{inner_indent}{arg}:" for arg in filtered_args
             )
-            args_section = f"\nArgs:\n{args_lines}" if filtered_args else ""
+            raise_section = ""
+            if has_raise(node):
+                raise_section = f"\n\nRaises:\n{inner_indent}{DO_RAISE_INFO}"
+            args_section = f"\n\nArgs:\n{args_lines}" if filtered_args else ""
             if node.returns is not None:
                 return_section = (
-                    f"\nReturns:\n{inner_indent}{ast.unparse(node.returns)}"
+                    f"\n\nReturns:\n{inner_indent}{ast.unparse(node.returns)}"
                 )
             elif has_non_none_return(node):
-                return_section = f"\nReturns:\n{inner_indent}{DO_RETURN_TYPE}"
+                return_section = (
+                    f"\n\nReturns:\n{inner_indent}{DO_RETURN_TYPE}"
+                )
             else:
                 return_section = ""
             docstring_body = GOOGLE_DOC_TEMPLATE.format(
-                prefix=prefix, args=args_section, returns=return_section
+                prefix=prefix, args=args_section,
+                returns=return_section, raises=raise_section
             )
+            print(docstring_body)
             for line in docstring_body.splitlines():
                 if line.strip() == "":
                     continue
                 if not line.startswith(inner_indent) and line not in (
-                    DO_RETURN_TYPE,
-                ):
+                    DO_RETURN_TYPE) and line not in FIRST_LINE_DOC:
                     docstring_body = docstring_body.replace(
                         line, indent + line
                     )
@@ -222,12 +230,13 @@ class ProjectCodeM4nager:
         def check_docstring_needs_update(
             node: ast.FunctionDef, docstring: str
         ) -> bool:
-            """
-            Check if the docstring is missing any arguments or
+            """Check if the docstring is missing any arguments or
             the return value.
+
             Args:
                 node (ast.FunctionDef): the function node
                 docstring (str): actual doctring
+
             Returns:
                 bool: if needs update
             """
@@ -239,6 +248,7 @@ class ProjectCodeM4nager:
                 node.returns is None
                 and not has_non_none_return(node)
                 and not filtered_args
+                and not has_raise(node)
             ):
                 return False
             for arg in filtered_args:
@@ -255,13 +265,16 @@ class ProjectCodeM4nager:
                     not in docstring.split("Returns:")[1]
                 ):
                     return True
+            if has_raise(node) and "Raises" not in docstring:
+                return True
             return False
 
         def get_indent(line: str) -> str:
-            """
-            Return the whitespace at the start of a line for indentation.
+            """Return the whitespace at the start of a line for indentation.
+
             Args:
                 line (str): line to get indent
+
             Returns:
                 str: indentation
             """
@@ -274,11 +287,12 @@ class ProjectCodeM4nager:
         def find_docstring_bounds(
             lines: list[str], start: int
         ) -> tuple[int, int] | None:
-            """
-            Find the start and end lines of a docstring.
+            """Find the start and end lines of a docstring.
+
             Args:
                 lines (list[str]): lines
                 start (int): line to start searching from
+
             Returns:
                 tuple[int, int] | None: start and end lines or None
             """
@@ -295,8 +309,8 @@ class ProjectCodeM4nager:
             return start, end + 1
 
         def process_file(path: Path):
-            """
-            Manage docstrings in a file.
+            """Manage docstrings in a file.
+
             Args:
                 path (Path): file path
             """
@@ -342,11 +356,12 @@ class ProjectCodeM4nager:
                 f.write("\n".join(lines))
 
         def find_signature_end(lines: list[str], start_line: int) -> int:
-            """
-            Return the index where the function signature ends.
+            """Return the index where the function signature ends.
+
             Args:
                 lines (list[str]): lines
                 start_line (int): start line
+
             Returns:
                 int: last line
             """
@@ -360,10 +375,12 @@ class ProjectCodeM4nager:
             return start_line
 
         def has_non_none_return(node: ast.FunctionDef) -> bool:
-            """
-            Return True if the function has at least one 'return' with a value.
+            """Return True if the function has at least one 'return' with a
+            value.
+
             Args:
                 node (ast.FunctionDef): the function node
+
             Returns:
                 bool: if has return
             """
@@ -373,11 +390,27 @@ class ProjectCodeM4nager:
                     return True
             return False
 
-        def filter_args(node: ast.FunctionDef) -> list[str]:
-            """
-            Filter out unwanted arguments.
+        def has_raise(node: ast.FunctionDef) -> bool:
+            """Return True if the function has at least one 'raise' statement.
+
             Args:
                 node (ast.FunctionDef): the function node
+
+            Returns:
+                bool: if has raise
+            """
+
+            for n in ast.walk(node):
+                if isinstance(n, ast.Raise):
+                    return True
+            return False
+
+        def filter_args(node: ast.FunctionDef) -> list[str]:
+            """Filter out unwanted arguments.
+
+            Args:
+                node (ast.FunctionDef): the function node
+
             Returns:
                 list[str]: filtered arguments
             """
@@ -427,8 +460,8 @@ class ProjectCodeM4nager:
                     process_file(py_file)
 
     def fmt(self, specific: str = ""):
-        """
-        Format code using Black and isort.
+        """Format code using Black and isort.
+
         Args:
             specific (str): specific file to format (dir, file, file::fuction)
         """
@@ -452,8 +485,8 @@ class ProjectCodeM4nager:
         )
 
     def test(self, specific: str = ""):
-        """
-        Run tests in `tests` dir.
+        """Run tests in `tests` dir.
+
         Args:
             specific (str): specific test to run (dir, file, file::fuction)
         """
@@ -465,8 +498,8 @@ class ProjectCodeM4nager:
         )
 
     def venv(self, python: str = None):
-        """
-        Generate a python venv in ./.venv.
+        """Generate a python venv in ./.venv.
+
         Args:
             python (str, optional): python interpreter to use
         """
