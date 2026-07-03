@@ -6,8 +6,8 @@ from pyr4t.core import ProjectArchM4nager
 
 
 def cmd_init(args: argparse.Namespace):
-    """
-    Initialize project architecture.
+    """Initialize project architecture.
+
     Args:
         args (argparse.Namespace): parsed command-line arguments containing
             project details
@@ -28,8 +28,8 @@ def cmd_init(args: argparse.Namespace):
 
 
 def add_init_parser(subparsers: argparse._SubParsersAction):
-    """
-    Adds the 'init' subcommand parser to the CLI.
+    """Adds the 'init' subcommand parser to the CLI.
+    
     Args:
         subparsers (argparse._SubParsersAction): the subparsers object
             from the main parser

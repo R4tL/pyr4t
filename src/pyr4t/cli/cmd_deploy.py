@@ -6,8 +6,8 @@ from pyr4t.core import ProjectCodeM4nager
 
 
 def cmd_deploy(args: argparse.Namespace):
-    """
-    Deploy the specified project using pip.
+    """Deploy the specified project using pip.
+
     Args:
         args (argparse.Namespace): parsed command-line arguments containing
             project details
@@ -18,8 +18,8 @@ def cmd_deploy(args: argparse.Namespace):
 
 
 def add_deploy_parser(subparsers: argparse._SubParsersAction):
-    """
-    Adds the 'deploy' subcommand parser to the CLI.
+    """Adds the 'deploy' subcommand parser to the CLI.
+    
     Args:
         subparsers (argparse._SubParsersAction): the subparsers object
             from the main parser

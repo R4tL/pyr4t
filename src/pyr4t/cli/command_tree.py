@@ -13,9 +13,9 @@ def wrap_sequence(
     have_children: bool,
     desc="",
 ):
-    """
-    Builds wrapped text lines for a tree node with optional sequence
+    """Builds wrapped text lines for a tree node with optional sequence
     and description.
+
     Args:
         prefix (str): prefix for the current tree level
             (indentation + connectors)
@@ -27,6 +27,7 @@ def wrap_sequence(
         have_children (bool): whether the node has child elements
         desc (str, optional): description text to display on the right
             side of the node
+
     Returns:
         list[str]: list of formatted strings representing this node and its
             wrapped lines
@@ -76,11 +77,12 @@ def wrap_sequence(
 
 
 def wrap_desc(desc: str, desc_width: int) -> list[str]:
-    """
-    Wraps a description string to fit within a given width.
+    """Wraps a description string to fit within a given width.
+
     Args:
         desc (str): description text to wrap
         desc_width (int): maximum width for each wrapped line
+
     Returns:
         list[str]: list of formatted strings representing this node and
             its wrapped lines
@@ -109,11 +111,12 @@ def wrap_desc(desc: str, desc_width: int) -> list[str]:
 
 
 def build_lines(dict_cmd: dict, prefix="") -> list[str]:
-    """
-    Build wraped lines to print dinamicaly.
+    """Build wraped lines to print dinamicaly.
+
     Args:
         dict_cmd (dict): dict of commands.
         prefix (str): prefix for the current tree level.
+
     Returns:
         list[str]: list of formatted strings
     """
@@ -142,8 +145,8 @@ def build_lines(dict_cmd: dict, prefix="") -> list[str]:
 
 
 def get_tree() -> str:
-    """
-    Prints a formatted tree representation commands using commands.json.
+    """Create a formatted tree representation commands using commands.json.
+
     Returns:
         str: The string to print in the terminal
     """

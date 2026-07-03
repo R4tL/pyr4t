@@ -6,8 +6,8 @@ from pyr4t.core import ProjectCodeM4nager
 
 
 def cmd_test(args: argparse.Namespace):
-    """
-    Run tests for the specified project.
+    """Run tests for the specified project.
+
     Args:
         args (argparse.Namespace): parsed command-line arguments containing
             project details
@@ -18,8 +18,8 @@ def cmd_test(args: argparse.Namespace):
 
 
 def add_test_parser(subparsers: argparse._SubParsersAction):
-    """
-    Adds the 'test' subcommand parser to the CLI.
+    """Adds the 'test' subcommand parser to the CLI.
+    
     Args:
         subparsers (argparse._SubParsersAction): the subparsers object
             from the main parser

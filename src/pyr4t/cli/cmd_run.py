@@ -6,8 +6,8 @@ from pyr4t.core import ProjectCodeM4nager
 
 
 def cmd_run(args: argparse.Namespace):
-    """
-    Run scripts for the specified project.
+    """Run scripts for the specified project.
+
     Args:
         args (argparse.Namespace): parsed command-line arguments containing
             project details
@@ -23,8 +23,8 @@ def cmd_run(args: argparse.Namespace):
 
 
 def add_run_parser(subparsers: argparse._SubParsersAction):
-    """
-    Adds the 'run' subcommand parser to the CLI.
+    """Adds the 'run' subcommand parser to the CLI.
+    
     Args:
         subparsers (argparse._SubParsersAction): the subparsers object
             from the main parser

@@ -6,8 +6,8 @@ from pyr4t.core import UserDBM4nager
 
 
 def cmd_usr(args: argparse.Namespace):
-    """
-    Handle user-related CLI actions.
+    """Handle user-related CLI actions.
+
     Args:
         args (argparse.pathspace): parsed command-line arguments containing
            project details
@@ -50,8 +50,8 @@ def cmd_usr(args: argparse.Namespace):
 
 
 def add_usr_parser(subparsers: argparse._SubParsersAction):
-    """
-    Add the 'usr' command and its subcommands to the CLI parser.
+    """Add the 'usr' command and its subcommands to the CLI parser.
+    
     Args:
         subparsers (argparse._SubParsersAction): the subparsers object to
             from the main parser

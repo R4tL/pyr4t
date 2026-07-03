@@ -6,8 +6,8 @@ from pyr4t.core import ProjectCodeM4nager
 
 
 def cmd_venv(args: argparse.Namespace):
-    """
-    Create a Python virtual environment.
+    """Create a Python virtual environment.
+
     Args:
         args (argparse.pathspace): parsed command-line arguments containing
            project details
@@ -18,8 +18,8 @@ def cmd_venv(args: argparse.Namespace):
 
 
 def add_venv_parser(subparsers: argparse._SubParsersAction):
-    """
-    Adds the 'venv' subcommand parser to the CLI.
+    """Adds the 'venv' subcommand parser to the CLI.
+    
     Args:
         subparsers (argparse._SubParsersAction): the subparsers object
             from the main parser

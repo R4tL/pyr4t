@@ -6,8 +6,8 @@ from pyr4t.core import UserDBM4nager
 
 
 def cmd_whoami(_: argparse.Namespace):
-    """
-    Initializes a new Python project using the provided arguments.
+    """Initializes a new Python project using the provided arguments.
+
     Args:
         args (argparse.Namespace): parsed command-line arguments containing
            project details
@@ -19,8 +19,8 @@ def cmd_whoami(_: argparse.Namespace):
 
 
 def add_whoami_parser(subparsers: argparse._SubParsersAction):
-    """
-    Adds the 'whoami' subcommand parser to the CLI.
+    """Adds the 'whoami' subcommand parser to the CLI.
+    
     Args:
         subparsers (argparse._SubParsersAction): the subparsers object
             from the main parser

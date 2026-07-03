@@ -12,10 +12,8 @@ from .models import EntryType, JSOND4ta
 
 
 class _JSONDBM4nager(Generic[EntryType]):
-    """
-    Manages a JSON DB: add, list, update, select, and remove data
-    stored in a JSON file.
-    """
+    """Manages a JSON DB: add, list, update, select, and remove data
+    stored in a JSON file."""
 
     data: JSOND4ta
 
@@ -26,8 +24,8 @@ class _JSONDBM4nager(Generic[EntryType]):
         self.data, self.listd, self.current = self._load_data()
 
     def get_current(self) -> tuple[str, EntryType]:
-        """
-        Returns the key and entry information ofthe current entry.
+        """Returns the key and entry information ofthe current entry.
+
         Returns:
             tuple[str, EntryType]: key and entry data of the default entry
         """
@@ -38,8 +36,8 @@ class _JSONDBM4nager(Generic[EntryType]):
         return self.current, entry
 
     def update_data(self, key: str, action: str, entry: EntryType = None):
-        """
-        Update DB.
+        """Update DB.
+
         Args:
             key (str): Data key.
             action (str): type (add, rm, updt)
@@ -87,6 +85,8 @@ class _JSONDBM4nager(Generic[EntryType]):
             file.truncate()
 
     def _load_data(self) -> tuple[JSOND4ta, dict[str, EntryType], str]:
+        """Loads datas in the JSON file."""
+
         with open(self.json_file_path, "r+", encoding="utf-8") as file:
             try:
                 data: dict = json.load(file)
@@ -99,12 +99,16 @@ class _JSONDBM4nager(Generic[EntryType]):
         return data, listd, current
 
     def _find_duplicate(self, entry: EntryType) -> str:
+        """Finds duplicate datas in the JSON file."""
+
         for key, value in self.listd.items():
             if value == entry:
                 return key
         return ""
 
     def _increment_key(self, key: str) -> str:
+        """Increment key if the input already exists in the JSON file."""
+
         if key not in self.listd:
             return key
         base_key = key
@@ -123,18 +127,16 @@ class _JSONDBM4nager(Generic[EntryType]):
 
 
 def select_python_interpreter(python: str = None) -> str:
-    """
-    Select a Python interpreter to use for execution.
-    Determines which Python interpreter to use based on the provided argument
-    or the active virtual environment. If no interpreter is specified, attempts
-    to use the Python from the currently active virtual environment
-    (VIRTUAL_ENV).
+    """Select a Python interpreter to use for execution.
+
     Args:
         python (str, optional): Path to or name of the Python interpreter.
             If None, attempts to use the interpreter from the active virtual
             environment. Defaults to None.
+
     Returns:
         str: The path to a working Python interpreter.
+
     Raises:
         RuntimeError: If no python interpreter is specified and no active
             virtual environment is found.
@@ -163,6 +165,8 @@ def select_python_interpreter(python: str = None) -> str:
 
 
 def _check_python_works(python_cmd: list[str]) -> str:
+    """Checks if the python bin works."""
+
     out = subprocess.check_output(
         [*python_cmd, "-c", "import sys; print(sys.executable)"], text=True
     ).strip()

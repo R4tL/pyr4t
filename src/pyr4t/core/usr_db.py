@@ -10,17 +10,15 @@ from pyr4t.utils import _JSONDBM4nager
 
 
 class UserDBM4nager(_JSONDBM4nager[User]):
-    """
-    Manages user users: add, list, update, select, and remove users
-    stored in a JSON file.
-    """
+    """Manages user users: add, list, update, select, and remove users
+    stored in a JSON file."""
 
     def __init__(self):
         super().__init__(Path.home() / ".pyr4t" / "users.json")
 
     def add(self, alias: str, name: str, email: str):
-        """
-        Adds a new user user.
+        """Adds a new user user.
+
         Args:
             alias (str): unique identifier for the user
             name (str): name of the user
@@ -33,8 +31,8 @@ class UserDBM4nager(_JSONDBM4nager[User]):
         print(f"[info] User added: {alias}: {name} <{email}>")
 
     def list(self) -> dict[str, User]:
-        """
-        Lists all user users except the default user 'me'.
+        """Lists all user users except the default user 'me'.
+
         Returns:
             dict[str, User]: dictionary of user aliases to User objects
         """
@@ -42,8 +40,8 @@ class UserDBM4nager(_JSONDBM4nager[User]):
         return self.listd
 
     def remove(self, alias: str):
-        """
-        Removes a user user by alias.
+        """Removes a user user by alias.
+
         Args:
             alias (str): alias of the user to remove
         """
@@ -55,8 +53,8 @@ class UserDBM4nager(_JSONDBM4nager[User]):
             print(f"[info] User removed: {alias}")
 
     def modify(self, alias: str, name: str = None, email: str = None):
-        """
-        Updates an existing user user.
+        """Updates an existing user user.
+
         Args:
             alias (str): alias of the user to update
             name (str, optional): new name for the user
@@ -76,8 +74,8 @@ class UserDBM4nager(_JSONDBM4nager[User]):
         )
 
     def switch(self, alias: str):
-        """
-        Selects a user as the default user ('me').
+        """Selects a user as the default user.
+
         Args:
             alias (str): alias of the user to set as default
         """
@@ -86,8 +84,8 @@ class UserDBM4nager(_JSONDBM4nager[User]):
         print(f"[info] Default user selected: {alias}")
 
     def whoami(self) -> tuple[str, User]:
-        """
-        Returns the alias and user information of the current user.
+        """Returns the alias and user information of the current user.
+
         Returns:
             tuple[str, User]: alias and user data of the default user
         """
@@ -95,6 +93,8 @@ class UserDBM4nager(_JSONDBM4nager[User]):
         return self.get_current()
 
     def _validate_email(self, email: str):
+        """Verifies if the email is valid."""
+
         if "@" not in email or email.count("@") != 1:
             raise ValueError("Email must contain exactly one '@'")
         local, domain = email.split("@")

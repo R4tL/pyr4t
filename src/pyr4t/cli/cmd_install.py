@@ -7,6 +7,7 @@ from pyr4t.core import install_info, install_pyr4tpackage, maj_token
 
 def cmd_install(args: argparse.Namespace):
     """Install a pyr4t package.
+
     Args:
         args (argparse.Namespace): parsed command-line arguments containing
             project details
@@ -25,8 +26,8 @@ def cmd_install(args: argparse.Namespace):
 
 
 def add_install_parser(subparsers: argparse._SubParsersAction):
-    """
-    Adds the 'install' subcommand parser to the CLI.
+    """Adds the 'install' subcommand parser to the CLI.
+    
     Args:
         subparsers (argparse._SubParsersAction): the subparsers object
             from the main parser

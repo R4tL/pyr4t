@@ -7,17 +7,15 @@ from pyr4t.utils import _JSONDBM4nager
 
 
 class ProjectDBM4nager(_JSONDBM4nager[Project]):
-    """
-    Manages projects: add, list, update, select, and remove projects
-    stored in a JSON file.
-    """
+    """Manages projects: add, list, update, select, and remove projects
+    stored in a JSON file."""
 
     def __init__(self):
         super().__init__(Path.home() / ".pyr4t" / "projects.json")
 
     def add(self, title: str, path: str, version: str):
-        """
-        Adds a new project.
+        """Adds a new project.
+    
         Args:
             title (str): unique identifier for the project
             path (str): name of the user
@@ -32,8 +30,8 @@ class ProjectDBM4nager(_JSONDBM4nager[Project]):
         print(f"[info] Project added: {title}: {path} <v{version}>")
 
     def list(self) -> dict[str, Project]:
-        """
-        Lists all projects.
+        """Lists all projects.
+
         Returns:
             dict[str, Project]: dictionary of project titles
                 to Project objects
@@ -42,8 +40,8 @@ class ProjectDBM4nager(_JSONDBM4nager[Project]):
         return self.listd
 
     def remove(self, title: str):
-        """
-        Removes a user project by title.
+        """Removes a user project by title.
+
         Args:
             title (str): title of the project to remove
         """
@@ -55,8 +53,8 @@ class ProjectDBM4nager(_JSONDBM4nager[Project]):
             print(f"[info] Project removed: {title}")
 
     def modify(self, title: str, path: str = None, version: str = None):
-        """
-        Updates an existing user project.
+        """Updates an existing user project.
+
         Args:
             title (str): The title of the project to update.
             path (str, optional): new path for the project
@@ -75,8 +73,8 @@ class ProjectDBM4nager(_JSONDBM4nager[Project]):
         )
 
     def switch(self, title: str):
-        """
-        Selects a project as the default project ('me').
+        """Selects a project as the default project.
+    
         Args:
             title (str): title of the project to set as default
         """
@@ -85,8 +83,8 @@ class ProjectDBM4nager(_JSONDBM4nager[Project]):
         print(f"[info] Active project selected: {title}")
 
     def info(self) -> tuple[str, Project]:
-        """
-        Returns the title and project information ofthe current project.
+        """Returns the title and project information ofthe current project.
+
         Returns:
             tuple[str, Project]: title and project data of the default project
         """

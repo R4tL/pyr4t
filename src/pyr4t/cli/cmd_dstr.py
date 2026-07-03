@@ -6,8 +6,8 @@ from pyr4t.core import ProjectCodeM4nager
 
 
 def cmd_dstr(args: argparse.Namespace):
-    """
-    Generate or update docstrings for the specified project.
+    """Generate or update docstrings for the specified project.
+
     Args:
         args (argparse.Namespace): parsed command-line arguments containing
             project details
@@ -18,8 +18,8 @@ def cmd_dstr(args: argparse.Namespace):
 
 
 def add_dstr_parser(subparsers: argparse._SubParsersAction):
-    """
-    Adds the 'dstr' subcommand parser to the CLI.
+    """Adds the 'dstr' subcommand parser to the CLI.
+    
     Args:
         subparsers (argparse._SubParsersAction): the subparsers object
             from the main parser

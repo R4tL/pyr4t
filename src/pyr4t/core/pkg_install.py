@@ -16,9 +16,9 @@ from pyr4t.utils import select_python_interpreter
 def install_pyr4tpackage(
     package: str, version: str = None, python: str = None
 ):
-    """
-    Install a pyr4t package from a binary (wheel or tar.gz) GitHub release
+    """Install a pyr4t package from a binary (wheel or tar.gz) GitHub release
     without relying on Git.
+
     Args:
         package (str): package name
         version (str, optional): version to install (None -> latest release)
@@ -113,8 +113,8 @@ def install_pyr4tpackage(
 
 
 def install_info(show_private: bool = False):
-    """
-    Print information about available pyr4t packages.
+    """Print information about available pyr4t packages.
+
     Args:
         show_private (bool, optional): show private repositories
     """
@@ -181,8 +181,8 @@ def install_info(show_private: bool = False):
 
 
 def maj_token(token: str):
-    """
-    Update GitHub token used for private pyr4t package installation.
+    """Update GitHub token used for private pyr4t package installation.
+
     Args:
         token (str): GitHub token
     """
@@ -206,8 +206,8 @@ def maj_token(token: str):
 
 
 def save_token(token: str):
-    """
-    Save GitHub token securely in system keyring.
+    """Save GitHub token securely in system keyring.
+
     Args:
         token (str): GitHub token
     """
@@ -215,8 +215,8 @@ def save_token(token: str):
 
 
 def load_token() -> str | None:
-    """
-    Load GitHub token from system keyring.
+    """Load GitHub token from system keyring.
+
     Returns:
         str | None: GitHub token if found, else None
     """

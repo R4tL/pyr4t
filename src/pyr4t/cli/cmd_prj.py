@@ -8,8 +8,8 @@ from pyr4t.core import ProjectDBM4nager
 
 
 def cmd_prj(args: argparse.Namespace):
-    """
-    Initializes a new Python project using the provided arguments.
+    """Initializes a new Python project using the provided arguments.
+
     Args:
         args (argparse.Namespace): parsed command-line arguments containing
             project details
@@ -73,8 +73,8 @@ def cmd_prj(args: argparse.Namespace):
 
 
 def add_prj_parser(subparsers: argparse._SubParsersAction):
-    """
-    Adds the 'prj' subcommand parser to the CLI.
+    """Adds the 'prj' subcommand parser to the CLI.
+    
     Args:
         subparsers (argparse._SubParsersAction): the subparsers object
             from the main parser

@@ -9,8 +9,8 @@ from .usr_db import UserDBM4nager
 
 
 class ProjectArchM4nager:
-    """
-    A utility class for managing architecture for pyr4t projects.
+    """A utility class for managing architecture for pyr4t projects.
+
     Args:
         proj_title (str, optional): title of the project to manage
             (None -> uses the current default project)
@@ -63,22 +63,22 @@ class ProjectArchM4nager:
         )
 
     def generate_app_project(self):
-        """Generate a python app architecture."""
+        """Generates a python app architecture."""
 
         self._pg.generate_project("app")
 
     def generate_cli_project(self):
-        """Generate a python CLI architecture."""
+        """Generates a python CLI architecture."""
 
         self._pg.generate_project("cli")
 
     def generate_lib_project(self):
-        """Generate a python lib architecture."""
+        """Generates a python lib architecture."""
 
         self._pg.generate_project("lib")
 
     def genretate_dev_env(self):
-        """Generate a dev env in /dev"""
+        """Generates a dev env in /dev"""
 
         print("[info] Generating a dev environment...")
         (self._pg.proj_path / "dev").mkdir()
@@ -91,10 +91,8 @@ class ProjectArchM4nager:
 
 
 class _ProjectGenerator:
-    """
-    Class to generate a standardized Python project structure with
-    configuration files, scripts, and metadata.
-    """
+    """Class to generate a standardized Python project structure with
+    configuration files, scripts, and metadata."""
 
     def __init__(
         self,
@@ -112,8 +110,8 @@ class _ProjectGenerator:
         self.proj_version = proj_version
 
     def generate_project(self, project_type: str):
-        """
-        Create the main project directory and subdirectories.
+        """Create the main project directory and subdirectories.
+
         Args:
             project_type (str): type of project (app, cli, lib)
         Returns:
@@ -159,8 +157,8 @@ class _ProjectGenerator:
         print("[info] Project architecture created with success.")
 
     def generate_scripts(self, proj_path: Path = None, project_type: str = ""):
-        """
-        Generate 'scripts' directory with example scripts.
+        """Generates 'scripts' directory with example scripts.
+
         Args:
             proj_path (Path, optional): path where to create the scripts
             project_type (str, optional): type of project (app, cli, lib)
@@ -196,6 +194,7 @@ if __name__ == "__main__":
         self._create_file(proj_path / "scripts" / "__init__.py")
 
     def _generate_dirs(self, project_type: str):
+        """Generates directories for the project."""
 
         # Init subdirectories list
         subdirs: list[str] = ["docs", "scripts", "src", "tests"]
@@ -228,6 +227,7 @@ if __name__ == "__main__":
             print(f"[info] Cretation of dir: {subdir_core}")
 
     def _generate_init_files(self, project_type: str):
+        """Generates `__init__.py` files."""
 
         for proj_dir in (self.proj_path / "src").rglob("*"):
             if proj_dir.is_dir():
@@ -262,6 +262,7 @@ __all__ = ["build_parser"]
                 self._create_file(proj_dir / "__init__.py", content)
 
     def _generate_py_doc_link(self):
+        """Generates doc python file."""
 
         docs_path = self.proj_path / "docs" / "python_doc.md"
         content = """\
@@ -272,6 +273,7 @@ __all__ = ["build_parser"]
         self._create_file(docs_path, content)
 
     def _generate_gitignore(self):
+        """Generates `.gitignore` file."""
 
         content = """\
 # Python bytecode
@@ -310,6 +312,7 @@ Thumbs.db
         self._create_file(self.proj_path / ".gitignore", content)
 
     def _generate_readme(self, project_type: str):
+        """Generates `README.md` file."""
 
         author_names = ", ".join(a.get("name", "") for a in self.authors)
         author_links = ", ".join(
@@ -514,6 +517,7 @@ MIT License. See [LICENSE](LICENSE) for details.
         self._create_file(self.proj_path / "README.md", content)
 
     def _generate_license(self):
+        """Generates `LICENSE` file."""
 
         author_names = ", ".join(a.get("name", "") for a in self.authors)
         content = f"""\
@@ -542,6 +546,7 @@ SOFTWARE.
         self._create_file(self.proj_path / "LICENSE", content)
 
     def _generate_pyproject(self, project_type: str):
+        """Generates `pyproject.toml` file."""
 
         authors_toml = ", ".join(
             [
@@ -587,6 +592,7 @@ where = ["src"]
         self._create_file(self.proj_path / "pyproject.toml", content)
 
     def _generate_tests(self, project_type: str):
+        """Generates test files."""
 
         test = '''\
 """Test package example."""
@@ -635,6 +641,7 @@ def test_cli_{self.package_name}():
         self._create_file(self.proj_path / "tests" / "test_example.py", test)
 
     def _generate_cli(self):
+        """Generates files for a cli project."""
 
         # Scripts in CLI dir
         example = '''\
@@ -973,6 +980,7 @@ def main():
         )
 
     def _generate_app(self):
+        """Generates files for an app project."""
 
         # Need same script like CLI (APP is CLI ++)
         self._generate_cli()
@@ -1032,6 +1040,7 @@ def main():
         )
 
     def _generate_lib(self):
+        """Generates files for a lib project."""
 
         example = '''\
 """Example of a module for a lib."""
@@ -1050,6 +1059,8 @@ class Example:
         )
 
     def _create_file(self, file_path: Path, content: str = ""):
+        """File generator."""
+
         try:
             file_path.parent.mkdir(parents=True, exist_ok=True)
             with open(file_path, "w", encoding="utf-8") as file:
@@ -1059,6 +1070,8 @@ class Example:
             print(f"[error] An error occurred while creating {file_path}: {e}")
 
     def _get_dev_dependencies(self):
+        """Deduces dependencies version using python version."""
+
         major, minor = sys.version_info[:2]
         # Define recommended versions per Python release
         if major == 3 and minor >= 12:
@@ -1081,6 +1094,8 @@ class Example:
         return f'["{pytest}", "{black}", "{isort}"]'
 
     def _get_authors(self, authors: list[str]) -> list[dict]:
+        """Gets author(s) using the user DB."""
+
         udb = UserDBM4nager()
         authors_list = []
         for author in authors:
