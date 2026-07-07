@@ -5,6 +5,7 @@ Handles creation, listing, updating, selection, and removal of user users.
 
 from pathlib import Path
 
+from pyr4t.exceptions import Pyr4tValueError
 from pyr4t.models import User
 from pyr4t.utils import _JSONDBM4nager
 
@@ -93,10 +94,14 @@ class UserDBM4nager(_JSONDBM4nager[User]):
         return self.get_current()
 
     def _validate_email(self, email: str):
-        """Verifies if the email is valid."""
+        """Verifies if the email is valid.
+
+        Raises:
+            Pyr4tValueError: If the email is invalid.
+        """
 
         if "@" not in email or email.count("@") != 1:
-            raise ValueError("Email must contain exactly one '@'")
+            raise Pyr4tValueError("Email must contain exactly one '@'")
         local, domain = email.split("@")
         if not local or not domain or "." not in domain:
-            raise ValueError("Invalid format for email")
+            raise Pyr4tValueError("Invalid format for email")

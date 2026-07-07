@@ -8,6 +8,7 @@ import subprocess
 from pathlib import Path
 from typing import Generic
 
+from .exceptions import Pyr4tValueError, Pyr4tRuntimeError, Pyr4tFileError
 from .models import EntryType, JSOND4ta
 
 
@@ -28,10 +29,13 @@ class _JSONDBM4nager(Generic[EntryType]):
 
         Returns:
             tuple[str, EntryType]: key and entry data of the default entry
+        
+        Raises:
+            Pyr4tValueError: If no current entry is set.
         """
 
         if not self.current:
-            raise ValueError("No current set. Please add entry first.")
+            raise Pyr4tValueError("No current set. Please add entry first.")
         entry = self.listd.get(self.current)
         return self.current, entry
 
@@ -42,12 +46,15 @@ class _JSONDBM4nager(Generic[EntryType]):
             key (str): Data key.
             action (str): type (add, rm, updt)
             entry (EntryType): data
+        
+        Raises:
+            Pyr4tValueError: If the action is invalid.
         """
 
         if action == "add":
             duplicate_key = self._find_duplicate(entry)
             if duplicate_key:
-                raise ValueError(
+                raise Pyr4tValueError(
                     f"Entry: {entry} "
                     f"already exists with key '{duplicate_key}'."
                 )
@@ -55,7 +62,7 @@ class _JSONDBM4nager(Generic[EntryType]):
 
         elif not key in self.listd:
             if key != "*" and action != "rm":
-                raise ValueError(f"No entry found with key: {key}")
+                raise Pyr4tValueError(f"No entry found with key: {key}")
 
         if action in ["updt", "add"] and entry:
             self.listd[key] = entry
@@ -72,8 +79,13 @@ class _JSONDBM4nager(Generic[EntryType]):
                 self.current = ""
                 self.data = {}
             else:
-                self.listd.pop(key)
-                self.data["list"] = self.listd
+                try:
+                    self.listd.pop(key)
+                    self.data["list"] = self.listd
+                except KeyError as e:
+                    raise Pyr4tValueError(
+                        f"No entry found with key: {key}"
+                    ) from e
         elif action == "slct":
             self.current = key
             self.data["current"] = self.current
@@ -138,9 +150,9 @@ def select_python_interpreter(python: str = None) -> str:
         str: The path to a working Python interpreter.
 
     Raises:
-        RuntimeError: If no python interpreter is specified and no active
+        Pyr4tRuntimeError: If no python interpreter is specified and no active
             virtual environment is found.
-        FileNotFoundError: If the specified python interpreter path does not
+        Pyr4tFileError: If the specified python interpreter path does not
             exist or is not a file.
     """
 
@@ -152,7 +164,7 @@ def select_python_interpreter(python: str = None) -> str:
             else:
                 python = str(Path(venv) / "bin" / "python")
         else:
-            raise RuntimeError(
+            raise Pyr4tRuntimeError(
                 "No python interpreter specified and no active venv found."
             )
     if not Path(python).exists():
@@ -160,7 +172,7 @@ def select_python_interpreter(python: str = None) -> str:
     elif Path(python).is_file():
         py_arg = [python]
     else:
-        raise FileNotFoundError(f"Python interpreter not found: {python}")
+        raise Pyr4tFileError(f"Python interpreter not found: {python}")
     return _check_python_works(py_arg)
 
 

@@ -3,6 +3,7 @@
 import argparse
 
 from pyr4t.core import UserDBM4nager
+from pyr4t.exceptions import Pyr4tValueError
 
 
 def cmd_usr(args: argparse.Namespace):
@@ -11,6 +12,9 @@ def cmd_usr(args: argparse.Namespace):
     Args:
         args (argparse.pathspace): parsed command-line arguments containing
            project details
+    
+    Raises:
+        Pyr4tValueError: If required arguments are missing or invalid.
     """
 
     dbu = UserDBM4nager()
@@ -39,7 +43,9 @@ def cmd_usr(args: argparse.Namespace):
 
         case "mv":
             if not args.name and not args.email:
-                raise ValueError("Either --name or --email must be specified.")
+                raise Pyr4tValueError(
+                    "Either --name or --email must be specified."
+                )
             dbu.modify(args.alias, name=args.name, email=args.email)
 
         case "rm":

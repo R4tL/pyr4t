@@ -7,6 +7,7 @@ import subprocess
 import sys
 from pathlib import Path
 
+from pyr4t.exceptions import Pyr4tValueError, Pyr4tFileError, Pyr4tRuntimeError
 from pyr4t.utils import select_python_interpreter
 
 from .prj_db import ProjectDBM4nager
@@ -26,40 +27,54 @@ class ProjectCodeM4nager:
         if proj_title is None:
             proj_title = self.dbp.current
         if proj_title not in self.dbp.listd:
-            raise ValueError(f"Project '{proj_title}' not found in DB.")
+            raise Pyr4tValueError(f"Project '{proj_title}' not found in DB.")
         self.proj_title = proj_title
         self.proj_path = Path(self.dbp.listd[proj_title]["path"])
 
     def build(self):
-        """Build a binary package of the project."""
+        """Build a binary package of the project.
+        
+        Raises:
+            Pyr4tRuntimeError: If the build process fails.
+        """
 
-        print("[info] Buil binary files ...")
-        subprocess.check_call(
-            [sys.executable, "-m", "build"], cwd=str(self.proj_path)
-        )
+        try:
+            print("[info] Buil binary files ...")
+            subprocess.check_call(
+                [sys.executable, "-m", "build"], cwd=str(self.proj_path)
+            )
+        except subprocess.CalledProcessError as e:
+            raise Pyr4tRuntimeError(f"Failed to build package: {e}") from e
 
     def deploy(self, dev_mode: bool = False, python: str = None):
         """Deploy the package using pip.
 
-            Args:
-                dev_mode (bool, optional): if True, deploy in editable mode.
-                python (str, optional): python interpreter to use
+        Args:
+            dev_mode (bool, optional): if True, deploy in editable mode.
+            python (str, optional): python interpreter to use
+            
+        Raises:
+            Pyr4tRuntimeError: If the deployment fails.
         """
 
         python_interpreter = select_python_interpreter(python)
         print(f"[info] Using python interpreter: {python_interpreter}")
-        if dev_mode:
-            print("[info] Deploy package in editable mode ...")
-            subprocess.check_call(
-                [python_interpreter, "-m", "pip", "install", "-e", ".[dev]"],
-                cwd=str(self.proj_path),
-            )
-        else:
-            print("[info] Deploy permanant package ...")
-            subprocess.check_call(
-                [python_interpreter, "-m", "pip", "install", "."],
-                cwd=str(self.proj_path),
-            )
+        try:
+            if dev_mode:
+                print("[info] Deploy package in editable mode ...")
+                subprocess.check_call(
+                    [python_interpreter, "-m", "pip",
+                     "install", "-e", ".[dev]"],
+                    cwd=str(self.proj_path),
+                )
+            else:
+                print("[info] Deploy permanant package ...")
+                subprocess.check_call(
+                    [python_interpreter, "-m", "pip", "install", "."],
+                    cwd=str(self.proj_path),
+                )
+        except subprocess.CalledProcessError as e:
+            raise Pyr4tRuntimeError(f"Failed to deploy package: {e}") from e
 
     def run(
         self,
@@ -75,25 +90,36 @@ class ProjectCodeM4nager:
             dev_mode (bool, optional): if true run dev script
             python (str, optional): python interpreter to use
             args (list[str], optional): arguments to pass to the script
+        
+        Raises:
+            Pyr4tRuntimeError: If the script execution fails.
+            Pyr4tFileError: If cannot access the script file.
         """
 
         python_interpreter = select_python_interpreter(python)
         if args is None:
             args = []
-        if dev_mode:
-            print(f"[info] Run dev script: {script} ...")
-            print(f"[info] Using python interpreter: {python_interpreter}")
-            subprocess.check_call(
-                [python_interpreter, "-m", script, *args],
-                cwd=str(self.proj_path / "dev" / "scripts"),
-            )
-        else:
-            print(f"[info] Run script: {script} ...")
-            print(f"[info] Using python interpreter: {python_interpreter}")
-            subprocess.check_call(
-                [python_interpreter, "-m", script, *args],
-                cwd=str(self.proj_path / "scripts"),
-            )
+        try:
+            if dev_mode:
+                print(f"[info] Run dev script: {script} ...")
+                print(f"[info] Using python interpreter: {python_interpreter}")
+                subprocess.check_call(
+                    [python_interpreter, "-m", script, *args],
+                    cwd=str(self.proj_path / "dev" / "scripts"),
+                )
+            else:
+                print(f"[info] Run script: {script} ...")
+                print(f"[info] Using python interpreter: {python_interpreter}")
+                subprocess.check_call(
+                    [python_interpreter, "-m", script, *args],
+                    cwd=str(self.proj_path / "scripts"),
+                )
+        except subprocess.CalledProcessError as e:
+            raise Pyr4tRuntimeError(f"Failed to run script: {e}") from e
+        except (FileNotFoundError, PermissionError) as e:
+            raise Pyr4tFileError(
+                f"Cannot access {self.proj_path / 'scripts' / script}"
+            ) from e
 
     def cls(self, files: list[str] = None):
         """Clean cache, logs, or all temporary files.
@@ -161,6 +187,9 @@ class ProjectCodeM4nager:
         Args:
             specific (str, optional): specific script to process
                 (dir, file, file::fuction)
+
+        Raises:
+            Pyr4tFileError: If the specific path does not exist.
         """
 
         # pylint: disable=C0103
@@ -413,6 +442,9 @@ class ProjectCodeM4nager:
 
             Returns:
                 list[str]: filtered arguments
+            
+            Raises:
+                Pyr4tFileError: If the specific path does not exist.
             """
 
             fbd_args = ["self", "cls"]
@@ -447,7 +479,7 @@ class ProjectCodeM4nager:
 
         specific_path = self.proj_path / "src" / specific
         if not specific_path.exists():
-            raise FileNotFoundError(f"Path not found: {specific_path}")
+            raise Pyr4tFileError(f"Path not found: {specific_path}")
         if specific_path.is_file():
             print(f"[info] Processing {specific_path.name}")
             process_file(specific_path)
@@ -464,52 +496,77 @@ class ProjectCodeM4nager:
 
         Args:
             specific (str): specific file to format (dir, file, file::fuction)
+        
+        Raises:
+            Pyr4tFileError: If the specific path does not exist.
+            Pyr4tRuntimeError: If the formatting fails.
         """
 
         specific_path = self.proj_path / "src" / specific
         if not specific_path.exists():
-            raise FileNotFoundError(f"Path not found: {specific_path}")
-        print("[info] Formatting code...")
-        subprocess.check_call(
-            [
-                sys.executable,
-                "-m",
-                "black",
-                "--line-length",
-                "79",
-                str(specific_path),
-            ]
-        )
-        subprocess.check_call(
-            [sys.executable, "-m", "isort", str(specific_path)]
-        )
+            raise Pyr4tFileError(f"Path not found: {specific_path}")
+        try:
+            print("[info] Formatting code...")
+            subprocess.check_call(
+                [
+                    sys.executable,
+                    "-m",
+                    "black",
+                    "--line-length",
+                    "79",
+                    str(specific_path),
+                ]
+            )
+            subprocess.check_call(
+                [sys.executable, "-m", "isort", str(specific_path)]
+            )
+        except subprocess.CalledProcessError as e:
+            raise Pyr4tRuntimeError(f"Failed to format code: {e}") from e
 
     def test(self, specific: str = ""):
         """Run tests in `tests` dir.
 
         Args:
             specific (str): specific test to run (dir, file, file::fuction)
+        
+        Raises:
+            Pyr4tRuntimeError: If the running tests fails.
+            Pyr4tFileError: If cannot access the specific test file.
         """
 
-        print(f"[info] Run {Path(self.proj_path).name} tests ...")
-        subprocess.check_call(
-            [sys.executable, "-m", "pytest", specific],
-            cwd=str(self.proj_path / "tests"),
-        )
+        try:
+            print(f"[info] Run {Path(self.proj_path).name} tests ...")
+            subprocess.check_call(
+                [sys.executable, "-m", "pytest", specific],
+                cwd=str(self.proj_path / "tests"),
+            )
+        except subprocess.CalledProcessError as e:
+            raise Pyr4tRuntimeError(f"Failed to run tests: {e}") from e
+        except (FileNotFoundError, PermissionError) as e:
+            raise Pyr4tFileError(
+                f"Cannot access {self.proj_path / 'tests' / specific}"
+            ) from e
 
     def venv(self, python: str = None):
         """Generate a python venv in ./.venv.
 
         Args:
             python (str, optional): python interpreter to use
+        
+        Raises:
+            Pyr4tRuntimeError: If the venv creation fails.
         """
 
         print("[info] Generating a python venv ...")
         python_interpreter = select_python_interpreter(python)
         print(f"[info] Using python interpreter: {python_interpreter}")
-        subprocess.check_call(
-            [python_interpreter, "-m", "venv", str(self.proj_path / ".venv")]
-        )
+        try:
+            subprocess.check_call(
+                [python_interpreter, "-m",
+                 "venv", str(self.proj_path / ".venv")]
+            )
+        except subprocess.CalledProcessError as e:
+            raise Pyr4tRuntimeError(f"Failed to generate venv: {e}") from e
         if platform.system().lower() == "windows":
             activate = str(self.proj_path / ".venv" / "Scripts" / "activate")
         else:

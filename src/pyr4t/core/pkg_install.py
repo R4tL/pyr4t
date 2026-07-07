@@ -10,6 +10,7 @@ from pathlib import Path
 import keyring
 import requests
 
+from pyr4t.exceptions import Pyr4tRuntimeError
 from pyr4t.utils import select_python_interpreter
 
 
@@ -22,7 +23,13 @@ def install_pyr4tpackage(
     Args:
         package (str): package name
         version (str, optional): version to install (None -> latest release)
+        python (str, optional): python interpreter to use
+
+    Raises:
+        Pyr4tRuntimeError: If the GitHub API request fails or if the package
+            cannot be installed.
     """
+    
     python_cmd = select_python_interpreter(python)
     print(f"[info] Using Python interpreter: {python_cmd}")
     # URL GitHub API
@@ -41,19 +48,21 @@ def install_pyr4tpackage(
     r = requests.get(url, headers=headers, timeout=5)
 
     if r.status_code in (401, 403, 404):  # need token / not found (nf)
-        raise RuntimeError(
+        raise Pyr4tRuntimeError(
             f"[{r.status_code}] "
             "Access denied or release not found. "
             "If the package is private, please provide a valid token "
             "using `pyr4t install --token <token>`."
         )
     elif r.status_code != 200:
-        raise RuntimeError(f"[{r.status_code}] GitHub API: {r.text}")
+        raise Pyr4tRuntimeError(
+            f"[{r.status_code}] GitHub API error : {r.text}"
+        )
 
     release: dict = r.json()
     assets: list[dict] = release.get("assets", [])
     if not assets:
-        raise RuntimeError("No binary found in this release.")
+        raise Pyr4tRuntimeError("No binary found in this release.")
 
     # Determine asset
     py_version = f"cp{sys.version_info.major}{sys.version_info.minor}"
@@ -84,7 +93,7 @@ def install_pyr4tpackage(
         )
 
     if not asset:
-        raise RuntimeError(
+        raise Pyr4tRuntimeError(
             "No compatible file (.whl or .tar.gz) found for"
             " your system and Python."
         )
@@ -117,6 +126,10 @@ def install_info(show_private: bool = False):
 
     Args:
         show_private (bool, optional): show private repositories
+    
+    Raises:
+        Pyr4tRuntimeError: If the GitHub API request fails or if a private
+            repository cannot be accessed.
     """
 
     print(
@@ -130,7 +143,9 @@ def install_info(show_private: bool = False):
         headers["Authorization"] = f"token {token}"
         url = "https://api.github.com/user/repos"
     elif show_private:
-        raise RuntimeError("Private token required to show private repos.")
+        raise Pyr4tRuntimeError(
+            "Private token required to show private repos."
+        )
     else:
         url = "https://api.github.com/users/R4tL/repos"
 
@@ -138,13 +153,15 @@ def install_info(show_private: bool = False):
     r = requests.get(url, headers=headers, timeout=10)
 
     if r.status_code in (401, 403, 404):  # need token / not found (nf)
-        raise RuntimeError(
+        raise Pyr4tRuntimeError(
             f"[{r.status_code}] Invalid token: {r.text}. "
             "Please provide a valid token "
             "using `pyr4t install --token <token>`."
         )
     elif r.status_code != 200:
-        raise RuntimeError(f"[{r.status_code}] GitHub API error: {r.text}")
+        raise Pyr4tRuntimeError(
+            f"[{r.status_code}] GitHub API error: {r.text}"
+        )
 
     r.raise_for_status()
     repos = r.json()
@@ -185,6 +202,9 @@ def maj_token(token: str):
 
     Args:
         token (str): GitHub token
+    
+    Raises:
+        Pyr4tRuntimeError: If the token is invalid or cannot be saved.
     """
 
     # Verify token
@@ -193,15 +213,19 @@ def maj_token(token: str):
     url = "https://api.github.com/user/repos"
     r = requests.get(url, headers=headers, timeout=10)
     if r.status_code in (401, 403, 404):
-        raise RuntimeError(f"[{r.status_code}] Invalid token: {r.text}")
+        raise Pyr4tRuntimeError(
+            f"[{r.status_code}] Invalid token: {r.text}"
+        )
     elif r.status_code != 200:
-        raise RuntimeError(f"[{r.status_code}] GitHub API error: {r.text}")
+        raise Pyr4tRuntimeError(
+            f"[{r.status_code}] GitHub API error: {r.text}"
+        )
     else:
         # Add token to keyring
         save_token(token)
         token_saved = load_token()
         if token_saved != token:
-            raise RuntimeError("[error] Failed to save token securely.")
+            raise Pyr4tRuntimeError("Failed to save token securely.")
         print("[info] Token saved securely in system keyring.")
 
 

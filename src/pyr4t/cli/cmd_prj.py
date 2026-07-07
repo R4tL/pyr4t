@@ -5,6 +5,7 @@ import shutil
 from pathlib import Path
 
 from pyr4t.core import ProjectDBM4nager
+from pyr4t.exceptions import Pyr4tValueError
 
 
 def cmd_prj(args: argparse.Namespace):
@@ -13,6 +14,9 @@ def cmd_prj(args: argparse.Namespace):
     Args:
         args (argparse.Namespace): parsed command-line arguments containing
             project details
+
+    Raises:
+        Pyr4tValueError: If required arguments are missing or invalid.
     """
 
     dbp = ProjectDBM4nager()
@@ -41,7 +45,7 @@ def cmd_prj(args: argparse.Namespace):
 
         case "mv":
             if not args.path and not args.version:
-                raise ValueError(
+                raise Pyr4tValueError(
                     "Either --path or --version must be specified."
                 )
             path = Path(args.path).resolve() if args.path else None
