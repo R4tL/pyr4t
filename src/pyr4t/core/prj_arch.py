@@ -140,6 +140,10 @@ class _ProjectGenerator:
         self._create_file(
             self.proj_path / "src" / self.package_name / "models.py", models
         )
+        exp = '''"""Exception module."""\n'''
+        self._create_file(
+            self.proj_path / "src" / self.package_name / "exceptions.py", exp
+        )
 
         # Create project type files
         if project_type == "app":
