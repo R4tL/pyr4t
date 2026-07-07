@@ -31,3 +31,6 @@ tmp/
 # OS files
 .DS_Store
 Thumbs.db
+
+# Sphinx documentation
+docs/_build/
