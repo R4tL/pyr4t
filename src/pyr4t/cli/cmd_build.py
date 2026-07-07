@@ -19,6 +19,7 @@ def cmd_build(args: argparse.Namespace):
 
 def add_build_parser(subparsers: argparse._SubParsersAction):
     """Adds the 'build' subcommand parser to the CLI.
+    
     Args:
         subparsers (argparse._SubParsersAction): the subparsers object
             from the main parser
