@@ -4,6 +4,8 @@ import sys
 import time
 from pathlib import Path
 
+from pyr4t.exceptions import Pyr4tRuntimeError
+
 from .prj_db import ProjectDBM4nager
 from .usr_db import UserDBM4nager
 
@@ -1127,22 +1129,43 @@ class Example:
         authors_list = []
         for author in authors:
             if author == "current":
-                _, profile = udb.whoami()
+                profile = udb.listd.get(udb.current, {})
             else:
                 profile = udb.listd.get(author, {})
             if not profile:
-                print(
-                    f"[warning] No user found for alias '{author}'."
-                    " Add new user data:"
-                )
                 if author == "current":
-                    author = input("Alias: ").upper()
-                udb.add(
-                    author,
-                    input(f"`{author}` name: "),
-                    input(f"`{author}` email: "),
-                )
-                profile = udb.listd.get(author, {})
+                    print(
+                        "[warning] No curent user found.\n"
+                        "1. Add new current user.\n"
+                        "2. Switch current to existing user.\n"
+                    )
+                    choice = input("Choice (1/2): ")
+                    if choice == "2":
+                        udb.switch(input("Alias: ").upper())
+                    elif choice == "1":
+                        author = input("Alias: ").upper()
+                        udb.add(
+                            author,
+                            input(f"`{author}` name: "),
+                            input(f"`{author}` email: "),
+                        )
+                        udb.switch(author)
+                    else:
+                        raise Pyr4tRuntimeError(
+                            "Invalid choice. Please select either '1' or '2'."
+                        )
+                    _, profile = udb.whoami()
+                else:
+                    print(
+                        f"[warning] No user found for alias '{author}'."
+                        " Add new user data:"
+                    )
+                    udb.add(
+                        author,
+                        input(f"`{author}` name: "),
+                        input(f"`{author}` email: "),
+                    )
+                    profile = udb.listd.get(author, {})
             authors_list.append(profile)
         return authors_list
 
