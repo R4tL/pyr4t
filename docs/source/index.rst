@@ -15,3 +15,4 @@ Welcome to the Pyr4t Documentation!
    :maxdepth: 2
    :caption: Contents:
 
+   pyr4t
