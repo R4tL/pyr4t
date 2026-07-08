@@ -37,7 +37,7 @@ jobs:
         run: |
           sphinx-apidoc \
             -o docs/source \
-            src/pyr4t \
+            src \
             --force \
             --module-first
 
