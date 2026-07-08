@@ -1,4 +1,4 @@
-# pyr4t v1.0.1
+# pyr4t v1.1.0
 
 A python manager to generate python project architectures, manage them and install pyr4t package based on github: [R4tL repo](https://github.com/R4tL?tab=repositories).
 ----------------------------------------------------------------------------------------------------------------------------
@@ -28,7 +28,7 @@ A python manager to generate python project architectures, manage them and insta
   <img src="https://www.python.org/static/img/python-logo.png" alt="Python" width="100" >
 </a>
 
-- [Pyr4t](#https://r4tl.github.io/pyr4t/)
+- [Pyr4t](https://r4tl.github.io/pyr4t/)
 
 ---
 
