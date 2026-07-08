@@ -1,5 +1,9 @@
-![Python](https://img.shields.io/badge/python-3.13%2B-blue)[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)[![linting: pylint](https://img.shields.io/badge/linting-pylint-yellowgreen)](https://github.com/pylint-dev/pylint)
-![License](https://img.shields.io/github/license/R4tL/pyr4t)![tag](https://img.shields.io/github/v/tag/R4tL/pyr4t)[![Documentation](https://img.shields.io/badge/docs-online-blue)](https://R4tL.github.io/pyr4t/)
+![tag](https://img.shields.io/github/v/tag/R4tL/pyr4t)
+![Python](https://img.shields.io/badge/python-3.13%2B-blue)
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+[![linting: pylint](https://img.shields.io/badge/linting-pylint-yellowgreen)](https://github.com/pylint-dev/pylint)
+![License](https://img.shields.io/github/license/R4tL/pyr4t)
+[![Documentation](https://img.shields.io/badge/docs-online-blue)](https://R4tL.github.io/pyr4t/)
 
 # pyr4t v1.1.0
 
