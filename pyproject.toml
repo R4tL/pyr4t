@@ -23,7 +23,7 @@ dev = ["pytest>=8.3.2", "black>=24.3.0", "isort>=5.13.2"]
 docs = ["sphinx>=8.0", "furo>=2025.7.19"]
 
 [project.scripts]
-pyr4t-test = "pyr4t.launcher:main"
+pyr4t = "pyr4t.launcher:main"
 
 [build-system]
 requires = ["setuptools>=61.0"]
