@@ -1,15 +1,17 @@
-.. image:: _static/logo.png
-   :alt: Pyr4t logo
-   :width: 350px
+.. raw:: html
+
+   <div style="margin-bottom:2rem;">
+       <img id="pyr4t-logo"
+            src="_static/logo-light.png"
+            alt="Pyr4t"
+            width="320">
+   </div>
 
 ====================
-Pyr4t Documentation
+Welcome to the Pyr4t Documentation!
 ====================
-
-Welcome to the documentation of **Pyr4t**.
 
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
 
-   modules

@@ -5,9 +5,10 @@
 ![License](https://img.shields.io/github/license/R4tL/pyr4t)
 [![Documentation](https://img.shields.io/badge/docs-online-blue)](https://R4tL.github.io/pyr4t/)
 
-![1783516999759](assets/logo.png)
-
-
+<>
+  <img src="assets/logo-light.png#gh-light-mode-only" alt="Pyr4t" width="400">
+  <img src="assets/logo-dark.png#gh-dark-mode-only" alt="Pyr4t" width="400">
+</p>
 
 A python manager to generate python project architectures, manage them and install pyr4t package based on github: [R4tL repo](https://github.com/R4tL?tab=repositories).
 ----------------------------------------------------------------------------------------------------------------------------
