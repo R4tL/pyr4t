@@ -5,10 +5,8 @@
 ![License](https://img.shields.io/github/license/R4tL/pyr4t)
 [![Documentation](https://img.shields.io/badge/docs-online-blue)](https://R4tL.github.io/pyr4t/)
 
-<>
-  <img src="assets/logo-light.png#gh-light-mode-only" alt="Pyr4t" width="400">
-  <img src="assets/logo-dark.png#gh-dark-mode-only" alt="Pyr4t" width="400">
-</p>
+<img src="assets/logo-light.png#gh-light-mode-only" alt="Pyr4t" width="400">
+<img src="assets/logo-dark.png#gh-dark-mode-only" alt="Pyr4t" width="400">
 
 A python manager to generate python project architectures, manage them and install pyr4t package based on github: [R4tL repo](https://github.com/R4tL?tab=repositories).
 ----------------------------------------------------------------------------------------------------------------------------
@@ -38,12 +36,20 @@ A python manager to generate python project architectures, manage them and insta
   <img src="https://www.python.org/static/img/python-logo.png" alt="Python" width="100" >
 </a>
 
-- <>
-  <a href="https://r4tl.github.io/pyr4t/">
-    <img src="assets/logo-light.png#gh-light-mode-only" alt="Pyr4t" width="100">
-    <img src="assets/logo-dark.png#gh-dark-mode-only" alt="Pyr4t" width="100">
-  </a>
-</p>
+- <a href="https://r4tl.github.io/pyr4t/">
+  <picture>
+    <source
+      media="(prefers-color-scheme: dark)"
+      srcset="assets/logo-dark.png">
+    <source
+      media="(prefers-color-scheme: light)"
+      srcset="assets/logo-light.png">
+    <img
+      src="assets/logo-light.png"
+      alt="Pyr4t"
+      width="70">
+  </picture>
+</a>
 
 ---
 
