@@ -86,21 +86,21 @@ Use pipx to install the package globally in an isolated environment.
 - HTTPS
 
 ```bash
-pip install git+https://github.com/R4tL/pyr4t.git@v1.0.1
+pip install git+https://github.com/R4tL/pyr4t.git@v1.1.0
 ```
 
 ```bash
-pipx install git+https://github.com/R4tL/pyr4t.git@v1.0.1
+pipx install git+https://github.com/R4tL/pyr4t.git@v1.1.0
 ```
 
 - SSH
 
 ```bash
-pip install git+ssh://git@github.com/R4tL/pyr4t.git@v1.0.1
+pip install git+ssh://git@github.com/R4tL/pyr4t.git@v1.1.0
 ```
 
 ```bash
-pipx install git+ssh://git@github.com/R4tL/pyr4t.git@v1.0.1
+pipx install git+ssh://git@github.com/R4tL/pyr4t.git@v1.1.0
 ```
 
 * **Cloning the repository**
@@ -110,13 +110,13 @@ Clone the repository on your local machine:
 - HTTPS
 
 ```bash
-git clone https://github.com/R4tL/pyr4t.git@v1.0.1
+git clone https://github.com/R4tL/pyr4t.git@v1.1.0
 ```
 
 - SSH
 
 ```bash
-git clone ssh://git@github.com/R4tL/pyr4t.git@v1.0.1
+git clone ssh://git@github.com/R4tL/pyr4t.git@v1.1.0
 ```
 
 Then install the package using pip or pipx:
@@ -156,6 +156,7 @@ pipx install .
     ├── venv [(-p | --prj) <title>] [(-py | --python) <python-interpreter>]     # Generate a python venv in ./.venv
     │        [--dev]
     ├── dev [(-p | --prj) <title>]                                              # Generate dev env in ./dev
+    ├── doc [(-p | --prj) <title>]                                              # Generate Sphinx documentation files in ./docs
     ├── info                                                                    # Print current project informations
     ├── whoami                                                                  # Print current user informations
     ├── prj                                                                     # Manage project DB
