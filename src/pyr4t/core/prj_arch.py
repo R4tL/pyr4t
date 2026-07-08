@@ -312,6 +312,9 @@ dev
 # OS files
 .DS_Store
 Thumbs.db
+
+# Sphinx documentation
+docs/_build/
 """
         self._create_file(self.proj_path / ".gitignore", content)
 

@@ -1,16 +1,16 @@
 .. Pyr4t documentation master file, created by
-   sphinx-quickstart on Tue Jul  7 22:32:53 2026.
+   sphinx-quickstart on Wed Jul  8 10:11:39 2026.
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Pyr4t documentation
+Pyr4t
 ===================
 
-Welcome to the Pyr4t documentation! This project is designed to provide a comprehensive overview of the Pyr4t library, including its features, usage, and API reference.
+Welcome to the Pyr4t documentation! This project is designed to provide a comprehensive framework for building Python applications with ease and efficiency. Whether you're developing a small script or a large-scale application, Pyr4t offers the tools and structure you need to succeed.
 
 
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
 
-   modules
+   pyr4t

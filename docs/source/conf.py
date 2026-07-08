@@ -1,8 +1,3 @@
-import os
-import sys
-
-sys.path.insert(0, os.path.abspath("../../src"))
-
 # Configuration file for the Sphinx documentation builder.
 #
 # For the full list of built-in configuration values, see the documentation:
@@ -10,6 +5,11 @@ sys.path.insert(0, os.path.abspath("../../src"))
 
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
+
+import os
+import sys
+
+sys.path.insert(0, os.path.abspath("../../src"))
 
 project = 'Pyr4t'
 copyright = '2026, R4tL'
@@ -25,8 +25,6 @@ extensions = [
     "sphinx.ext.napoleon",
     "sphinx.ext.viewcode",
 ]
-
-autosummary_generate = True
 
 templates_path = ['_templates']
 exclude_patterns = []
