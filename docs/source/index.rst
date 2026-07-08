@@ -1,7 +1,6 @@
 .. image:: _static/logo.png
    :alt: Pyr4t logo
-   :align: center
-   :width: 250px
+   :width: 350px
 
 ====================
 Pyr4t Documentation
