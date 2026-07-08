@@ -6,7 +6,7 @@ from pyr4t.core import ProjectArchM4nager
 
 
 def cmd_doc(args: argparse.Namespace):
-    """Initializes a new Python project using the provided arguments.
+    """Initializes Sphynx documentation files for the project.
 
     Args:
         args (argparse.Namespace): parsed command-line arguments containing
