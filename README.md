@@ -38,9 +38,12 @@ A python manager to generate python project architectures, manage them and insta
   <img src="https://www.python.org/static/img/python-logo.png" alt="Python" width="100" >
 </a>
 
-- <a href="https://r4tl.github.io/pyr4t/">
-  <img src="assets/logo.png" width="100" >
-</a>
+-<>
+  <a href="https://r4tl.github.io/pyr4t/">
+    <img src="assets/logo-light.png#gh-light-mode-only" alt="Pyr4t" width="100">
+    <img src="assets/logo-dark.png#gh-dark-mode-only" alt="Pyr4t" width="100">
+  <>
+</p>
 
 ---
 
