@@ -1,3 +1,6 @@
+![Python](https://img.shields.io/badge/python-3.13%2B-blue)[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)[![linting: pylint](https://img.shields.io/badge/linting-pylint-yellowgreen)](https://github.com/pylint-dev/pylint)
+![License](https://img.shields.io/github/license/R4tL/pyr4t)![tag](https://img.shields.io/github/v/tag/R4tL/pyr4t)[![Documentation](https://img.shields.io/badge/docs-online-blue)](https://R4tL.github.io/pyr4t/)
+
 # pyr4t v1.1.0
 
 A python manager to generate python project architectures, manage them and install pyr4t package based on github: [R4tL repo](https://github.com/R4tL?tab=repositories).
@@ -26,6 +29,7 @@ A python manager to generate python project architectures, manage them and insta
 
 - <a href="https://docs.python.org/3/">
   <img src="https://www.python.org/static/img/python-logo.png" alt="Python" width="100" >
+
 </a>
 
 - [Pyr4t](https://r4tl.github.io/pyr4t/)
