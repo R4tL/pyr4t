@@ -6,8 +6,7 @@
 Pyr4t
 ===================
 
-Welcome to the Pyr4t documentation! This project is designed to provide a comprehensive framework for building Python applications with ease and efficiency. Whether you're developing a small script or a large-scale application, Pyr4t offers the tools and structure you need to succeed.
-
+Welcome to the Pyr4t documentation!
 
 .. toctree::
    :maxdepth: 2
