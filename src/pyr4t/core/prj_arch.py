@@ -89,6 +89,25 @@ class ProjectArchM4nager:
         print("[info] Cretation of dir: tmp")
         self._pg.generate_scripts(proj_path=self.proj_path / "dev")
 
+    def generate_docs_files(self):
+        """Generates the Sphinx documentation files."""
+
+        print("[info] Generating Sphinx documentation files...")
+        self._pg.generate_sphinx_config()
+        self._pg.generate_doc_workflow()
+        print(
+            "\n\nThe documentation is built automatically by GitHub Actions "
+            "whenever changes are pushed to the 'main' branch.\n\n"
+            "Before the workflow can publish the documentation, enable GitHub "
+            "Pages for your repository:\n"
+            "  1. Open your repository on GitHub.\n"
+            "  2. Go to Settings > Pages.\n"
+            "  3. Under 'Build and deployment', set 'Source' to 'GitHub "
+            "Actions'.\n\n"
+            "Once configured, every push to the 'main' branch will "
+            "automatically build and publish the latest version of the "
+            "documentation."
+        )
 
 class _ProjectGenerator:
     """Class to generate a standardized Python project structure with
@@ -130,7 +149,6 @@ class _ProjectGenerator:
         # Create basic files
         self._generate_init_files(project_type)
         self._generate_gitignore()
-        self._generate_py_doc_link()
         self._generate_license()
         self._generate_readme(project_type)
         self._generate_pyproject(project_type)
@@ -265,21 +283,10 @@ __all__ = ["build_parser"]
 
                 self._create_file(proj_dir / "__init__.py", content)
 
-    def _generate_py_doc_link(self):
-        """Generates doc python file."""
-
-        docs_path = self.proj_path / "docs" / "python_doc.md"
-        content = """\
-# Official Python Documentation 
-[![Python](https://www.python.org/static/img/python-logo.png)](https://docs.python.org/3/)
-
-"""
-        self._create_file(docs_path, content)
-
     def _generate_gitignore(self):
         """Generates `.gitignore` file."""
 
-        content = """\
+        content = f"""\
 # Python bytecode
 __pycache__/
 *.py[cod]
@@ -315,6 +322,8 @@ Thumbs.db
 
 # Sphinx documentation
 docs/_build/
+docs/source/modules.rst
+docs/source/{self.package_name}*.rst
 """
         self._create_file(self.proj_path / ".gitignore", content)
 
@@ -367,6 +376,7 @@ Short description of the project.
 ## Table of Contents
 
 - [About](#about)
+- [Documentation](#documentation)
 - [Python best practices reminder](#python-best-practices-reminder)
 - [Installation](#Installation)
 - [Requirements](#requirements)
@@ -381,6 +391,16 @@ Short description of the project.
 * **Version ->** {self.proj_version}
 * **{"Authors" if "," in author_names else "Author"} ->** {author_links}
 * **License ->** MIT
+
+---
+
+## Documentation
+
+- <a href="https://docs.python.org/3/">
+  <img src="https://www.python.org/static/img/python-logo.png" alt="Python" width="100" >
+</a>
+
+- [{self.proj_title}](#https://{self.authors[0].get("name", "")}.github.io/{self.proj_title.lower()}/)
 
 ---
 
@@ -1125,3 +1145,138 @@ class Example:
                 profile = udb.listd.get(author, {})
             authors_list.append(profile)
         return authors_list
+
+    def generate_doc_workflow(self):
+        """Generates a doc workflow in /docs/workflow"""
+
+        print("[info] Cretation of dir: .github/workflows")
+        (self.proj_path / ".github" / "workflows").mkdir(
+            exist_ok=True, parents=True
+        )
+        cotent = """\
+name: Documentation
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Install package and documentation dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e ".[docs]"
+
+      - name: Generate API documentation
+        run: |
+          sphinx-apidoc \
+            -o docs/source \
+            src \
+            --force \
+            --module-first
+
+      - name: Build HTML documentation
+        run: |
+          sphinx-build -b html docs/source docs/build/html
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: docs/build/html
+
+  deploy:
+    needs: build
+
+    runs-on: ubuntu-latest
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    permissions:
+      pages: write
+      id-token: write
+
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+"""
+        self._create_file(
+            self.proj_path / ".github" / "workflows" / "docs.yml", cotent
+        )
+
+    def generate_sphinx_config(self):
+        """Generates a Sphinx configuration file in /docs/source/conf.py"""
+
+        print("[info] Generating Sphinx configuration...")
+        (self.proj_path / "docs" / "source").mkdir(exist_ok=True, parents=True)
+        print("[info] Creation of dir: source")
+        # pylint: disable=line-too-long
+        conf_content = f"""\
+import os
+import sys
+
+sys.path.insert(0, os.path.abspath("../../src"))
+
+project = '{self.proj_title}'
+copyright = '{time.strftime('%Y')}, {', '.join(a.get('name', '') for a in self.authors)}'
+author = 'R4tL'
+release = '1.1.0'
+
+extensions = [
+    "sphinx.ext.autodoc",
+    "sphinx.ext.autosummary",
+    "sphinx.ext.napoleon",
+    "sphinx.ext.viewcode",
+]
+
+templates_path = ['_templates']
+exclude_patterns = []
+
+html_theme = 'furo'
+html_static_path = ['_static']
+"""
+        # pylint: enable=line-too-long
+
+        index_content = f"""\
+{self.proj_title}
+===================
+
+Welcome to the {self.proj_title} documentation!
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Contents:
+
+   modules
+"""
+        self._create_file(
+            self.proj_path / "docs" / "source" / "conf.py", conf_content
+        )
+
+        self._create_file(
+            self.proj_path / "docs" / "source" / "index.rst", index_content
+        )

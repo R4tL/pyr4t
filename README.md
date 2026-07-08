@@ -6,6 +6,7 @@ A python manager to generate python project architectures, manage them and insta
 ## Table of Contents
 
 - [About](#about)
+- [Documentation](#documentation)
 - [Python best practices reminder](#python-best-practices-reminder)
 - [Installation](#installation)
 - [Usage](#usage)
@@ -15,9 +16,19 @@ A python manager to generate python project architectures, manage them and insta
 
 ## About
 
-* **Version ->** 1.0.1
+* **Version ->** 1.1.0
 * **Author ->** [R4tL](https://github.com/R4tL)
 * **License ->** MIT
+
+---
+
+## Documentation
+
+- <a href="https://docs.python.org/3/">
+  <img src="https://www.python.org/static/img/python-logo.png" alt="Python" width="100" >
+</a>
+
+- [Pyr4t](#https://r4tl.github.io/pyr4t/)
 
 ---
 
@@ -149,7 +160,7 @@ pipx install .
     └── usr                                                                     # Manage user DB
         ├── add <alias> <name> <email>                                          # Add a user to the pyr4t user DB
         ├── ls                                                                  # List users from the pyr4t user DB
-        ├── mv <alias> [(-e | --email) <email>] [(-n | --name) <name>]          # Modify user information in the pyr4t user DB     
+        ├── mv <alias> [(-e | --email) <email>] [(-n | --name) <name>]          # Modify user information in the pyr4t user DB   
         ├── rm <alias>                                                          # Remove a user from the pyr4t user DB
         └── switch <alias>                                                      # Switch to another default user from the pyr4t user DB
 ```

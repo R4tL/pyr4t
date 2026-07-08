@@ -1,12 +1,12 @@
-"""CLI command for dev."""
+"""CLI command for doc."""
 
 import argparse
 
 from pyr4t.core import ProjectArchM4nager
 
 
-def cmd_dev(args: argparse.Namespace):
-    """Initializes a dev environment for the project.
+def cmd_doc(args: argparse.Namespace):
+    """Initializes a new Python project using the provided arguments.
 
     Args:
         args (argparse.Namespace): parsed command-line arguments containing
@@ -14,21 +14,21 @@ def cmd_dev(args: argparse.Namespace):
     """
 
     pam = ProjectArchM4nager(proj_title=args.prj)
-    pam.genretate_dev_env()
+    pam.generate_docs_files()
 
 
-def add_dev_parser(subparsers: argparse._SubParsersAction):
-    """Adds the 'dev' subcommand parser to the CLI.
-    
+def add_doc_parser(subparsers: argparse._SubParsersAction):
+    """Adds the 'doc' subcommand parser to the CLI.
+
     Args:
         subparsers (argparse._SubParsersAction): the subparsers object
             from the main parser
     """
 
     parser: argparse.ArgumentParser = subparsers.add_parser(
-        "dev", help="Generate dev env in ./dev"
+        "doc", help="Generate documentation files"
     )
     parser.add_argument(
         "--prj", "-p", default=None, help="Project title (default: current)"
     )
-    parser.set_defaults(func=cmd_dev)
+    parser.set_defaults(func=cmd_doc)

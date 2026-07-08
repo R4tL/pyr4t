@@ -54,6 +54,10 @@
             "__desc__": "Generate dev env in ./dev",
             "__seq__": ["[(-p | --prj) <title>]"] 
         },
+        "doc": {
+            "__desc__": "Generate Sphinx documentation files in ./docs",
+            "__seq__": ["[(-p | --prj) <title>]"]
+        },
         "info": {
             "__desc__": "Print current project informations"
         },

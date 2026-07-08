@@ -10,6 +10,7 @@ from .cmd_cls import add_cls_parser
 from .cmd_deploy import add_deploy_parser
 from .cmd_dev import add_dev_parser
 from .cmd_dstr import add_dstr_parser
+from .cmd_doc import add_doc_parser
 from .cmd_fmt import add_fmt_parser
 from .cmd_info import add_info_parser
 from .cmd_init import add_init_parser
@@ -73,6 +74,7 @@ def build_parser() -> argparse.ArgumentParser:
     add_deploy_parser(subparsers)
     add_dev_parser(subparsers)
     add_dstr_parser(subparsers)
+    add_doc_parser(subparsers)
     add_fmt_parser(subparsers)
     add_info_parser(subparsers)
     add_init_parser(subparsers)
