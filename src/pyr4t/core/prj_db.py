@@ -1,7 +1,9 @@
 """Module for managing the projects database."""
 
+import shutil
 from pathlib import Path
 
+from pyr4t.exceptions import Pyr4tFileError
 from pyr4t.models import Project
 from pyr4t.utils import _JSONDBM4nager
 
@@ -39,24 +41,55 @@ class ProjectDBM4nager(_JSONDBM4nager[Project]):
 
         return self.listd
 
-    def remove(self, title: str):
+    def remove(self, title: str, files: bool = False):
         """Removes a user project by title.
 
         Args:
             title (str): title of the project to remove
+            files (bool): whether to also delete the project files
         """
+
+        if files:
+            print(
+                "[warning] Do you want to delete the files for "
+                f"{"all projects" if title == "*" else title}? (y/n)"
+            )
+            response = input().lower()
+            if response == "y":
+                if title == "*":
+                    for key, project in self.listd.items():
+                        path = Path(project.get("path", {}))
+                        if not path or not path.exists():
+                            raise Pyr4tFileError(
+                                f"This path doesn't exsits: <{key}> {path}"
+                            )
+                        shutil.rmtree(path, ignore_errors=True)
+                    print(
+                        "[info] All files for all project have been deleted"
+                    )
+                else:
+                    path = Path(self.listd.get(title, {}).get("path", {}))
+                    if not path or not path.exists():
+                        raise Pyr4tFileError(
+                            f"This path doesn't exsits: <{title}> {path}"
+                        )
+                    shutil.rmtree(path, ignore_errors=True)
+                    print(
+                            f"[info] All files for project {title} "
+                            "have been deleted"
+                        )
 
         self.update_data(title, "rm")
         if title == "*":
-            print("[info] All projects removed")
+            print("[info] All projects removed from DB")
         else:
-            print(f"[info] Project removed: {title}")
+            print(f"[info] Project removed from DB: {title}")
 
     def modify(self, title: str, path: str = None, version: str = None):
         """Updates an existing user project.
 
         Args:
-            title (str): The title of the project to update.
+            title (str): title of the project to update
             path (str, optional): new path for the project
             version (str): project version
         """

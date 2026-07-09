@@ -1,7 +1,6 @@
 """CLI command for managing Pyr4t projects."""
 
 import argparse
-import shutil
 from pathlib import Path
 
 from pyr4t.core import ProjectDBM4nager
@@ -52,23 +51,7 @@ def cmd_prj(args: argparse.Namespace):
             dbp.modify(args.title, path=path, version=args.version)
 
         case "rm":
-            if args.files:
-                print(
-                    "[warning] Do you want to delete the files for "
-                    f"project {args.title}? (y/n)"
-                )
-                response = input().lower()
-                if response == "y":
-                    print(
-                        f"[info] Deleting project files for: {args.title}..."
-                    )
-                    path = dbp.listd.get(args.title, {}).get("path", {})
-                    dbp.remove(args.title)
-                    shutil.rmtree(path, ignore_errors=True)
-                else:
-                    print("[info] Project files not deleted.")
-            else:
-                dbp.remove(args.title)
+            dbp.remove(args.title, args.files)
 
         case "switch":
             dbp.switch(args.title)
