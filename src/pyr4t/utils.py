@@ -10,10 +10,10 @@ from pathlib import Path
 from typing import Generic
 
 from .exceptions import Pyr4tValueError, Pyr4tRuntimeError, Pyr4tFileError
-from .models import EntryType, JSOND4ta
+from .models import EntryTypeT, JSOND4ta
 
 
-class _JSONDBM4nager(Generic[EntryType]):
+class _JSONDBM4nager(Generic[EntryTypeT]):
     """Manages a JSON DB: add, list, update, select, and remove data
     stored in a JSON file."""
 
@@ -25,11 +25,11 @@ class _JSONDBM4nager(Generic[EntryType]):
         self.json_file_path.touch(exist_ok=True)
         self.data, self.listd, self.current = self._load_data()
 
-    def get_current(self) -> tuple[str, EntryType]:
+    def get_current(self) -> tuple[str, EntryTypeT]:
         """Returns the key and entry information ofthe current entry.
 
         Returns:
-            tuple[str, EntryType]: key and entry data of the default entry
+            tuple[str, EntryTypeT]: key and entry data of the default entry
         
         Raises:
             Pyr4tValueError: If no current entry is set.
@@ -40,13 +40,13 @@ class _JSONDBM4nager(Generic[EntryType]):
         entry = self.listd.get(self.current)
         return self.current, entry
 
-    def update_data(self, key: str, action: str, entry: EntryType = None):
+    def update_data(self, key: str, action: str, entry: EntryTypeT = None):
         """Update DB.
 
         Args:
             key (str): Data key.
             action (str): type (add, rm, updt)
-            entry (EntryType): data
+            entry (EntryTypeT): data
         
         Raises:
             Pyr4tValueError: If the action is invalid.
@@ -55,7 +55,7 @@ class _JSONDBM4nager(Generic[EntryType]):
         if not key:
             raise Pyr4tValueError("Key can't be empty.")
 
-        if action == "add":
+        if action == "add": # TODO : corriger issue #26
             if not entry:
                 raise Pyr4tValueError("Entry can't be empty.")
             duplicate_key = self._find_duplicate(entry)
@@ -103,21 +103,21 @@ class _JSONDBM4nager(Generic[EntryType]):
             json.dump(self.data, file, indent=4)
             file.truncate()
 
-    def _load_data(self) -> tuple[JSOND4ta, dict[str, EntryType], str]:
+    def _load_data(self) -> tuple[JSOND4ta, dict[str, EntryTypeT], str]:
         """Loads datas in the JSON file."""
 
         with open(self.json_file_path, "r+", encoding="utf-8") as file:
             try:
                 data: dict = json.load(file)
-                listd: dict[str, EntryType] = data.get("list", {})
+                listd: dict[str, EntryTypeT] = data.get("list", {})
                 current: str = data.get("current", "")
             except json.JSONDecodeError:
                 data: dict = {}
-                listd: dict[str, EntryType] = {}
+                listd: dict[str, EntryTypeT] = {}
                 current = ""
         return data, listd, current
 
-    def _find_duplicate(self, entry: EntryType) -> str:
+    def _find_duplicate(self, entry: EntryTypeT) -> str:
         """Finds duplicate datas in the JSON file."""
 
         for key, value in self.listd.items():

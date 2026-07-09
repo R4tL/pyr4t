@@ -1,15 +1,15 @@
 """Typing module."""
 
-from typing import Generic, TypedDict, TypeVar
+from typing import TypedDict, TypeVar
 
-EntryType = TypeVar("EntryType", bound=TypedDict)
+EntryTypeT = TypeVar("EntryTypeT", bound=dict[str, str])
 
 
 class JSOND4ta(TypedDict):
     """Typing for JSON data."""
 
     current: str
-    list: dict[str, EntryType]
+    list: dict[str, EntryTypeT]
 
 
 class User(TypedDict):
