@@ -25,7 +25,7 @@ class ProjectCodeM4nager:
 
         self.dbp = ProjectDBM4nager()
         if proj_title is None:
-            proj_title = self.dbp.current
+            proj_title, _ = self.dbp.info()
         if proj_title not in self.dbp.listd:
             raise Pyr4tValueError(f"Project '{proj_title}' not found in DB.")
         self.proj_title = proj_title

@@ -4,7 +4,8 @@ import sys
 import time
 from pathlib import Path
 
-from pyr4t.exceptions import Pyr4tRuntimeError
+from pyr4t.exceptions import Pyr4tRuntimeError, Pyr4tValueError
+from pyr4t.utils import is_text_valid
 
 from .prj_db import ProjectDBM4nager
 from .usr_db import UserDBM4nager
@@ -32,22 +33,26 @@ class ProjectArchM4nager:
         proj_version: str = None,
     ):
 
-        self.pdb = ProjectDBM4nager()
-
+        self.dbp = ProjectDBM4nager()
         if proj_title is None:
-            self.proj_title = self.pdb.current
+            self.proj_title, _ = self.dbp.info()
+        if is_text_valid(proj_title) is False:
+            raise Pyr4tValueError(
+                f"Invalid project title: {proj_title}. "
+                "Only letters, numbers, underscores, and hyphens are allowed."
+            )
         else:
             self.proj_title = proj_title
         if proj_base_path is None:
             self.proj_path = Path(
-                self.pdb.listd.get(self.proj_title, {"": ""}).get("path", "")
+                self.dbp.listd.get(self.proj_title, {"": ""}).get("path", "")
             )
             self.proj_base_path = Path(self.proj_path).parent
         else:
             self.proj_base_path = Path(proj_base_path)
             self.proj_path = self.proj_base_path / self.proj_title
         if proj_version is None:
-            self.proj_version = self.pdb.listd.get(
+            self.proj_version = self.dbp.listd.get(
                 self.proj_title, {"": ""}
             ).get("version", "")
         else:
@@ -82,6 +87,10 @@ class ProjectArchM4nager:
     def genretate_dev_env(self):
         """Generates a dev env in /dev"""
 
+        if self.proj_title not in self.dbp.listd:
+            raise Pyr4tValueError(
+                f"Project '{self.proj_title}' not found in DB."
+            )
         print("[info] Generating a dev environment...")
         (self._pg.proj_path / "dev").mkdir()
         print("[info] Cretation of dir: dev")
@@ -94,6 +103,10 @@ class ProjectArchM4nager:
     def generate_docs_files(self):
         """Generates the Sphinx documentation files."""
 
+        if self.proj_title not in self.dbp.listd:
+            raise Pyr4tValueError(
+                f"Project '{self.proj_title}' not found in DB."
+            )
         print("[info] Generating Sphinx documentation files...")
         self._pg.generate_sphinx_config()
         self._pg.generate_doc_workflow()
@@ -123,7 +136,7 @@ class _ProjectGenerator:
         proj_version: str,
     ):
 
-        self.proj_title = proj_title.replace(" ", "-")
+        self.proj_title = proj_title
         self.package_name = self.proj_title.lower().replace("-", "_")
         self.base_path = base_path.resolve()
         self.proj_path = (base_path / self.proj_title).resolve()
@@ -174,9 +187,9 @@ class _ProjectGenerator:
             self._generate_lib()
 
         # Add to DB and current
-        pdb = ProjectDBM4nager()
-        pdb.add(self.proj_title, str(self.proj_path), self.proj_version)
-        pdb.switch(self.proj_title)
+        dbp = ProjectDBM4nager()
+        dbp.add(self.proj_title, str(self.proj_path), self.proj_version)
+        dbp.switch(self.proj_title)
 
         print("[info] Project architecture created with success.")
 
@@ -1125,13 +1138,13 @@ class Example:
     def _get_authors(self, authors: list[str]) -> list[dict]:
         """Gets author(s) using the user DB."""
 
-        udb = UserDBM4nager()
+        dbu = UserDBM4nager()
         authors_list = []
         for author in authors:
             if author == "current":
-                profile = udb.listd.get(udb.current, {})
+                profile = dbu.listd.get(dbu.current, {})
             else:
-                profile = udb.listd.get(author, {})
+                profile = dbu.listd.get(author, {})
             if not profile:
                 if author == "current":
                     print(
@@ -1141,31 +1154,31 @@ class Example:
                     )
                     choice = input("Choice (1/2): ")
                     if choice == "2":
-                        udb.switch(input("Alias: ").upper())
+                        dbu.switch(input("Alias: ").upper())
                     elif choice == "1":
                         author = input("Alias: ").upper()
-                        udb.add(
+                        dbu.add(
                             author,
                             input(f"`{author}` name: "),
                             input(f"`{author}` email: "),
                         )
-                        udb.switch(author)
+                        dbu.switch(author)
                     else:
                         raise Pyr4tRuntimeError(
                             "Invalid choice. Please select either '1' or '2'."
                         )
-                    _, profile = udb.whoami()
+                    _, profile = dbu.whoami()
                 else:
                     print(
                         f"[warning] No user found for alias '{author}'."
                         " Add new user data:"
                     )
-                    udb.add(
+                    dbu.add(
                         author,
                         input(f"`{author}` name: "),
                         input(f"`{author}` email: "),
                     )
-                    profile = udb.listd.get(author, {})
+                    profile = dbu.listd.get(author, {})
             authors_list.append(profile)
         return authors_list
 

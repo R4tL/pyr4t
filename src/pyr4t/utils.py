@@ -3,6 +3,7 @@
 import json
 import os
 import platform
+import re
 import shlex
 import subprocess
 from pathlib import Path
@@ -189,3 +190,16 @@ def _check_python_works(python_cmd: list[str]) -> str:
         [*python_cmd, "-c", "import sys; print(sys.executable)"], text=True
     ).strip()
     return out
+
+
+def is_text_valid(text: str) -> bool:
+    """Checks if the input string is valid.
+
+    Args:
+        text (str): input string to validate
+
+    Returns:
+        bool: True if the input string is valid, False otherwise
+    """
+
+    return bool(re.fullmatch(r"[A-Za-z0-9_-]+", text))
