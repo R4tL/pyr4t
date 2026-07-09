@@ -55,8 +55,9 @@ class _JSONDBM4nager(Generic[EntryTypeT]):
         if not key:
             raise Pyr4tValueError("Key can't be empty.")
 
-        if action == "add": # TODO : corriger issue #26
-            if not entry:
+        if action == "add":
+            k, v = entry.items()
+            if not k or not v:
                 raise Pyr4tValueError("Entry can't be empty.")
             duplicate_key = self._find_duplicate(entry)
             if duplicate_key:
