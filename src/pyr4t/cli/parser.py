@@ -33,6 +33,14 @@ def cmd_base(args: argparse.Namespace):
     """
 
     if args.help_requested:
+        print(
+            "\nWelcome to Pyr4t - the Python project management tool"
+            " developed by R4tL!"
+            "\n  - Documentation: https://r4tl.github.io/pyr4t"
+            "\n  - GitHub: https://github.com/R4tL/pyr4t"
+            "\n\nUse the following commands:"
+        )
+        print("")
         print(get_tree())
         print("")
         build_parser().print_help()
