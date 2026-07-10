@@ -3,7 +3,7 @@
 import shutil
 from pathlib import Path
 
-from pyr4t.exceptions import Pyr4tFileError
+from pyr4t.exceptions import Pyr4tFileError, Pyr4tValueError
 from pyr4t.models import Project
 from pyr4t.utils import _JSONDBM4nager
 
@@ -95,6 +95,8 @@ class ProjectDBM4nager(_JSONDBM4nager[Project]):
         """
 
         project = self.listd.get(title)
+        if not project:
+            raise Pyr4tValueError(f"No project found with title: {title}")
         if path:
             project["path"] = path
         if version:

@@ -72,7 +72,12 @@ class _JSONDBM4nager(Generic[EntryTypeT]):
                 raise Pyr4tValueError(f"No entry found with key: {key}")
 
         if action in ["updt", "add"] and entry:
-            self.listd[key] = entry
+            try:
+                self.listd[key] = entry
+            except KeyError as e:
+                raise Pyr4tValueError(
+                    f"No entry found with key: {key}"
+                ) from e
             self.data["list"] = self.listd
             if not self.current:
                 print("[info] Adding first entry like current")

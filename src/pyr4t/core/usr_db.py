@@ -63,6 +63,8 @@ class UserDBM4nager(_JSONDBM4nager[User]):
         """
 
         user = self.listd.get(alias.upper())
+        if not user:
+            raise Pyr4tValueError(f"No user found with alias: {alias}")
         if name:
             user["name"] = name
         if email:
