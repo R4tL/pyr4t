@@ -29,7 +29,7 @@ def install_pyr4tpackage(
         Pyr4tRuntimeError: If the GitHub API request fails or if the package
             cannot be installed.
     """
-    
+
     python_cmd = select_python_interpreter(python)
     print(f"[info] Using Python interpreter: {python_cmd}")
     # URL GitHub API

@@ -16,7 +16,7 @@ def cmd_install(args: argparse.Namespace):
     if args.token:
         maj_token(args.token)
     if args.package:
-        install_pyr4tpackage(args.package, args.version)
+        install_pyr4tpackage(args.package, args.version, args.python)
     if args.info:
         install_info(show_private=False)
     if args.info_private:
@@ -48,6 +48,12 @@ def add_install_parser(subparsers: argparse._SubParsersAction):
         "--token", help="Update the GitHub token for private pyr4t packages"
     )
     parser.add_argument("package", nargs="?", help="Pyr4t package name")
+    parser.add_argument(
+        "-py", "--python",
+        help="Specify the Python interpreter to use for installation,"
+         " works with any keyword (e.g., 'python3.13', 'python3', 'python',"
+         " `'py -3.13'`) or an absolute path to the interpreter"
+    )
     parser.add_argument(
         "-V", "--version", help="Specify the version of the package to install"
     )

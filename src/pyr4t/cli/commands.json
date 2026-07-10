@@ -4,7 +4,7 @@
         "__seq__":["[(-h | --help) | (-V | --version)]"],
         "install": {
             "__desc__": "Install a pyr4t package from R4tL's github repo (use '--info(-private)' to show all available package)",
-            "__seq__": ["[<package> [(-V | --version) <version>]]", "[--info]", "[--info-private]", "[--token <token>]"]
+            "__seq__": ["[<package> ", "[(-py | --python) <python-interpreter>]","[(-V | --version) <version>]]", "[--info]", "[--info-private]", "[--token <token>]"]
         },
         "init": {
             "__desc__": "Generate a new python project architecture, default switched as active project",

@@ -38,6 +38,8 @@ def add_deploy_parser(subparsers: argparse._SubParsersAction):
         "--python",
         "-py",
         default=None,
-        help="Python interpreter to use (default: active venv/python)",
+        help="Specify the Python interpreter to use for deployment,"
+         " works with any keyword (e.g., 'python3.13', 'python3', 'python',"
+         " `'py -3.13'`) or an absolute path to the interpreter"
     )
     parser.set_defaults(func=cmd_deploy)
