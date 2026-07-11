@@ -34,18 +34,19 @@ def add_install_parser(subparsers: argparse._SubParsersAction):
     """
 
     parser: argparse.ArgumentParser = subparsers.add_parser(
-        "install", help="Install a pyr4t package"
+        "install", help="Install a Pyr4t package"
     )
     parser.add_argument(
-        "--info", action="store_true", help="Display package info"
+        "--info", action="store_true",
+        help="Display available public Pyr4t packages"
     )
     parser.add_argument(
         "--info-private",
         action="store_true",
-        help="Display package info including private packages",
+        help="Display available private and public Pyr4t packages",
     )
     parser.add_argument(
-        "--token", help="Update the GitHub token for private pyr4t packages"
+        "--token", help="Update the GitHub token for private Pyr4t packages"
     )
     parser.add_argument("package", nargs="?", help="Pyr4t package name")
     parser.add_argument(
@@ -53,6 +54,7 @@ def add_install_parser(subparsers: argparse._SubParsersAction):
         help="Specify the Python interpreter to use for installation,"
          " works with any keyword (e.g., 'python3.13', 'python3', 'python',"
          " `'py -3.13'`) or an absolute path to the interpreter"
+         "(default: active venv/python)"
     )
     parser.add_argument(
         "-V", "--version", help="Specify the version of the package to install"

@@ -31,12 +31,14 @@ def add_run_parser(subparsers: argparse._SubParsersAction):
     """
 
     parser: argparse.ArgumentParser = subparsers.add_parser(
-        "run", help="Run scripts"
+        "run", help="Run script files stored in ./scripts"
     )
     parser.add_argument(
         "--prj", "-p", default=None, help="Project title (default: current)"
     )
-    parser.add_argument("--dev", action="store_true", help="Dev script")
+    parser.add_argument(
+        "--dev", action="store_true", help="Dev script stored in ./dev/scripts"
+    )
     parser.add_argument("script", help="Script name")
     parser.add_argument(
         "script_args",
@@ -47,6 +49,9 @@ def add_run_parser(subparsers: argparse._SubParsersAction):
         "--python",
         "-py",
         default=None,
-        help="Python interpreter to use (default: active venv/python)",
+        help="Specify the Python interpreter to use for running scripts,"
+        " works with any keyword (e.g., 'python3.13', 'python3', 'python',"
+        " `'py -3.13'`) or an absolute path to the interpreter"
+        "(default: active venv/python)"
     )
     parser.set_defaults(func=cmd_run)

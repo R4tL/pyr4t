@@ -26,7 +26,7 @@ def add_deploy_parser(subparsers: argparse._SubParsersAction):
     """
 
     parser: argparse.ArgumentParser = subparsers.add_parser(
-        "deploy", help="Deploy project with pip"
+        "deploy", help="Deploy project `using pip install`"
     )
     parser.add_argument(
         "--prj", "-p", default=None, help="Project title (default: current)"
@@ -41,5 +41,6 @@ def add_deploy_parser(subparsers: argparse._SubParsersAction):
         help="Specify the Python interpreter to use for deployment,"
          " works with any keyword (e.g., 'python3.13', 'python3', 'python',"
          " `'py -3.13'`) or an absolute path to the interpreter"
+         "(default: active venv/python)"
     )
     parser.set_defaults(func=cmd_deploy)

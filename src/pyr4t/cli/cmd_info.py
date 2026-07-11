@@ -27,6 +27,6 @@ def add_info_parser(subparsers: argparse._SubParsersAction):
     """
 
     parser: argparse.ArgumentParser = subparsers.add_parser(
-        "info", help="Display the current default user"
+        "info", help="Display the current project informations"
     )
     parser.set_defaults(func=cmd_info)

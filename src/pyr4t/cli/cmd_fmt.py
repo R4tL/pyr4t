@@ -35,6 +35,6 @@ def add_fmt_parser(subparsers: argparse._SubParsersAction):
         "specific",
         nargs="?",
         default="",
-        help="Run specific test (dir or file or file::function)",
+        help="Specific spot (dir or file or file::function)",
     )
     parser.set_defaults(func=cmd_fmt)

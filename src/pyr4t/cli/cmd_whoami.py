@@ -27,6 +27,6 @@ def add_whoami_parser(subparsers: argparse._SubParsersAction):
     """
 
     parser: argparse.ArgumentParser = subparsers.add_parser(
-        "whoami", help="Display the current default user"
+        "whoami", help="Display the current user informations"
     )
     parser.set_defaults(func=cmd_whoami)

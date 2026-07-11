@@ -68,24 +68,30 @@ def add_prj_parser(subparsers: argparse._SubParsersAction):
     """
 
     parser: argparse.ArgumentParser = subparsers.add_parser(
-        "prj", help="Manage a pyr4t project"
+        "prj", help="Manage the Pyr4t project DB"
     )
 
     proj_subparsers = parser.add_subparsers(dest="action", required=True)
 
     # ----- add -----
-    add_parser = proj_subparsers.add_parser("add", help="Add a new project")
+    add_parser = proj_subparsers.add_parser(
+        "add", help="Add a new project to the DB"
+    )
     add_parser.add_argument("title", help="Project title")
     add_parser.add_argument("path", help="Project path")
     add_parser.add_argument("version", help="Project version")
     add_parser.set_defaults(func=cmd_prj)
 
     # ----- ls -----
-    list_parser = proj_subparsers.add_parser("ls", help="List projects")
+    list_parser = proj_subparsers.add_parser(
+        "ls", help="List projects in the DB"
+    )
     list_parser.set_defaults(func=cmd_prj)
 
     # ----- mv -----
-    modify_parser = proj_subparsers.add_parser("mv", help="Modify a project")
+    modify_parser = proj_subparsers.add_parser(
+        "mv", help="Modify a project in the DB"
+    )
     modify_parser.add_argument("title", help="Project title")
     modify_parser.add_argument("-p", "--path", help="New project path")
     modify_parser.add_argument("-V", "--version", help="New project verrsion")
@@ -99,7 +105,9 @@ def add_prj_parser(subparsers: argparse._SubParsersAction):
     select_parser.set_defaults(func=cmd_prj)
 
     # ----- rm -----
-    remove_parser = proj_subparsers.add_parser("rm", help="Remove a project")
+    remove_parser = proj_subparsers.add_parser(
+        "rm", help="Remove a project from the DB"
+    )
     remove_parser.add_argument("title", help="Project title")
     remove_parser.add_argument(
         "-f", "--files", action="store_true", help="Delete project files too"

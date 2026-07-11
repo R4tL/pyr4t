@@ -61,7 +61,7 @@ def build_parser() -> argparse.ArgumentParser:
 
     parser = argparse.ArgumentParser(
         prog="pyr4t",
-        description="CLI of the python manager pyr4t.",
+        description="Pyr4t CLI",
         add_help=False,
     )
     parser.add_argument(

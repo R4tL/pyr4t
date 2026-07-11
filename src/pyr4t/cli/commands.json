@@ -31,7 +31,7 @@
                 "[--dev]", "<script>", "[<script_args>]"]
         },
         "test": {
-            "__desc__": "Run tests in /tests (default all)",
+            "__desc__": "Run tests in ./tests (default all)",
             "__seq__": ["[(-p | --prj) <title>]", "[<specific>]"]
         },
         "cls": {
@@ -65,46 +65,46 @@
             "__desc__": "Print current user informations"
         },
         "prj": {
-            "__desc__": "Manage project DB",
+            "__desc__": "Manage the Pyr4t project DB",
             "add": {
-                "__desc__": "Add a local project to the pyr4t project DB",
+                "__desc__": "Add a local project to the Pyr4t project DB",
                 "__seq__": ["<title>", "<path>", "<version>"]
             },
             "ls": {
-                "__desc__": "List projects from the pyr4t project DB"
+                "__desc__": "List projects from the Pyr4t project DB"
             },
             "mv": {
-                "__desc__": "Modify project information in the pyr4t project DB",
+                "__desc__": "Modify project informations in the Pyr4t project DB",
                 "__seq__": ["<title>", "[(-p | --path) <path>]", "[(-V | --version) <version>]"]
             },
             "rm": {
-                "__desc__": "Remove a project from the pyr4t project DB",
+                "__desc__": "Remove a project from the Pyr4t project DB",
                 "__seq__": ["<title>", "[(-f | --files)]"]
             },
             "switch": {
-                "__desc__": "Switch to another active project from the pyr4t project DB",
+                "__desc__": "Switch to another active project from the Pyr4t project DB",
                 "__seq__": ["<title>"]
             }
         },
         "usr": {
-            "__desc__": "Manage user DB",
+            "__desc__": "Manage the Pyr4t user DB",
             "add": {
-                "__desc__": "Add a user to the pyr4t user DB",
+                "__desc__": "Add a user to the Pyr4t user DB",
                 "__seq__": ["<alias>", "<name>", "<email>"]
             },
             "ls": {
-                "__desc__": "List users from the pyr4t user DB"
+                "__desc__": "List users from the Pyr4t user DB"
             },
             "mv": {
-                "__desc__": "Modify user information in the pyr4t user DB",
+                "__desc__": "Modify user informations in the Pyr4t user DB",
                 "__seq__": ["<alias>", "[(-e | --email) <email>]", "[(-n | --name) <name>]"]
             },
             "rm": {
-                "__desc__": "Remove a user from the pyr4t user DB",
+                "__desc__": "Remove a user from the Pyr4t user DB",
                 "__seq__": ["<alias>"]
             },
             "switch": {
-                "__desc__": "Switch to another default user from the pyr4t user DB",
+                "__desc__": "Switch to another default user from the Pyr4t user DB",
                 "__seq__": ["<alias>"]
             }
         }

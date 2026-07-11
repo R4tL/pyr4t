@@ -26,7 +26,7 @@ def add_test_parser(subparsers: argparse._SubParsersAction):
     """
 
     parser: argparse.ArgumentParser = subparsers.add_parser(
-        "test", help="Run tests"
+        "test", help="Run test files stored in ./tests"
     )
     parser.add_argument(
         "--prj", "-p", default=None, help="Project title (default: current)"

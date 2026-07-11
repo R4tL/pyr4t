@@ -26,7 +26,7 @@ def add_doc_parser(subparsers: argparse._SubParsersAction):
     """
 
     parser: argparse.ArgumentParser = subparsers.add_parser(
-        "doc", help="Generate documentation files"
+        "doc", help="Generate input documentation files for Sphinx"
     )
     parser.add_argument(
         "--prj", "-p", default=None, help="Project title (default: current)"
