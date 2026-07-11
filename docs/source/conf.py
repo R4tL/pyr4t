@@ -6,7 +6,7 @@ sys.path.insert(0, os.path.abspath("../../src"))
 project = 'Pyr4t'
 copyright = '2026, R4tL'
 author = 'R4tL'
-release = '1.1.1'
+release = '1.1.2'
 
 extensions = [
     "sphinx.ext.autodoc",
