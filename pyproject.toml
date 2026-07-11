@@ -1,6 +1,6 @@
 [project]
 name = "pyr4t"
-version = "1.1.1"
+version = "1.1.2"
 description = "A CLI app for generating and managing python projects."
 authors = [{ name = "R4tL", email = "r4tl.dev@gmail.com" }]
 requires-python = ">=3.13"

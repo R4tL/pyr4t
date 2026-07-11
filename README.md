@@ -24,7 +24,7 @@ A python manager to generate python project architectures, manage them and insta
 
 ## About
 
-* **Version ->** 1.1.1
+* **Version ->** 1.1.2
 * **Author ->** [R4tL](https://github.com/R4tL)
 * **License ->** MIT
 
@@ -101,21 +101,21 @@ Use pipx to install the package globally in an isolated environment.
 - HTTPS
 
 ```bash
-pip install git+https://github.com/R4tL/pyr4t.git@v1.1.1
+pip install git+https://github.com/R4tL/pyr4t.git@v1.1.2
 ```
 
 ```bash
-pipx install git+https://github.com/R4tL/pyr4t.git@v1.1.1
+pipx install git+https://github.com/R4tL/pyr4t.git@v1.1.2
 ```
 
 - SSH
 
 ```bash
-pip install git+ssh://git@github.com/R4tL/pyr4t.git@v1.1.1
+pip install git+ssh://git@github.com/R4tL/pyr4t.git@v1.1.2
 ```
 
 ```bash
-pipx install git+ssh://git@github.com/R4tL/pyr4t.git@v1.1.1
+pipx install git+ssh://git@github.com/R4tL/pyr4t.git@v1.1.2
 ```
 
 * **Cloning the repository**
@@ -125,13 +125,13 @@ Clone the repository on your local machine:
 - HTTPS
 
 ```bash
-git clone https://github.com/R4tL/pyr4t.git@v1.1.1
+git clone https://github.com/R4tL/pyr4t.git@v1.1.2
 ```
 
 - SSH
 
 ```bash
-git clone ssh://git@github.com/R4tL/pyr4t.git@v1.1.1
+git clone ssh://git@github.com/R4tL/pyr4t.git@v1.1.2
 ```
 
 Then install the package using pip or pipx:
