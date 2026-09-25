@@ -20,15 +20,18 @@ class ProjectDBM4nager(_JSONDBM4nager[Project]):
     
         Args:
             title (str): unique identifier for the project
-            path (str): name of the user
+            path (str): path to the project directory
             version (str): project version
+        
+        Raises:
+            Pyr4tValueError: If the path doesn't exist.
         """
 
         path = str(Path(path).resolve())
+        if not (Path(path)).exists():
+            raise Pyr4tFileError(f"This path doesn't exist: {path}")
         project: Project = {"path": path, "version": version}
         self.update_data(title, "add", project)
-        if not (Path(path)).exists():
-            print(f"[warning] Path does not exist: {path}")
         print(f"[info] Project added: {title}: {path} <v{version}>")
 
     def list(self) -> dict[str, Project]:
@@ -92,12 +95,18 @@ class ProjectDBM4nager(_JSONDBM4nager[Project]):
             title (str): title of the project to update
             path (str, optional): new path for the project
             version (str): project version
+        
+        Raises:
+            Pyr4tValueError: If the path doesn't exist.
         """
 
         project = self.listd.get(title)
         if not project:
             raise Pyr4tValueError(f"No project found with title: {title}")
         if path:
+            path = str(Path(path).resolve())
+            if not (Path(path)).exists():
+                raise Pyr4tFileError(f"This path doesn't exsits: {path}")
             project["path"] = path
         if version:
             project["version"] = version
