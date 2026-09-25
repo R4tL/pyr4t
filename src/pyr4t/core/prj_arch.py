@@ -33,16 +33,15 @@ class ProjectArchM4nager:
         proj_version: str = None,
     ):
 
+        self.proj_title = proj_title
         self.dbp = ProjectDBM4nager()
-        if proj_title is None:
+        if self.proj_title is None:
             self.proj_title, _ = self.dbp.info()
-        if is_text_valid(proj_title) is False:
+        if is_text_valid(self.proj_title) is False:
             raise Pyr4tValueError(
-                f"Invalid project title: {proj_title}. "
+                f"Invalid project title: {self.proj_title}. "
                 "Only letters, numbers, underscores, and hyphens are allowed."
             )
-        else:
-            self.proj_title = proj_title
         if proj_base_path is None:
             self.proj_path = Path(
                 self.dbp.listd.get(self.proj_title, {"": ""}).get("path", "")
