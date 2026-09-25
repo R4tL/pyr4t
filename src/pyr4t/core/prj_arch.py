@@ -381,7 +381,7 @@ ex.example()
 """
         # pylint: disable=line-too-long
         content = f"""\
-# {self.proj_title} v{self.proj_version}
+# {self.proj_title}
 
 Short description of the project.
 
