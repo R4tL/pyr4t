@@ -390,6 +390,7 @@ Short description of the project.
 ## Table of Contents
 
 - [About](#about)
+- [Version](#version)
 - [Documentation](#documentation)
 - [Python best practices reminder](#python-best-practices-reminder)
 - [Installation](#Installation)
@@ -402,9 +403,15 @@ Short description of the project.
 
 ## About
 
-* **Version ->** {self.proj_version}
+* **Last Version ->** {self.proj_version}
 * **{"Authors" if "," in author_names else "Author"} ->** {author_links}
 * **License ->** MIT
+
+---
+
+## Versions
+
+- [v{self.proj_version}](https://github.com/{self.authors[0].get("name", "")}/{self.proj_title}/tree/v{self.proj_version})
 
 ---
 
@@ -459,7 +466,13 @@ Use pipx to install the package globally in an isolated environment.
 
 - HTTPS
 ```bash
+pip install git+https://github.com/{self.authors[0].get("name", "")}/{self.proj_title}.git
+```
+```bash
 pip install git+https://github.com/{self.authors[0].get("name", "")}/{self.proj_title}.git@v{self.proj_version}
+```
+```bash
+pipx install git+https://github.com/{self.authors[0].get("name", "")}/{self.proj_title}.git
 ```
 ```bash
 pipx install git+https://github.com/{self.authors[0].get("name", "")}/{self.proj_title}.git@v{self.proj_version}
@@ -467,7 +480,13 @@ pipx install git+https://github.com/{self.authors[0].get("name", "")}/{self.proj
 
 - SSH
 ```bash
+pip install git+ssh://git@github.com/{self.authors[0].get("name", "")}/{self.proj_title}.git
+```
+```bash
 pip install git+ssh://git@github.com/{self.authors[0].get("name", "")}/{self.proj_title}.git@v{self.proj_version}
+```
+```bash
+pipx install git+ssh://git@github.com/{self.authors[0].get("name", "")}/{self.proj_title}.git
 ```
 ```bash
 pipx install git+ssh://git@github.com/{self.authors[0].get("name", "")}/{self.proj_title}.git@v{self.proj_version}
@@ -476,7 +495,13 @@ pipx install git+ssh://git@github.com/{self.authors[0].get("name", "")}/{self.pr
 * **Install directly from Pypi**
 
 ```bash
+pip install {self.proj_title.lower()}
+```
+```bash
 pip install {self.proj_title.lower()}=={self.proj_version}
+```
+```bash
+pipx install {self.proj_title.lower()}
 ```
 ```bash
 pipx install {self.proj_title.lower()}=={self.proj_version}
@@ -487,9 +512,15 @@ pipx install {self.proj_title.lower()}=={self.proj_version}
 Clone the repository on your local machine:
 - HTTPS
 ```bash
+git clone https://github.com/{self.authors[0].get("name", "")}/{self.proj_title}.git
+```
+```bash
 git clone https://github.com/{self.authors[0].get("name", "")}/{self.proj_title}.git@v{self.proj_version}
 ```
 - SSH
+```bash
+git clone ssh://git@github.com/{self.authors[0].get("name", "")}/{self.proj_title}.git
+```
 ```bash
 git clone ssh://git@github.com/{self.authors[0].get("name", "")}/{self.proj_title}.git@v{self.proj_version}
 ```
