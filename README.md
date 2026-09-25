@@ -14,6 +14,7 @@ A python manager to generate python project architectures, manage them and insta
 ## Table of Contents
 
 - [About](#about)
+- [Versions](#versions)
 - [Documentation](#documentation)
 - [Python best practices reminder](#python-best-practices-reminder)
 - [Installation](#installation)
@@ -24,9 +25,20 @@ A python manager to generate python project architectures, manage them and insta
 
 ## About
 
-* **Version ->** 1.1.2
+* **Last Version ->** 1.1.2
 * **Author ->** [R4tL](https://github.com/R4tL)
 * **License ->** MIT
+
+---
+
+## Versions
+
+- [v1.2.0](https://github.com/R4tL/pyr4t/tree/v1.2.0)
+- [v1.1.2](https://github.com/R4tL/pyr4t/tree/v1.1.2)
+- [v1.1.1](https://github.com/R4tL/pyr4t/tree/v1.1.1)
+- [v1.1.0](https://github.com/R4tL/pyr4t/tree/v1.1.0)
+- [v1.0.1](https://github.com/R4tL/pyr4t/tree/v1.0.1)
+- [v1.0.0](https://github.com/R4tL/pyr4t/tree/v1.0.0)
 
 ---
 
@@ -101,22 +113,33 @@ Use pipx to install the package globally in an isolated environment.
 - HTTPS
 
 ```bash
-pip install git+https://github.com/R4tL/pyr4t.git@v1.1.2
+pipx install git+https://github.com/R4tL/pyr4t.git
 ```
-
 ```bash
-pipx install git+https://github.com/R4tL/pyr4t.git@v1.1.2
+pipx install git+https://github.com/R4tL/pyr4t.git@v1.2.0
+```
+```bash
+pip install git+https://github.com/R4tL/pyr4t.git
+```
+```bash
+pip install git+https://github.com/R4tL/pyr4t.git@v1.2.0
 ```
 
 - SSH
 
 ```bash
-pip install git+ssh://git@github.com/R4tL/pyr4t.git@v1.1.2
+pipx install git+ssh://git@github.com/R4tL/pyr4t.git
+```
+```bash
+pipx install git+ssh://git@github.com/R4tL/pyr4t.git@v1.2.0
+```
+```bash
+pip install git+ssh://git@github.com/R4tL/pyr4t.git@v1.2.0
+```
+```bash
+pip install git+ssh://git@github.com/R4tL/pyr4t.git
 ```
 
-```bash
-pipx install git+ssh://git@github.com/R4tL/pyr4t.git@v1.1.2
-```
 
 * **Cloning the repository**
 
@@ -125,13 +148,21 @@ Clone the repository on your local machine:
 - HTTPS
 
 ```bash
-git clone https://github.com/R4tL/pyr4t.git@v1.1.2
+git clone https://github.com/R4tL/pyr4t.git
+```
+
+```bash
+git clone https://github.com/R4tL/pyr4t.git@v1.2.0
 ```
 
 - SSH
 
 ```bash
-git clone ssh://git@github.com/R4tL/pyr4t.git@v1.1.2
+git clone ssh://git@github.com/R4tL/pyr4t.git
+```
+
+```bash
+git clone ssh://git@github.com/R4tL/pyr4t.git@v1.2.0
 ```
 
 Then install the package using pip or pipx:
