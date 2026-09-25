@@ -14,7 +14,7 @@ def cmd_deploy(args: argparse.Namespace):
     """
 
     pcm = ProjectCodeM4nager(proj_title=args.prj)
-    pcm.deploy(dev_mode=args.dev, python=args.python)
+    pcm.deploy(edit_mode=args.e, python=args.python, extras=args.extras)
 
 
 def add_deploy_parser(subparsers: argparse._SubParsersAction):
@@ -32,7 +32,11 @@ def add_deploy_parser(subparsers: argparse._SubParsersAction):
         "--prj", "-p", default=None, help="Project title (default: current)"
     )
     parser.add_argument(
-        "--dev", action="store_true", help="Deploy in dev and editable mode"
+        "-e", action="store_true", help="Deploy in dev and editable mode"
+    )
+    parser.add_argument(
+        "extras", nargs="?", default="",
+        help="Extra dependencies to install (e.g., [dev, test])"
     )
     parser.add_argument(
         "--python",

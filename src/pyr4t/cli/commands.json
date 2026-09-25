@@ -18,10 +18,10 @@
             "__seq__":["[(-p | --prj) <title>]"]
         },
         "deploy": {
-            "__desc__": "Deploy project using pip (--dev for editable mode)",
+            "__desc__": "Deploy project using pip",
             "__seq__":[
                 "[(-p | --prj) <title>]", "[(-py | --python) <python-interpreter>]",
-                "[--dev]"
+                "[-e], [<extras>]"
             ]
         },
         "run": {

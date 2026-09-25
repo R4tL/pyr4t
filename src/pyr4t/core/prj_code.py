@@ -46,33 +46,38 @@ class ProjectCodeM4nager:
         except subprocess.CalledProcessError as e:
             raise Pyr4tRuntimeError(f"Failed to build package: {e}") from e
 
-    def deploy(self, dev_mode: bool = False, python: str = None):
+    def deploy(
+            self, edit_mode: bool = False, python: str = None, extras: str = ""
+        ):
         """Deploy the package using pip.
 
         Args:
-            dev_mode (bool, optional): if True, deploy in editable mode.
+            edit_mode (bool, optional): if True, deploy in editable mode.
             python (str, optional): python interpreter to use
-            
+            extras (str, optional): extra dependencies to install 
+                (e.g., [dev, test])
+
         Raises:
             Pyr4tRuntimeError: If the deployment fails.
         """
 
         python_interpreter = select_python_interpreter(python)
         print(f"[info] Using python interpreter: {python_interpreter}")
+        print_extra = f"With extra(s): {extras}" if extras else ""
+        e = ""
+        if edit_mode:
+            e = "-e"
+            print(
+                f"[info] Deploy package in editable mode {print_extra} ..."
+            )
+        else:
+            print(f"[info] Deploy permanant package {print_extra} ...")
         try:
-            if dev_mode:
-                print("[info] Deploy package in editable mode ...")
-                subprocess.check_call(
-                    [python_interpreter, "-m", "pip",
-                     "install", "-e", ".[dev]"],
-                    cwd=str(self.proj_path),
-                )
-            else:
-                print("[info] Deploy permanant package ...")
-                subprocess.check_call(
-                    [python_interpreter, "-m", "pip", "install", "."],
-                    cwd=str(self.proj_path),
-                )
+            subprocess.check_call(
+                [python_interpreter, "-m", "pip",
+                    "install", e, f".{extras}"],
+                cwd=str(self.proj_path),
+            )
         except subprocess.CalledProcessError as e:
             raise Pyr4tRuntimeError(f"Failed to deploy package: {e}") from e
 

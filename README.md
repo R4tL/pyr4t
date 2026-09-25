@@ -159,8 +159,8 @@ pipx install .
     │        [(-a | --authors) <alias1> <alias2> ...] [(-p | --path) <path>]      switched as active project
     │        [(-V | --version) <version>]
     ├── build [(-p | --prj) <title>]                                            # Build binary files in ./dist (.tar.gz, .whl)
-    ├── deploy [(-p | --prj) <title>] [(-py | --python) <python-interpreter>]   # Deploy project using pip (--dev for editable mode)
-    │          [--dev]
+    ├── deploy [(-p | --prj) <title>] [(-py | --python) <python-interpreter>]   # Deploy project using pip
+    │          [-e]
     ├── run [(-p | --prj) <title>] [(-py | --python) <python-interpreter>]      # Run a script file from ./scripts or ./dev/scripts
     │       [(-d | --dev)] <script> [<script_args>]
     ├── test [(-p | --prj) <title>] [<specific>]                                # Run tests in /tests (default all)
