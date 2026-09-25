@@ -25,10 +25,10 @@
             ]
         },
         "run": {
-            "__desc__": "Run a script file from ./scripts",
+            "__desc__": "Run a script file from ./scripts or ./dev/scripts",
             "__seq__": [
                 "[(-p | --prj) <title>]", "[(-py | --python) <python-interpreter>]", 
-                "[--dev]", "<script>", "[<script_args>]"]
+                "[(-d | --dev)]", "<script>", "[<script_args>]"]
         },
         "test": {
             "__desc__": "Run tests in ./tests (default all)",
@@ -48,7 +48,7 @@
         },
         "venv": {
             "__desc__": "Generate a python venv in ./.venv",
-            "__seq__": ["[(-p | --prj) <title>]", "[(-py | --python) <python-interpreter>]", "[--dev]"]
+            "__seq__": ["[(-p | --prj) <title>]", "[(-py | --python) <python-interpreter>]"]
         },
         "dev": {
             "__desc__": "Generate dev env in ./dev",

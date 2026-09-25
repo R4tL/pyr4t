@@ -161,15 +161,14 @@ pipx install .
     ├── build [(-p | --prj) <title>]                                            # Build binary files in ./dist (.tar.gz, .whl)
     ├── deploy [(-p | --prj) <title>] [(-py | --python) <python-interpreter>]   # Deploy project using pip (--dev for editable mode)
     │          [--dev]
-    ├── run [(-p | --prj) <title>] [(-py | --python) <python-interpreter>]      # Run a script file from ./scripts
-    │       [--dev] <script> [<script_args>]
+    ├── run [(-p | --prj) <title>] [(-py | --python) <python-interpreter>]      # Run a script file from ./scripts or ./dev/scripts
+    │       [(-d | --dev)] <script> [<script_args>]
     ├── test [(-p | --prj) <title>] [<specific>]                                # Run tests in /tests (default all)
     ├── cls [(-p | --prj) <title>] [--cache] [--log] [--tmp] [<specific>]       # Clean cache, logs and tmp files
     ├── dstr [(-p | --prj) <title>] [<specific>]                                # Check doctring and create/update template if
     │                                                                             necessary
     ├── fmt [(-p | --prj) <title>] [<specific>]                                 # Format scripts in ./src using black and isort
     ├── venv [(-p | --prj) <title>] [(-py | --python) <python-interpreter>]     # Generate a python venv in ./.venv
-    │        [--dev]
     ├── dev [(-p | --prj) <title>]                                              # Generate dev env in ./dev
     ├── doc [(-p | --prj) <title>]                                              # Generate Sphinx documentation files in ./docs
     ├── info                                                                    # Print current project informations

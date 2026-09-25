@@ -37,7 +37,8 @@ def add_run_parser(subparsers: argparse._SubParsersAction):
         "--prj", "-p", default=None, help="Project title (default: current)"
     )
     parser.add_argument(
-        "--dev", action="store_true", help="Dev script stored in ./dev/scripts"
+        "--dev", "-d", action="store_true",
+        help="Dev script stored in ./dev/scripts"
     )
     parser.add_argument("script", help="Script name")
     parser.add_argument(
